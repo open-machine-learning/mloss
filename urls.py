@@ -11,7 +11,8 @@ urlpatterns = patterns('',
     (r'^submit/', include('software.urls')),
 
     # Using registration
-    #(r'^accounts/', include('registration.urls')),
+    (r'^accounts/', include('registration.urls')),
+	(r'^forum/', include('djangoforum.urls')),
 )
 
 if settings.DEBUG and not settings.PRODUCTION:

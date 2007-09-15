@@ -1,0 +1,18 @@
+{% extends "forum_base.html" %}
+{% block title %}Forums{% endblock %}
+{% block content %}
+<table id='djangoForumList'>
+<tr>
+<th>Forum</th>
+<th>Last Post</th>
+</tr>
+
+{% for forum in object_list %}
+<tr>
+<td class='djangoForumListDetails'><p><strong><a href='{{ forum.get_absolute_url }}'>{{ forum.title }}</a></strong><br /><span class='djangoForumStats'>{{ forum.threads }} thread{{ forum.threads|pluralize }}, {{ forum.posts }} post{{ forum.posts|pluralize }}</span></p>
+<p>{{ forum.description }}</p></td>
+<td class='djangoForumListLastPost'>{% if forum.forum_latest_post %}{{ forum.forum_latest_post.time|timesince }} ago by {{ forum.forum_latest_post.author }} (<a href='{{ forum.forum_latest_post.get_absolute_url }}'>view</a>){% else %}No Posts{% endif %}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "forum_base.html" %}
+{% block title %}{{ forum.title }}{% endblock %}
+{% block pagetitle %}{{ forum.title }}{% endblock %}
+
+{% block breadcrumbs %} &raquo; <a href='{{ forum.get_absolute_url }}'>{{ forum.title }}</a> ({{ forum.threads }} thread{{ forum.threads|pluralize }}, {{ forum.posts }} post{{ forum.posts|pluralize }}){% endblock %}
+
+
+{% block content %}
+
+
+<table id='djangoForumThreadList'>
+
+<tr>
+<th>Thread</th>
+<th style='width: 50px;'>Posts</th>
+<th style='width: 50px;'>Views</th>
+<th style='width: 220px;'>Last Post</th>
+</tr>
+
+{% for t in threads %}
+<tr>
+<td>{% if t.sticky %}Sticky {% endif %}<a href='{{ t.get_absolute_url }}'>{{ t.title }}</a>{% if t.closed %} (Closed){% endif %}</td>
+<td style='width: 50px;'>{{ t.posts }}</td>
+<td style='width: 50px;'>{{ t.views }}</td>
+<td style='width: 220px;' class='djangoForumThreadLastPost'>{{ t.thread_latest_post.time|timesince }} ago by {{ t.thread_latest_post.author }} (<a href='{{ t.thread_latest_post.get_absolute_url }}'>view</a>)</td>
+</tr>
+{% endfor %}
+</table>
+
+<h2>Create a Thread</h2>
+{% if user.is_authenticated %}
+<form method='post' action='new/'>
+<p><label for='title'>Title</label> <input type='text' name='title' maxlength='100' /></p>
+<p><label>Posting As</label><span>{{ user.username }}</span></p>
+<p><label for='body'>Body</label>
+<textarea name='body' rows='8' cols='50'></textarea></p>
+<p><input type='submit' value='Post' /></p>
+</form>
+{% else %}
+<p>Please login to create a thread.</p>
+{% endif %}
+
+{% endblock %}

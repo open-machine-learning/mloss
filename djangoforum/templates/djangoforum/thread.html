@@ -1,0 +1,38 @@
+{% extends "forum_base.html" %}
+{% block title %}{{ thread.title }} ({{ forum.title }}){% endblock %}
+
+{% block pagetitle %}{{ forum.title }} &raquo; {{ thread.title }}{% endblock %}
+
+
+{% block breadcrumbs %}&raquo; <a href='{{ forum.get_absolute_url }}'>{{ forum.title }}</a> &raquo; <a href='{{ thread.get_absolute_url }}'>{{ thread.title }}</a> ({{ thread.posts }} post{{ thread.posts|pluralize }}){% endblock %}
+
+{% block content %}
+<table id='djangoForumThreadPosts'>
+
+{% for post in posts %}
+
+<tr>
+<th style='djangoForumThreadPostDetail' id='post{{ post.id }}'>{{ post.time|timesince }} ago<br />
+by <strong>{{ post.author }}</strong></th>
+<td>{{ post.body|escape }}</td>
+</tr>{% endfor %}
+
+</table>
+
+<h2>Post a Reply</h2>
+{% if thread.closed %}
+<p>Sorry, this thread is closed. No further replies are permitted.</p>
+{% else %}
+{% if user.is_authenticated %}
+<form method='post' action='reply/'>
+<p><label>Posting As</label><span>{{ user.username }}</span></p>
+<p><label for='body'>Your Post</label>
+<textarea name='body' rows='8' cols='50'></textarea></p>
+<input type='submit' value='Submit' />
+</form>
+{% else %}
+<p>Please login to post a reply.</p>
+{% endif %}
+{% endif %}
+
+{% endblock %}
