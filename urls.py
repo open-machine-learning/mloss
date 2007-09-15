@@ -1,10 +1,8 @@
 from django.conf.urls.defaults import *
-from static import *
+from django.conf import settings
+from django.shortcuts import render_to_response
 
 urlpatterns = patterns('',
-    # home page
-    (r'^$', about),
-
     # administration
     (r'^admin/', include('django.contrib.admin.urls')),
 
@@ -12,14 +10,9 @@ urlpatterns = patterns('',
     (r'^browse/', include('software.urls')),
     (r'^submit/', include('software.urls')),
 
-    # static pages
-    (r'^workshop/$', workshop),
-    (r'^links/$', links),
-    (r'^faq/$', faq),
-    (r'^about/$', about),
-
     # Using registration
     #(r'^accounts/', include('registration.urls')),
 )
 
-
+if settings.DEBUG and not settings.PRODUCTION:
+	urlpatterns += patterns('',(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'media'}),)

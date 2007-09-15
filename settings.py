@@ -1,10 +1,16 @@
-# Django settings for mloss1 project.
+# Django settings for mloss project.
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+PRODUCTION = False # set to True when project goes live
+
+if not PRODUCTION:
+	DEBUG = True
+	TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    ('Mikio Braun', 'mikio@cs.tu-berlin.de'),
+    ('Cheng Soon Ong', 'chengsoon.ong@tuebingen.mpg.de'),
+    ('Gunnar Raetsch', 'gunnar.raetsch@tuebingen.mpg.de'),
+    ('Soeren Sonnenburg', 'soeren.sonnenburg@first.fraunhofer.de'),
 )
 
 MANAGERS = ADMINS
@@ -45,7 +51,7 @@ MEDIA_URL = ''
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/media_admin/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'ccku5%_-8r2#*rb(yh)j!11ar12vx_tll5u(11%3l=^k8rfe=y'
@@ -62,9 +68,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
+	'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
-ROOT_URLCONF = 'mloss1.urls'
+ROOT_URLCONF = 'mloss.urls'
 
 
 #import os.path
@@ -86,5 +93,6 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'django.contrib.markup',
     'django.contrib.syndication',
-    'mloss1.software',
+	'django.contrib.flatpages',
+    'mloss.software',
 )
