@@ -1,0 +1,17 @@
+{% extends "base_2col.html" %}
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block billboard %}{{ object.title }}{% endblock %}
+
+
+{% block content %}
+<dl>
+<dt>Author(s):</dt>
+<dd>{{ object.authors }}</dd>
+<dt>Posted:</dt>
+<dd>{{ object.pub_date|date:"F j, Y" }}</dd>
+<dt>Description:</dt>
+<dd>{{ object.description }}</dd>
+</dl>
+{% endblock %}
+

@@ -1,0 +1,28 @@
+{% extends "base_2col.html" %}
+
+{% block title %}All Authors{% endblock %}
+
+<h2>All users</h2>
+
+{% block content-main %}
+<ul>
+  {% for author in object_list %}
+  <li><a href="/authors/{{ author.firstname }}/">{{ author.firstname }}</a></li>
+  {% endfor %}
+</ul>
+
+<p class="pagination">
+  {% if has_previous %}
+  <a href="?page={{ previous }}">&lt; 
+    Previous {{ results_per_page }}</a>
+  {% endif %}&nbsp;&nbsp;
+  {% if has_next %}
+  <a href="?page={{ next }}">Next 
+    {{ results_per_page }} &gt;</a>
+  {% endif %}</p>
+{% endblock %}
+
+{% block content-related %}
+Here is a list of all the authors
+{% endblock %}
+
