@@ -23,6 +23,7 @@ DATABASE_HOST = ''             # Set to empty string for localhost. Not used wit
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 
+LOGIN_REDIRECT_URL='/'
 ACCOUNT_ACTIVATION_DAYS=1
 
 # Local time zone for this installation. Choices can be found here:

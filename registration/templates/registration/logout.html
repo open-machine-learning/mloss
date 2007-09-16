@@ -1,13 +1,16 @@
-{% extends "base.html" %}
+{% extends "base_2col.html" %}
 
 {% block title %}Logged out{% endblock %}
 
+{% block sectionid %}logout{% endblock %}
+
+{% block billboard %}<h2>Logout</h2>{% endblock %}
 {% block content_header %}Logged out{% endblock %}
 
 {% block content %}
 <p>You've been logged out.</p>
 {% endblock %}
 
-{% block sidebar %}
+{% block content-related %}
 <p>Thanks for stopping by; when you come back, don't forget to <a href="/accounts/login/">log in</a> again.</p>
 {% endblock %}

@@ -40,7 +40,7 @@
 	  <li id="nav-links"><a href="/links/">External Links</a></li>
 	  <li id="nav-faq"><a href="/faq/">FAQ</a></li>
 	  <li id="nav-about"><a href="/about/">About</a></li>
-	  {% if request.user.is_authenticated %}
+	  {% if user.is_authenticated %}
 	  <li id="nav-accounts-logout"><a href="/accounts/logout">Logout</a></li>
 	  {% else %}
 	  <li id="nav-accounts-login"><a href="/accounts/login">Login</a></li>
