@@ -12,7 +12,7 @@ urlpatterns = patterns('',
 
     # Using registration
     (r'^accounts/', include('registration.urls')),
-	(r'^forum/', include('djangoforum.urls')),
+	(r'^community/', include('djangoforum.urls')),
 )
 
 if settings.DEBUG and not settings.PRODUCTION:

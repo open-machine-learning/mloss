@@ -1,8 +1,8 @@
-<html>
+<!--<html>
 <head>
 <title>{% block title %}{% endblock %}</title>
 </head>
-<style type='text/css'><!--
+<style type='text/css'>
 body {
 	font-family: Verdana;
 	font-size: 10px;
@@ -75,12 +75,16 @@ body {
 #djangoForumThreadPostDetail {
 	width: 20%;
 }
---></style>
+</style>
 <body>
-<div id='djangoForumBody'>
+<div id='djangoForumBody'> -->
+{% extends "base.html" %}
+
+{% block content %}
 <h1>{% block pagetitle %}Welcome to the Forums{% endblock %}</h1>
-<div id='djangoForumBreadcrumbs'><a href='/'>Home</a> &raquo; <a href='/forum/'>Forums</a>{% block breadcrumbs %}{% endblock %}</div>
-{% block content %}{% endblock %}
+<div id='djangoForumBreadcrumbs'><a href='/'>Home</a> &raquo; <a href='/community/'>Forums</a>{% block breadcrumbs %}{% endblock %}</div>
+<!--
 </div>
 </body>
-</html>
+</html>-->
+{% endblock %}

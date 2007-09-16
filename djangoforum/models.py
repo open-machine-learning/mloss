@@ -26,7 +26,7 @@ class Forum(models.Model):
 		pass
 
 	def get_absolute_url(self):
-		return '/forum/%s/' % self.slug
+		return '/community/%s/' % self.slug
 
 	def __str__(self):
 		return self.title
@@ -58,7 +58,7 @@ class Thread(models.Model):
 		super(Thread, self).save()
 	
 	def get_absolute_url(self):
-		return '/forum/%s/%s/' % (self.forum.slug, self.id)
+		return '/community/%s/%s/' % (self.forum.slug, self.id)
 	
 	class Admin:
 		pass
@@ -99,7 +99,7 @@ class Post(models.Model):
 		ordering = ('-time',)
 		
 	def get_absolute_url(self):
-		return '/forum/%s/%s/#post%s' % (self.thread.forum.slug, self.thread.id, self.id)
+		return '/community/%s/%s/#post%s' % (self.thread.forum.slug, self.thread.id, self.id)
 	
 	class Admin:
 		pass
