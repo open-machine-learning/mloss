@@ -1,90 +1,13 @@
-<!--<html>
-<head>
-<title>{% block title %}{% endblock %}</title>
-</head>
-<style type='text/css'>
-body {
-	font-family: Verdana;
-	font-size: 10px;
-	text-align: center;
-}
+{% extends "base_2col.html" %}
 
-#djangoForumBody {
-	width: 90%;
-	margin: 0 auto;
-	text-align: left;
-}
+{% block title %}Community{% endblock %}
 
-#djangoForumList,
-#djangoForumThreadList,
-#djangoForumThreadPosts {
-	border-collapse: collapse;
-	width: 100%;
-}
+{% block sectionid %}community{% endblock %}
 
-#djangoForumList td,
-#djangoForumThreadList td,
-#djangoForumThreadPosts td {
-	border: solid #777 1px;
-	padding: 6px;
-}
-
-#djangoForumList .djangoForumListDetails {
-	width: 70%;
-}
-
-#djangoForumList .djangoForumListDetails strong {
-	font-size: 120%;
-}
-
-#djangoForumList .djangoForumListDetails .djangoForumStats {
-	font-size: 80%;
-}
-
-.djangoForumListLastPost,
-.djangoForumThreadLastPost {
-	background-color: #ccc;
-	border-bottom: solid #777 1px;
-}
-
-#djangoForumList th,
-#djangoForumThreadList th,
-#djangoForumThreadPosts th {
-	background-color: #3a3;
-	border: solid #777 1px;
-	color: #fff;
-	text-align: left;
-	padding: 4px;
-}
-
-#djangoForumThreadPosts th {
-	width: 20%;
-}
-
-#djangoForumBreadcrumbs {
-	padding: 20px;
-}
-
-#djangoForumBody label {
-	font-size: 110%;
-	font-weight: bold;
-	display: block;
-	padding: 4px;
-}
-
-#djangoForumThreadPostDetail {
-	width: 20%;
-}
-</style>
-<body>
-<div id='djangoForumBody'> -->
-{% extends "base.html" %}
+{% block billboard %}<h2>Community</h2>{% endblock %}
 
 {% block content %}
-<h1>{% block pagetitle %}Welcome to the Forums{% endblock %}</h1>
-<div id='djangoForumBreadcrumbs'><a href='/'>Home</a> &raquo; <a href='/community/'>Forums</a>{% block breadcrumbs %}{% endblock %}</div>
-<!--
+<div id='djangoForumBreadcrumbs'><a href='/'>Home</a> &raquo; <a href='/community/'>Forums</a>
+	{% block breadcrumbs %}{% endblock %}
 </div>
-</body>
-</html>-->
 {% endblock %}

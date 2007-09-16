@@ -1,8 +1,14 @@
-{% extends "base.html" %}
+{% extends "base_2col.html" %}
+
+{% block sectionid %}login{% endblock %}
 
 {% block title %}Log in{% endblock %}
 
-{% block content_header %}Log in{% endblock %}
+{% block billboard %}<h2>Log in</h2>{% endblock %}
+
+{% block content-related %}
+<p>If you don't have an account, you can <a href="/accounts/register/">sign up</a> for one; it's free, and you'll get access to a bunch of nifty features.</p>
+{% endblock %}
 
 {% block content %}
 
@@ -21,6 +27,3 @@
 </form>
 {% endblock %}
 
-{% block sidebar %}
-<p>If you don't have an account, you can <a href="/accounts/register/">sign up</a> for one; it's free, and you'll get access to a bunch of nifty features.</p>
-{% endblock %}

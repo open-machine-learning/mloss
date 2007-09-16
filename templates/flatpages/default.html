@@ -1,5 +1,20 @@
-{% extends "base.html" %}
+{% extends "base_2col.html" %}
 {% block title %}{{ flatpage.title }}{% endblock %}
+
+{% block sectionid %}flatpage{% endblock %}
+
+{% block billboard %}<h2>{{ flatpage.title }}</h2>{% endblock %}
+
+{% block content-related %}
+<p>
+<a href=http://www.mloss.org>www.mloss.org</a> was conceived by 
+<a href=http://ml.cs.tu-berlin.de/~mikio>Mikio Braun</a>, <a href=http://www.fml.tuebingen.mpg.de/raetsch/ong>Cheng Soon Ong</a> and <a href=http://ida.first.fraunhofer.de/~sonne>Soeren Sonnenburg</a>.
+</p>
+{% endblock %}
+
 {% block content %}
 {{ flatpage.content }}
 {% endblock %}
+
+
+
