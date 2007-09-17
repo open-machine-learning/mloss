@@ -12,7 +12,10 @@ urlpatterns = patterns('',
 
     # Using registration
     (r'^accounts/', include('registration.urls')),
-	(r'^community/', include('djangoforum.urls')),
+    (r'^community/', include('djangoforum.urls')),
+
+    # Display News - simplest possible dynamic page
+    (r'^news/', 'news.views.index'),
 )
 
 if settings.DEBUG and not settings.PRODUCTION:

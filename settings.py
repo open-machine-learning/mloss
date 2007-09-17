@@ -102,4 +102,5 @@ INSTALLED_APPS = (
     'mloss.software',
     'mloss.djangoforum',
     'mloss.registration',
+    'mloss.news',
 )

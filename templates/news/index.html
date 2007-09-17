@@ -1,0 +1,33 @@
+{% extends "base_2col.html" %}
+
+{% block sectionid %}news{% endblock %}
+
+{% block title %}News Items{% endblock %}
+
+{% block billboard %}News Items{% endblock %}
+
+{% block content-related %}
+{% if all_news_items %}
+    <ul>
+    {% for nitem in all_news_items %}
+        <li>{{ nitem.headline }}</li>
+    {% endfor %}
+{% else %}
+    <p>No news items</p>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if all_news_items %}
+    <ul>
+    {% for nitem in all_news_items %}
+        <li>
+            <h2>{{ nitem.headline }}</h2>
+	    <h3>{{ nitem.author }} - {{ nitem.publication_date }}</h3>
+	    {{ nitem.article }}
+	</li>
+    {% endfor %}
+{% else %}
+    <p>No news items</p>
+{% endif %}
+{% endblock %}
