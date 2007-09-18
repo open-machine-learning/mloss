@@ -14,8 +14,9 @@ urlpatterns = patterns('',
     (r'^accounts/', include('registration.urls')),
     (r'^community/', include('djangoforum.urls')),
 
-    # Display News - simplest possible dynamic page
+    # Display News and FAQ- simplest possible dynamic page
     (r'^news/', 'news.views.index'),
+    (r'^faq/', 'faq.views.index'),
 )
 
 if settings.DEBUG and not settings.PRODUCTION:

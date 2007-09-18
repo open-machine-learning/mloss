@@ -25,6 +25,9 @@ a:hover { color:#ffe761; }
 
 #header { position:relative; height:6.5em; background:#CC0000; }
 #header h1#logo { margin:0; width:111px; height:41px; position:absolute; bottom:10px; left:25px; }
+#name { display:inline; text-align:left; padding-right: 50px; color:white; background:#CC0000 }
+#accounts { display:inline; text-align:right; padding:5em 16px 10px 16px; color:#ffc757; background:#660000 }
+
 
 /* NAV */
 
@@ -56,7 +59,7 @@ h1,h2,h3 { margin-top:.8em; font-family:"Trebuchet MS",sans-serif; font-weight:n
 h1 { font-size:218%; margin-top:.6em; margin-bottom:.6em; color:#660000; line-height:1.1em; }
 h2 { font-size:150%; margin-top:1em; margin-bottom:.2em; line-height:1.2em; color:#660000; }
 #homepage h2 { font-size:140%; }
-h3 { font-size:125%; font-weight:bold; margin-bottom:.2em; color:#487858; }
+h3 { font-size:125%; font-weight:bold; margin-bottom:.2em; color:#991111; }
 h4 { font-size:100%; font-weight:bold; margin-bottom:-3px; margin-top:1.2em; text-transform:uppercase; letter-spacing:1px; }
 h4 pre, h4 tt, h4 .literal { text-transform:none; }
 h5 { font-size:1em; font-weight:bold; margin-top:1.5em; margin-bottom:3px; }

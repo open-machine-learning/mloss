@@ -30,7 +30,14 @@
       <div id="header">
 	<h1 id="logo"><a href="/">
 	    <img src="/media/images/mloss.png" alt="mloss" /></a></h1>
-	Machine Learning Open Source Software
+	<div id="name">Machine Learning Open Source Software</div>
+	<div id="accounts">
+	  {% if user.is_authenticated %}
+	  <a href="/accounts/logout">Logout</a>
+	  {% else %}
+	  <a href="/accounts/login">Login</a>
+	  {% endif %}
+	</div>
 	<ul id="nav-global">
 	  <li id="nav-news"><a href="/news/">News</a></li>
 	  <li id="nav-browse"><a href="/browse/">Browse</a></li>
@@ -40,11 +47,6 @@
 	  <li id="nav-links"><a href="/links/">External Links</a></li>
 	  <li id="nav-faq"><a href="/faq/">FAQ</a></li>
 	  <li id="nav-about"><a href="/about/">About</a></li>
-	  {% if user.is_authenticated %}
-	  <li id="nav-accounts-logout"><a href="/accounts/logout">Logout</a></li>
-	  {% else %}
-	  <li id="nav-accounts-login"><a href="/accounts/login">Login</a></li>
-	  {% endif %}
 	</ul>
       </div>
       <!-- END Header -->

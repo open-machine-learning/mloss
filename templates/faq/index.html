@@ -1,0 +1,32 @@
+{% extends "base_2col.html" %}
+
+{% block sectionid %}faq{% endblock %}
+
+{% block title %}Frequently Asked Questions{% endblock %}
+
+{% block billboard %}<h2>Frequently Asked Questions</h2>{% endblock %}
+
+{% block content-related %}
+{% if all_faq_items %}
+    <ul>
+    {% for nitem in all_faq_items %}
+        <li>{{ nitem.question }}</li>
+    {% endfor %}
+{% else %}
+    <p>No faq items</p>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if all_faq_items %}
+    <ul>
+    {% for nitem in all_faq_items %}
+        <li>
+            <h2>{{ nitem.question }}</h2>
+	    {{ nitem.answer }}
+	</li>
+    {% endfor %}
+{% else %}
+    <p>No faq items</p>
+{% endif %}
+{% endblock %}
