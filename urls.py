@@ -15,8 +15,8 @@ urlpatterns = patterns('',
     (r'^community/', include('djangoforum.urls')),
 
     # Display News and FAQ- simplest possible dynamic page
-    (r'^news/', 'news.views.index'),
-    (r'^faq/', 'faq.views.index'),
+    (r'^news/', 'forshow.views.newsindex'),
+    (r'^faq/', 'forshow.views.faqindex'),
 )
 
 if settings.DEBUG and not settings.PRODUCTION:
