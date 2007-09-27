@@ -27,9 +27,9 @@ author_info_dict = dict(base_generic_dict,
                         queryset=Author.objects.all(),
                         template_name='author_list.html')
 
-# General snippets views.
+# General softwares views.
 urlpatterns = patterns('',
-                       (r'^(?P<snippet_id>\d+)/$', entry.snippet_detail),
+                       (r'^(?P<software_id>\d+)/$', entry.software_detail),
                        )
 
 # Generic views.

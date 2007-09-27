@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 from django.shortcuts import render_to_response
+from django.views.generic.simple import redirect_to
 
 urlpatterns = patterns('',
     # administration
@@ -8,7 +9,7 @@ urlpatterns = patterns('',
 
     # Using cab to browse software
     (r'^browse/', include('software.urls')),
-    (r'^submit/', include('software.urls')),
+    (r'^submit/', 'software.forms.addsoftware'),
 
     # Using registration
     (r'^accounts/', include('registration.urls')),
@@ -17,6 +18,9 @@ urlpatterns = patterns('',
     # Display News and FAQ- simplest possible dynamic page
     (r'^news/', 'forshow.views.newsindex'),
     (r'^faq/', 'forshow.views.faqindex'),
+
+    # redirect the root to news
+    ('^$', 'forshow.views.newsindex'),
 )
 
 if settings.DEBUG and not settings.PRODUCTION:

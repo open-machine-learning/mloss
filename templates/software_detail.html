@@ -1,17 +1,28 @@
 {% extends "base_2col.html" %}
+
+{% block sectionid %}browse{% endblock %}
+
 {% block title %}{{ object.title }}{% endblock %}
 
 {% block billboard %}{{ object.title }}{% endblock %}
 
-
-{% block content %}
+{% block content-related %}
 <dl>
 <dt>Author(s):</dt>
 <dd>{{ object.authors }}</dd>
 <dt>Posted:</dt>
-<dd>{{ object.pub_date|date:"F j, Y" }}</dd>
+<dd>{{ object.pub_date|date:"j F Y" }}</dd>
+<dt>Last Updated:</dt>
+<dd>{{ object.updated_date|date:"j F Y" }}</dd>
+</dl>
+{% endblock %}
+
+{% block content %}
+<dl>
 <dt>Description:</dt>
 <dd>{{ object.description }}</dd>
+<dt>URL:</dt>
+<dd>{{ object.project_url }}</dd>
 </dl>
 {% endblock %}
 

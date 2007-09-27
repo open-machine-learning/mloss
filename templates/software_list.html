@@ -1,4 +1,6 @@
-{% extends "base_browse.html" %}
+{% extends "base_2col.html" %}
+
+{% block sectionid %}browse{% endblock %}
 
 {% block title %}All entries{% endblock %}
 
@@ -29,7 +31,15 @@
   </a>
   {% endif %}
   {% else %}
-<p>No snippets posted yet.</p>
+<p>No software posted yet.</p>
 {% endif %}
 {% endblock %}
 
+{% block content-related %}
+<ul>
+  <li><a href="/browse/data/">Data</a></li>
+  <li><a href="/browse/software/">Software</a></li>
+  <li><a href="/browse/author/">by Author</a></li>
+  <li><a href="/browse/tags/">by Tag</a></li>
+</ul>
+{% endblock %}

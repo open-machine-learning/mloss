@@ -1,0 +1,57 @@
+{% extends "base_2col.html" %}
+
+{% block sectionid %}submit{% endblock %}
+
+{% block title %}Submit a software project{% endblock %}
+
+{% block billboard %}<h2>Submit a software project</h2>{% endblock %}
+
+{% block content %}
+{% if form.errors %}
+<p class="error">Please correct the errors below:</p>
+{% endif %}
+
+<form method="POST" action="">
+  <dl>
+    <dt><label for="id_title">
+        Title: {% if form.title.errors %}
+        <span class="error">
+          {{ form.title.errors|join:", " }}
+        </span>
+        {% endif %}
+      </label>
+    </dt>
+    <dd>{{ form.title }}</dd>
+    <dt><label for="id_authors">
+        Authors: {% if form.authors.errors %}
+        <span class="error">
+          {{ form.authors.errors|join:", " }}
+        </span>
+        {% endif %}
+      </label>
+    </dt>
+    <dd>{{ form.authors }}</dd>
+    <dt><label for="id_description">
+        Description: {% if form.description.errors %}
+        <span class="error">
+          {{ form.description.errors|join:", " }}
+        </span>
+        {% endif %}
+    </label>
+    </dt>
+    <dd>{{ form.description }}</dd>
+    <dt><label for="id_project_url">
+        Project URL: {% if form.project_url.errors %}
+        <span class="error">
+          {{ form.project_url.errors|join:", " }}
+        </span>
+        {% endif %}
+      </label>
+    </dt>
+    <dd>{{ form.project_url }}</dd>
+    <br />
+    <dt><input type="submit" value="Save" /></dt>
+  </dl>
+</form>
+{% endblock %}
+
