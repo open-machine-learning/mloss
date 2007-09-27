@@ -4,7 +4,7 @@ from software.models import Author
 # Create your models here.
 class News(models.Model):
     headline = models.CharField(maxlength=200)
-    author = models.OneToOneField(Author)
+    author = models.ManyToManyField(Author)
     publication_date = models.DateField()
     article = models.TextField()
 
