@@ -13,7 +13,8 @@ class Author(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
-    
+
+
 class Software(models.Model):
     """
     A description of some machine learning open source
@@ -22,9 +23,16 @@ class Software(models.Model):
     title = models.CharField(maxlength=100)
     authors = models.ManyToManyField(Author)
     description = models.TextField()
-    project_url = models.URLField(verify_exists=False) 
+    project_url = models.URLField(verify_exists=False)
     pub_date = models.DateTimeField()
     updated_date = models.DateTimeField()
+    keyword1 = models.TextField()
+    keyword2 = models.TextField()
+    keyword3 = models.TextField()
+    keyword4 = models.TextField()
+    keyword5 = models.TextField()
+    language = models.TextField()
+    os_license = models.TextField()
 
 
     #objects = managers.SoftwareManager()

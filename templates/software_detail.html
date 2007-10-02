@@ -14,6 +14,10 @@
 <dd>{{ object.pub_date|date:"j F Y" }}</dd>
 <dt>Last Updated:</dt>
 <dd>{{ object.updated_date|date:"j F Y" }}</dd>
+<dt>Open Source License:</dt>
+<dd>{{ object.os_license }}</dd>
+<dt>Programming Language(s):</dt>
+<dd>{{ object.language }}</dd>
 </dl>
 {% endblock %}
 
@@ -23,6 +27,8 @@
 <dd>{{ object.description }}</dd>
 <dt>URL:</dt>
 <dd>{{ object.project_url }}</dd>
+<dt>Keyword(s):</dt>
+<dd>{{ object.keyword1 }}{{ object.keyword2 }}{{ object.keyword3 }}{{ object.keyword4 }}{{ object.keyword5 }}</dd>
 </dl>
 {% endblock %}
 
