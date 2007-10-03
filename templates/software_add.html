@@ -4,14 +4,18 @@
 
 {% block title %}Submit a software project{% endblock %}
 
-{% block billboard %}<h2>Submit a software project</h2>{% endblock %}
+{% block billboard %}Submit a software project{% endblock %}
 
 {% block content %}
 {% if form.errors %}
 <p class="error">Please correct the errors below:</p>
 {% endif %}
 
+{% if form.is_multipart %}
+<form enctype="multipart/form-data" method="POST" action="">
+{% else %}
 <form method="POST" action="">
+{% endif %}
   <dl>
     <dt><label for="id_title">
         Title: {% if form.title.errors %}
@@ -94,6 +98,33 @@
       </label>
     </dt>
     <dd>{{ form.keyword5 }}</dd>
+    <dt><label for="language">
+        Programming Language(s): {% if form.language.errors %}
+        <span class="error">
+          {{ form.language.errors|join:", " }}
+        </span>
+        {% endif %}
+      </label>
+    </dt>
+    <dd>{{ form.language }}</dd>
+    <dt><label for="os_license">
+        Open Source License: {% if form.os_license.errors %}
+        <span class="error">
+          {{ form.os_license.errors|join:", " }}
+        </span>
+        {% endif %}
+      </label>
+    </dt>
+    <dd>{{ form.os_license }}</dd>
+    <dt><label for="tarball">
+        Project Archive: {% if form.os_license.errors %}
+        <span class="error">
+          {{ form.tarball.errors|join:", " }}
+        </span>
+        {% endif %}
+      </label>
+    </dt>
+    <dd>{{ form.tarball }}</dd>
     <br />
     <dt><input type="submit" value="Save" /></dt>
   </dl>

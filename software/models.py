@@ -3,9 +3,9 @@ from software import managers
 
 # Create your models here.
 class Author(models.Model):
-    salutation = models.CharField(maxlength=10)
-    first_name = models.CharField(maxlength=100)
-    last_name = models.CharField(maxlength=100)
+    salutation = models.CharField(max_length=10)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     email = models.EmailField()
 
     class Admin:
@@ -20,20 +20,21 @@ class Software(models.Model):
     A description of some machine learning open source
     software project.
     """
-    title = models.CharField(maxlength=100)
-    authors = models.ManyToManyField(Author)
+    title = models.CharField(max_length=80)
+    #authors = models.ManyToManyField(Author)
+    authors = models.CharField(max_length=80)
     description = models.TextField()
     project_url = models.URLField(verify_exists=False)
-    pub_date = models.DateTimeField()
-    updated_date = models.DateTimeField()
-    keyword1 = models.TextField()
-    keyword2 = models.TextField()
-    keyword3 = models.TextField()
-    keyword4 = models.TextField()
-    keyword5 = models.TextField()
-    language = models.TextField()
-    os_license = models.TextField()
-
+    keyword1 = models.CharField(max_length=200,blank=True)
+    keyword2 = models.CharField(max_length=200,blank=True)
+    keyword3 = models.CharField(max_length=200,blank=True)
+    keyword4 = models.CharField(max_length=200,blank=True)
+    keyword5 = models.CharField(max_length=200,blank=True)
+    language = models.CharField(max_length=200,blank=True)
+    os_license = models.CharField(max_length=200,blank=True)
+    pub_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+    tarball = models.FileField(upload_to="media/code_archive/",blank=True)
 
     #objects = managers.SoftwareManager()
 

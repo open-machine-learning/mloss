@@ -2,9 +2,9 @@
 
 {% block sectionid %}browse{% endblock %}
 
-{% block title %}{{ object.title }}{% endblock %}
+{% block title %}Project details:{{ object.title }}{% endblock %}
 
-{% block billboard %}{{ object.title }}{% endblock %}
+{% block billboard %}Title:{{ object.title }}{% endblock %}
 
 {% block content-related %}
 <dl>
@@ -28,7 +28,17 @@
 <dt>URL:</dt>
 <dd>{{ object.project_url }}</dd>
 <dt>Keyword(s):</dt>
-<dd>{{ object.keyword1 }}{{ object.keyword2 }}{{ object.keyword3 }}{{ object.keyword4 }}{{ object.keyword5 }}</dd>
+<dd>
+  {% if object.keyword1 %}{{ object.keyword1 }}{% endif %}
+  {% if object.keyword2 %}, {{ object.keyword2 }}{% endif %}
+  {% if object.keyword3 %}, {{ object.keyword3 }}{% endif %}
+  {% if object.keyword4 %}, {{ object.keyword4 }}{% endif %}
+  {% if object.keyword5 %}, {{ object.keyword5 }}{% endif %}
+</dd>
+{% if object.tarball %}
+<dt>Archive:</dt>
+<dd><a href='../../{{ object.tarball }}'>download here</a></dd>
+{% endif %}
 </dl>
 {% endblock %}
 
