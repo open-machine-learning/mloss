@@ -8,7 +8,7 @@ Copyright 2007: Mikio Braun, Cheng Soon Ong and Soeren Sonnenburg
 
 body { margin:0; padding:0; background:#113366; color:white; }
 body, th, td { font:12px/1.4em Verdana,sans-serif; }
-#container { position:relative; min-width:55em; max-width:100em; }
+#container { position:relative; min-width:62em; max-width:100em; }
 #homepage #container { max-width:100em; }
 
 /* LINKS */
@@ -24,8 +24,8 @@ a:hover { color:#ffe761; }
 /* HEADER */
 
 #header { position:relative; height:6.5em; background:#336699; }
-#header h1#logo { margin:0; width:150px; height:41px; position:absolute; }
-#name { display:inline; text-align:left; padding-right: 50px; color:white; background:#336699 }
+#header h1#logo { margin:0; width:180px; height:41px;  position:absolute; }
+#name { display:inline; text-align:left; padding-right: 20px; color:white; background:#336699 }
 #accounts { display:inline; text-align:right; padding:5em 16px 10px 16px; color:#ffc757; background:#113366 }
 
 
