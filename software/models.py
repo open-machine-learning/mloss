@@ -2,27 +2,13 @@ from django.db import models
 from software import managers
 
 # Create your models here.
-class Author(models.Model):
-    salutation = models.CharField(max_length=10)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField()
-
-    class Admin:
-        pass
-
-    def __str__(self):
-        return '%s %s' % (self.first_name, self.last_name)
-
-
 class Software(models.Model):
     """
     A description of some machine learning open source
     software project.
     """
     title = models.CharField(max_length=80)
-    #authors = models.ManyToManyField(Author)
-    authors = models.CharField(max_length=80)
+    authors = models.CharField(max_length=200)
     description = models.TextField()
     project_url = models.URLField(verify_exists=False)
     keyword1 = models.CharField(max_length=200,blank=True)
@@ -35,8 +21,6 @@ class Software(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     tarball = models.FileField(upload_to="media/code_archive/",blank=True)
-
-    #objects = managers.SoftwareManager()
 
     class Admin:
         fields = (

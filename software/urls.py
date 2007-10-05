@@ -9,7 +9,7 @@ root URLConf to include this URLConf for any URL beginning with
 
 from django.conf.urls.defaults import *
 from django.views.generic.list_detail import object_list
-from models import Author, Software
+from models import Software
 from views import entry
 
 
@@ -42,10 +42,6 @@ software_info_dict_license = dict(base_generic_dict,
 		queryset=Software.objects.all().order_by('-os_license'),
 		template_name='software_list.html')
 
-#author_info_dict = dict(base_generic_dict,
-#                        queryset=Author.objects.all(),
-#                        template_name='author_list.html')
-#
 # General softwares views.
 urlpatterns = patterns('',
                        (r'^(?P<software_id>\d+)/$', entry.software_detail),
