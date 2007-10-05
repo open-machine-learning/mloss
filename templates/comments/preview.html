@@ -1,0 +1,40 @@
+{% extends "base_2col.html" %}
+
+{% block sectionid %}browse{% endblock %}
+
+{% block title %}Error in comment submission{% endblock %}
+
+{% block billboard %}Error in comment submission{% endblock %}
+
+{% block content %}
+<form action="/comments/post/" method="post">
+  {% if comment_form.username.errors or comment_form.password.errors %}
+    <p><label for="id_username">Username:
+    {% if comment_form.username.errors %}
+      <span class="error">{{ comment_form.username.error_list|join:", " }}</span>
+    {% endif %}
+    </label>
+      {{ comment_form.username }}</p>
+    <p><label for="id_password">Password:
+    {% if comment_form.password.errors %}
+      <span class="error">{{ comment_form.password.error_list|join:", " }}</span>
+    {% endif %}
+    </label> {{ comment_form.password }}</p>
+  {% else %}
+    <p>User: <strong>{{ comment.user }}</strong></p>
+  {% endif %}
+
+  <p><label for="id_comment">Comment:
+  {% if comment_form.comment.errors %}
+    <span class="error">
+      {{ comment_form.comment.error_list|join:", "  }}
+    </span>
+  {% endif %}
+  </label><br />{{ comment_form.comment }}</p>
+  <input type="hidden" name="options" value="{{ options }}" />
+  <input type="hidden" name="target" value="{{ target }}" />
+  <input type="hidden" name="gonzo" value="{{ hash }}" />
+  <input type="submit" name="post" value="Post comment" />
+</form>
+
+{% endblock %}
