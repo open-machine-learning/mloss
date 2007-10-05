@@ -70,8 +70,6 @@ def update_software(request, software_id):
         software_detail.html
     
     """
-    entry = get_object_or_404(Software, pk=software_id)
-
     if not request.user.is_authenticated():
        return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
 

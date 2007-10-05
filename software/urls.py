@@ -10,17 +10,13 @@ root URLConf to include this URLConf for any URL beginning with
 from django.conf.urls.defaults import *
 from django.views.generic.list_detail import object_list
 from models import Software
-from views import entry
+from views import software_detail
 
 
 # Info for generic views.
 base_generic_dict = {
     'paginate_by': 10,
     }
-
-software_info_dict = dict(base_generic_dict,
-                          queryset=Software.objects.all(),
-                          template_name='software_list.html')
 
 software_info_dict_date = dict(base_generic_dict,
 		queryset=Software.objects.all().order_by('-pub_date'),
@@ -44,10 +40,10 @@ software_info_dict_license = dict(base_generic_dict,
 
 # General softwares views.
 urlpatterns = patterns('',
-                        (r'^view/(?P<software_id>\d+)/$', entry.software_detail),
-                        (r'^$', object_list, software_info_dict),
+                        (r'^view/(?P<software_id>\d+)/$', software_detail),
+                        (r'^$', object_list, software_info_dict_date),
                         (r'^date/$', object_list, software_info_dict_date),
-                        (r'^software/$', object_list, software_info_dict_software),
+                        (r'^title/$', object_list, software_info_dict_software),
                         (r'^author/$', object_list, software_info_dict_author),
                         (r'^tags/$', object_list, software_info_dict_tags),
                         (r'^license/$', object_list, software_info_dict_license),

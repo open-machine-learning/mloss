@@ -11,7 +11,7 @@
 <ul>
   {% for snippet in object_list %}
   <li>
-    <a href="{{ snippet.get_absolute_url }}">
+  <a href="{{ snippet.get_absolute_url }} {{ snippet.object_id }}">
       {{ snippet.title }}</a> 
     published
     {{ snippet.pub_date|timesince }} ago
@@ -47,7 +47,7 @@
 <h2>Browse by</h2>
 <ul>
     <li><a href="/software/date/">Date</a></li>
-    <li><a href="/software/software/">Project Title</a></li>
+    <li><a href="/software/title/">Project Title</a></li>
     <li><a href="/software/author/">Author</a></li>
     <li><a href="/software/tags/">Tag</a></li>
     <li><a href="/software/license/">License</a></li>

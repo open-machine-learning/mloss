@@ -80,12 +80,7 @@ ROOT_URLCONF = 'mloss.urls'
 
 #import os.path
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    # os.path.join(os.path.basename(__file__), '/templates/'), #dynamic paths don't seem to work
     'templates/',
-    'registration/templates/',
 )
 
 INSTALLED_APPS = (
@@ -100,7 +95,7 @@ INSTALLED_APPS = (
 	'django.contrib.flatpages',
 	'django.contrib.humanize',
     'mloss.software',
-    'mloss.djangoforum',
+    'mloss.community',
     'mloss.registration',
     'mloss.forshow',
 )
