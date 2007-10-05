@@ -36,5 +36,24 @@
 <dd><a href='../../{{ object.tarball }}'>download here</a></dd>
 {% endif %}
 </dl>
+
+<h2>Comments</h2>
+{% load comments %}
+
+{% get_comment_list for software.software object.id as comment_list %}
+
+{% if comment_list %}
+  {% for comment in comment_list %}
+  <p><strong>{{ comment.user }}</strong> - {{ comment.comment }}</p>
+  {% endfor %}
+{% else %}
+  <p>
+  No one has posted any comments yet. Perhaps you'd like to be the first?
+  </p>
+{% endif %}
+
+
+{% comment_form for software.software object.id %}
+
 {% endblock %}
 

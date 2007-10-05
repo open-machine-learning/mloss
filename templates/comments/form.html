@@ -1,0 +1,34 @@
+{% if display_form %}
+
+<form action="/comments/post/" method="post">
+{% if user.is_authenticated %}
+    <p>
+    Username:
+    <strong>{{ user.username }}</strong>
+    (<a href="{{ logout_url }}">Log out</a>)
+    </p>
+{% else %}
+    <p>
+    <label for="id_username">Username:</label>
+    <input type="text" name="username" id="id_username" />
+    <br />
+    Password:
+    <input type="password" name="password" id="id_password" />
+    (<a href="/accounts/password_reset/">
+    Forgotten your password?</a>)
+    </p>
+{% endif %}
+
+<p><label for="id_comment">Comment:</label><br />
+<textarea name="comment" id="id_comment" rows="10" cols="80"></textarea></p>
+
+<p>
+<input type="hidden" name="options" value="{{ options }}" />
+<input type="hidden" name="target" value="{{ target }}" />
+<input type="hidden" name="gonzo" value="{{ hash }}" />
+<input type="submit" name="post" value="Post comment" />
+</p>
+</form>
+
+
+{% endif %}
