@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     (r'^community/', include('djangoforum.urls')),
 
     # Display News and FAQ- simplest possible dynamic page
-    (r'^news/', 'forshow.views.newsindex'),
+    #(r'^news/', 'forshow.views.newsindex'),
     (r'^faq/', 'forshow.views.faqindex'),
 
     # redirect the root to news

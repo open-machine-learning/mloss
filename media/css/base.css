@@ -35,7 +35,7 @@ a:hover { color:#ffe761; }
 #nav-global li { display:block; float:left; list-style-type:none; margin:0; padding:0; }
 #nav-global a { display:block; float:left; padding:5em 16px 10px 16px; background:#336699; }
 #nav-global a:hover { color:#113366; background:#CCCCCC; }
-#news #nav-news a, #browse #nav-browse a, #submit #nav-submit a, #community #nav-community a, #Workshop #nav-workshop a, #links #nav-links a, #faq #nav-faq a, #About mloss.org #nav-about a { color:white; background:#113366 bottom repeat-x; }
+#news #nav-news a, #browse #nav-browse a, #submit #nav-submit a, #community #nav-community a, #Workshop #nav-workshop a, #links #nav-links a, #faq #nav-faq a, #About #nav-about a { color:white; background:#113366 bottom repeat-x; }
 
 /* COLUMNS */
 
