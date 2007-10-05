@@ -29,11 +29,7 @@
 <dd>{{ object.project_url }}</dd>
 <dt>Keyword(s):</dt>
 <dd>
-  {% if object.keyword1 %}{{ object.keyword1 }}{% endif %}
-  {% if object.keyword2 %}, {{ object.keyword2 }}{% endif %}
-  {% if object.keyword3 %}, {{ object.keyword3 }}{% endif %}
-  {% if object.keyword4 %}, {{ object.keyword4 }}{% endif %}
-  {% if object.keyword5 %}, {{ object.keyword5 }}{% endif %}
+  {% if object.tags %}{{ object.tags }}{% endif %}
 </dd>
 {% if object.tarball %}
 <dt>Archive:</dt>

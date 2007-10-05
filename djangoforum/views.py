@@ -6,7 +6,7 @@ and posts, adding new threads, and adding replies.
 from djangoforum.models import Forum,Thread,Post
 from datetime import datetime
 from django.shortcuts import get_object_or_404, render_to_response
-from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseServerError
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django import newforms as forms
 
@@ -48,12 +48,12 @@ def reply(request, forum, thread):
 	If a thread isn't closed, and the user is logged in, post a reply
 	to a thread. Note we don't have "nested" replies at this stage.
 	"""
-	if not request.user.is_authenticated:
-		raise HttpResponseServerError
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
 	f = get_object_or_404(Forum, slug=forum)
 	t = get_object_or_404(Thread, pk=thread)
 	if t.closed:
-		raise HttpResponseServerError
+		return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
 	body = request.POST.get('body', False)
 	p = Post(
 		thread=t, 
@@ -72,8 +72,8 @@ def newthread(request, forum):
 
 	Only allows a user to post if they're logged in.
 	"""
-	if not request.user.is_authenticated:
-		raise HttpResponseServerError
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect('/accounts/login?next=%s' % request.path) 
 	f = get_object_or_404(Forum, slug=forum)
 	t = Thread(
 		forum=f,

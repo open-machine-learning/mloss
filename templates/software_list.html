@@ -38,20 +38,20 @@
 {% block content-related %}
 <h2>Manage</h2>
 <ul>
-	<li><a href="/browse/edit/">Edit</a></li>
 {% if user.is_authenticated %}
-	<li><a href="/submit">Submit new Project</a></li>
+	<li><a href="/software/edit/">Edit</a></li>
+	<li><a href="/software/submit">Submit new Project</a></li>
 {% else %}
 <li><a href="/accounts/login">Login</a><a> to submit a new project</a></li>
 {% endif %}
 </ul>
 <h2>Browse by</h2>
 <ul>
-    <li><a href="/browse/date/">Date</a></li>
-    <li><a href="/browse/software/">Project Title</a></li>
-    <li><a href="/browse/author/">Author</a></li>
-    <li><a href="/browse/tags/">Tag</a></li>
-    <li><a href="/browse/license/">License</a></li>
+    <li><a href="/software/date/">Date</a></li>
+    <li><a href="/software/software/">Project Title</a></li>
+    <li><a href="/software/author/">Author</a></li>
+    <li><a href="/software/tags/">Tag</a></li>
+    <li><a href="/software/license/">License</a></li>
 </ul>
 {% endblock %}
 

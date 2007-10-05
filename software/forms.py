@@ -10,35 +10,15 @@ from django.http import HttpResponseRedirect
 
 from models import Software
 
-
-#class AddSoftwareForm(forms.Form):
-#    """
-#    Form used for adding Software
-#    
-#    """
-#    title = forms.CharField(widget=forms.TextInput(attrs={'size':80}))
-#    #authors = forms.ModelMultipleChoiceField(queryset=Author.objects.all())
-#    authors = forms.CharField(widget=forms.TextInput(attrs={'size':80}))
-#    description = forms.CharField(widget=forms.Textarea(attrs={'rows':20,'cols':80}))
-#    project_url = forms.URLField(widget=forms.TextInput(attrs={'size':80})) 
-#    keyword1 = forms.CharField(widget=forms.TextInput(attrs={'size':80}),required=False)
-#    keyword2 = forms.CharField(widget=forms.TextInput(attrs={'size':80}),required=False)
-#    keyword3 = forms.CharField(widget=forms.TextInput(attrs={'size':80}),required=False)
-#    keyword4 = forms.CharField(widget=forms.TextInput(attrs={'size':80}),required=False)
-#    keyword5 = forms.CharField(widget=forms.TextInput(attrs={'size':80}),required=False)
-#    language = forms.CharField(widget=forms.TextInput(attrs={'size':80}),required=False)
-#    os_license = forms.CharField(widget=forms.TextInput(attrs={'size':80}),required=False)
-#    tarball = forms.FileField(widget=forms.FileInput, required=False)
-
 AddSoftwareForm = forms.form_for_model(Software)
 
-
-
-  
 def addsoftware(request):
     """
     Show the software form, and capture the information
     """
+
+    if not request.user.is_authenticated():
+       return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
 
     def save_tarball(object):
         """
@@ -49,8 +29,6 @@ def addsoftware(request):
             #filename = object.user.username + '_' + filename
             object.save_tarball_file(filename, request.FILES['tarball']['content'])
 
-	if not request.user.is_authenticated:
-		raise HttpResponseServerError
     
     original_id = request.GET.get('oid', None)
     if request.method == 'POST':
@@ -66,11 +44,7 @@ def addsoftware(request):
                                     project_url=form.cleaned_data['project_url'],
                                     pub_date=datetime.datetime.now(),
                                     updated_date=datetime.datetime.now(),
-                                    keyword1=form.cleaned_data['keyword1'],
-                                    keyword2=form.cleaned_data['keyword2'],
-                                    keyword3=form.cleaned_data['keyword3'],
-                                    keyword4=form.cleaned_data['keyword4'],
-                                    keyword5=form.cleaned_data['keyword5'],
+                                    tags=form.cleaned_data['tags'],
                                     language=form.cleaned_data['language'],
                                     os_license=form.cleaned_data['os_license'],
                                     tarball=form.cleaned_data['tarball'],
@@ -90,8 +64,11 @@ def addsoftware(request):
 
 def editsoftware(request):
     """
-    Show the software form, fill with content and capture the information
+    Show the software form, and capture the information
     """
+
+    if not request.user.is_authenticated():
+       return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
 
     def save_tarball(object):
         """
@@ -102,8 +79,6 @@ def editsoftware(request):
             #filename = object.user.username + '_' + filename
             object.save_tarball_file(filename, request.FILES['tarball']['content'])
 
-	if not request.user.is_authenticated:
-		raise HttpResponseServerError
     
     original_id = request.GET.get('oid', None)
     if request.method == 'POST':
@@ -119,11 +94,7 @@ def editsoftware(request):
                                     project_url=form.cleaned_data['project_url'],
                                     pub_date=datetime.datetime.now(),
                                     updated_date=datetime.datetime.now(),
-                                    keyword1=form.cleaned_data['keyword1'],
-                                    keyword2=form.cleaned_data['keyword2'],
-                                    keyword3=form.cleaned_data['keyword3'],
-                                    keyword4=form.cleaned_data['keyword4'],
-                                    keyword5=form.cleaned_data['keyword5'],
+                                    tags=form.cleaned_data['tags'],
                                     language=form.cleaned_data['language'],
                                     os_license=form.cleaned_data['os_license'],
                                     tarball=form.cleaned_data['tarball'],

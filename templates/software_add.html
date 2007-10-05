@@ -53,51 +53,15 @@
       </label>
     </dt>
     <dd>{{ form.project_url }}</dd>
-    <dt><label for="keyword1">
-        Keyword1: {% if form.keyword1.errors %}
+    <dt><label for="tags">
+        Tags: {% if form.tags.errors %}
         <span class="error">
-          {{ form.keyword1.errors|join:", " }}
+          {{ form.tags.errors|join:", " }}
         </span>
         {% endif %}
       </label>
     </dt>
-    <dd>{{ form.keyword1 }}</dd>
-    <dt><label for="keyword2">
-        Keyword2: {% if form.keyword2.errors %}
-        <span class="error">
-          {{ form.keyword2.errors|join:", " }}
-        </span>
-        {% endif %}
-      </label>
-    </dt>
-    <dd>{{ form.keyword2 }}</dd>
-    <dt><label for="keyword3">
-        Keyword3: {% if form.keyword3.errors %}
-        <span class="error">
-          {{ form.keyword3.errors|join:", " }}
-        </span>
-        {% endif %}
-      </label>
-    </dt>
-    <dd>{{ form.keyword3 }}</dd>
-    <dt><label for="keyword4">
-        Keyword4: {% if form.keyword4.errors %}
-        <span class="error">
-          {{ form.keyword4.errors|join:", " }}
-        </span>
-        {% endif %}
-      </label>
-    </dt>
-    <dd>{{ form.keyword4 }}</dd>
-    <dt><label for="keyword5">
-        Keyword5: {% if form.keyword5.errors %}
-        <span class="error">
-          {{ form.keyword5.errors|join:", " }}
-        </span>
-        {% endif %}
-      </label>
-    </dt>
-    <dd>{{ form.keyword5 }}</dd>
+    <dd>{{ form.tags }}</dd>
     <dt><label for="language">
         Programming Language(s): {% if form.language.errors %}
         <span class="error">

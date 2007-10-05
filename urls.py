@@ -8,8 +8,7 @@ urlpatterns = patterns('',
     (r'^admin/', include('django.contrib.admin.urls')),
 
     # Using cab to browse software
-    (r'^browse/', include('software.urls')),
-    (r'^submit/', 'software.forms.addsoftware'),
+    (r'^software/', include('software.urls')),
 
     # Using registration
     (r'^accounts/', include('registration.urls')),

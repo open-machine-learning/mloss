@@ -35,7 +35,7 @@ software_info_dict_author = dict(base_generic_dict,
 		template_name='software_list.html')
 
 software_info_dict_tags = dict(base_generic_dict,
-		queryset=Software.objects.all().order_by('-keyword1'),
+		queryset=Software.objects.all().order_by('-tags'),
 		template_name='software_list.html')
 
 software_info_dict_license = dict(base_generic_dict,
@@ -46,7 +46,6 @@ software_info_dict_license = dict(base_generic_dict,
 urlpatterns = patterns('',
                        (r'^(?P<software_id>\d+)/$', entry.software_detail),
                        )
-
 # Generic views.
 urlpatterns += patterns('',
                         (r'^$', object_list, software_info_dict),
@@ -55,4 +54,6 @@ urlpatterns += patterns('',
                         (r'^author/$', object_list, software_info_dict_author),
                         (r'^tags/$', object_list, software_info_dict_tags),
                         (r'^license/$', object_list, software_info_dict_license),
+						(r'^submit/', 'software.forms.addsoftware'),
+						(r'^edit/', 'software.forms.editsoftware'),
                         )
