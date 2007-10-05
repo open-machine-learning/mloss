@@ -7,6 +7,16 @@
 {% block billboard %}Title:{{ object.title }}{% endblock %}
 
 {% block content-related %}
+<h2>Manage</h2>
+<dl><dt>
+{% if user.is_authenticated %}
+<a href="/software/update/{{ object.id}}">Update Project</a>
+{% else %}
+<a href="/software/update/{{ object.id}}">Login</a><a> to edit this project</a>
+{% endif %}
+</dt></dl>
+
+<h2>Details</h2>
 <dl>
 <dt>Author(s):</dt>
 <dd>{{ object.authors }}</dd>
