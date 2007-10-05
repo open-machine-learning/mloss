@@ -44,10 +44,7 @@ software_info_dict_license = dict(base_generic_dict,
 
 # General softwares views.
 urlpatterns = patterns('',
-                       (r'^(?P<software_id>\d+)/$', entry.software_detail),
-                       )
-# Generic views.
-urlpatterns += patterns('',
+                        (r'^view/(?P<software_id>\d+)/$', entry.software_detail),
                         (r'^$', object_list, software_info_dict),
                         (r'^date/$', object_list, software_info_dict_date),
                         (r'^software/$', object_list, software_info_dict_software),
@@ -55,5 +52,5 @@ urlpatterns += patterns('',
                         (r'^tags/$', object_list, software_info_dict_tags),
                         (r'^license/$', object_list, software_info_dict_license),
 						(r'^submit/', 'software.forms.addsoftware'),
-						(r'^edit/', 'software.forms.editsoftware'),
+						(r'^update/(?P<software_id>\d+)/$', 'software.forms.update_software'),
                         )
