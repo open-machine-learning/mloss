@@ -36,7 +36,16 @@
 {% endblock %}
 
 {% block content-related %}
-Sort by:
+<h2>Manage</h2>
+<ul>
+	<li><a href="/browse/edit/">Edit</a></li>
+{% if user.is_authenticated %}
+	<li><a href="/submit">Submit new Project</a></li>
+{% else %}
+<li><a href="/accounts/login">Login</a><a> to submit a new project</a></li>
+{% endif %}
+</ul>
+<h2>Browse by</h2>
 <ul>
     <li><a href="/browse/date/">Date</a></li>
     <li><a href="/browse/software/">Project Title</a></li>
