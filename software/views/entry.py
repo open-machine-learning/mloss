@@ -8,7 +8,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 
-from django.contrib.auth.models import User
 from software import forms
 from software.models import Software
 

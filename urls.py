@@ -16,7 +16,7 @@ urlpatterns = patterns('',
 
     # Display News and FAQ- simplest possible dynamic page
     #(r'^news/', 'forshow.views.newsindex'),
-    (r'^faq/', 'forshow.views.faqindex'),
+    #(r'^faq/', 'forshow.views.faqindex'),
 
     # redirect the root to news
     ('^$', 'forshow.views.newsindex'),

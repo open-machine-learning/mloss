@@ -39,10 +39,9 @@
 <h2>Manage</h2>
 <ul>
 {% if user.is_authenticated %}
-	<li><a href="/software/edit/">Edit</a></li>
 	<li><a href="/software/submit">Submit new Project</a></li>
 {% else %}
-<li><a href="/accounts/login">Login</a><a> to submit a new project</a></li>
+<li><a href="/software/submit">Login</a><a> to submit a new project</a></li>
 {% endif %}
 </ul>
 <h2>Browse by</h2>
