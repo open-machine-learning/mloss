@@ -35,6 +35,15 @@
       </label>
     </dt>
     <dd>{{ form.authors }}</dd>
+    <dt><label for="id_contact">
+        Main Author's Email Address: {% if form.contact.errors %}
+        <span class="error">
+          {{ form.contact.errors|join:", " }}
+        </span>
+        {% endif %}
+      </label>
+    </dt>
+    <dd>{{ form.contact }}</dd>
     <dt><label for="id_description">
         Description: {% if form.description.errors %}
         <span class="error">
@@ -81,7 +90,7 @@
     </dt>
     <dd>{{ form.os_license }}</dd>
     <dt><label for="tarball">
-        Project Archive: {% if form.os_license.errors %}
+        Project Archive: {% if form.tarball.errors %}
         <span class="error">
           {{ form.tarball.errors|join:", " }}
         </span>
@@ -89,7 +98,6 @@
       </label>
     </dt>
     <dd>{{ form.tarball }}</dd>
-    <br />
     <dt><input type="submit" value="Save" /></dt>
   </dl>
 </form>

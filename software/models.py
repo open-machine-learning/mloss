@@ -9,6 +9,7 @@ class Software(models.Model):
     """
     title = models.CharField(max_length=80)
     authors = models.CharField(max_length=200)
+    contact = models.EmailField(max_length=80)
     description = models.TextField()
     project_url = models.URLField(verify_exists=False)
     tags = models.CharField(max_length=200,blank=True)
@@ -18,12 +19,20 @@ class Software(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     tarball = models.FileField(upload_to="media/code_archive/",blank=True)
 
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return ('software.views.entry.software_detail', (), { 'software_id': str(self.id) })
+
+    get_absolute_url = models.permalink(get_absolute_url)
+
     class Admin:
         fields = (
             ('Metadata', {
             'fields': ('title', 'authors')}),
             ('None', {
-            'fields': ('description', 'project_url', 'pub_date', 'updated_date')}),
+            'fields': ('description', 'project_url', 'tags', 'language', 'os_license', 'pub_date', 'updated_date')}),
             )
         list_filter = ['pub_date']
         date_hierarchy = 'pub_date'
@@ -32,9 +41,3 @@ class Software(models.Model):
     class Meta:
         ordering = ('-pub_date',)
 
-    def __str__(self):
-        return self.title
-
-    def get_absolute_url(self):
-        return ('software.views.entry.software_detail', (), { 'software_id': str(self.id) })
-    get_absolute_url = models.permalink(get_absolute_url)

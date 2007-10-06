@@ -49,12 +49,13 @@
 
 <h2>Comments</h2>
 {% load comments %}
+{% load safe_markup %}
 
 {% get_comment_list for software.software object.id as comment_list %}
 
 {% if comment_list %}
   {% for comment in comment_list %}
-  <p><strong>{{ comment.user }}</strong> - {{ comment.comment }}</p>
+  <p><strong>{{ comment.user }}</strong> - {{ comment.comment|safe_markdown:"safe" }}</p>
   {% endfor %}
 {% else %}
   <p>
