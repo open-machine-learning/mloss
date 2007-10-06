@@ -11,7 +11,7 @@
 <ul>
   {% for snippet in object_list %}
   <li>
-  <a href="{{ snippet.get_absolute_url }} {{ snippet.object_id }}">
+  <a href="{{ snippet.get_absolute_url }}">
       {{ snippet.title }}</a> 
     published
     {{ snippet.pub_date|timesince }} ago
