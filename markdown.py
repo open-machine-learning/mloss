@@ -46,7 +46,7 @@ def message(level, text) :
 TAB_LENGTH = 4            # expand tabs to this many spaces
 ENABLE_ATTRIBUTES = True  # @id = xyz -> <... id="xyz">
 SMART_EMPHASIS = 1        # this_or_that does not become this<i>or</i>that
-HTML_REMOVED_TEXT = "[HTML_REMOVED]" # text used instead of HTML in safe mode
+HTML_REMOVED_TEXT = "" # text used instead of HTML in safe mode
 
 RTL_BIDI_RANGES = ( (u'\u0590', u'\u07FF'),
                     # from Hebrew to Nko (includes Arabic, Syriac and Thaana)

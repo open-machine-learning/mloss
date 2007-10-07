@@ -8,13 +8,20 @@
 
 {% block content-related %}
 <h2>Manage</h2>
-<dl><dt>
+<dl>
+{% if user.is_authenticated %}
+	<a href="/software/submit">Submit new Project</a></li>
+{% else %}
+<li><a href="/software/submit">Login</a><a> to submit a new project</a></li>
+{% endif %}
+</dl>
+<dl>
 {% if user.is_authenticated %}
 <a href="/software/update/{{ object.id}}">Update Project</a>
 {% else %}
 <a href="/software/update/{{ object.id}}">Login</a><a> to edit this project</a>
 {% endif %}
-</dt></dl>
+</dl>
 
 <h2>Details</h2>
 <dl>
@@ -26,25 +33,37 @@
 <dd>{{ object.updated_date|date:"j F Y" }}</dd>
 <dt>Open Source License:</dt>
 <dd>{{ object.os_license }}</dd>
+{% if object.language %}
 <dt>Programming Language(s):</dt>
 <dd>{{ object.language }}</dd>
+{% endif %}
 </dl>
 {% endblock %}
 
 {% block content %}
 <dl>
+
+{% if object.screenshot %}
+<dt>Screenshot:</dt>
+<dd><img src='/{{ object.screenshot }}' width='106' height='80' alt='screenshot'></dd>
+{% endif %}
+
 <dt>Description:</dt>
-<dd>{{ object.description }}</dd>
+<dd>{{ object.description_html }}</dd>
+
 <dt>URL:</dt>
 <dd>{{ object.project_url }}</dd>
-<dt>Keyword(s):</dt>
-<dd>
-  {% if object.tags %}{{ object.tags }}{% endif %}
-</dd>
+
+{% if object.tags %}
+<dt>Tag(s):</dt>
+<dd> {{ object.tags }} </dd>
+{% endif %}
+
 {% if object.tarball %}
 <dt>Archive:</dt>
-<dd><a href='../../{{ object.tarball }}'>download here</a></dd>
+<dd><a href='/{{ object.tarball }}'>download here</a></dd>
 {% endif %}
+
 </dl>
 
 <h2>Comments</h2>

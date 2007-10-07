@@ -31,7 +31,7 @@
 {% if user.is_authenticated %}
 <form method='post' action='new/'>
 <p><label for='title'>Title</label> <input type='text' name='title' maxlength='100' /></p>
-<p><label>Posting As</label><span>{{ user.username }}</span></p>
+<p><label>Posting As</label> <span>{{ user.username }}</span></p>
 <p><label for='body'>Body</label>
 <textarea name='body' rows='8' cols='50'></textarea></p>
 <p><input type='submit' value='Post' /></p>

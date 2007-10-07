@@ -25,7 +25,7 @@ by <strong>{{ post.author }}</strong></th>
 {% else %}
 {% if user.is_authenticated %}
 <form method='post' action='reply/'>
-<p><label>Posting As</label><span>{{ user.username }}</span></p>
+<p><label>Posting As</label> <span>{{ user.username }}</span></p>
 <p><label for='body'>Your Post</label>
 <textarea name='body' rows='8' cols='50'></textarea></p>
 <input type='submit' value='Submit' />

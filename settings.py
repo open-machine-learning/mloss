@@ -94,5 +94,9 @@ INSTALLED_APPS = (
     'django.contrib.syndication',
 	'django.contrib.flatpages',
 	'django.contrib.humanize',
-	'mloss'
+	'mloss',
+	'mloss.software',
+	'mloss.registration',
+	'mloss.community',
+	'mloss.forshow',
 )

@@ -2,7 +2,6 @@
 Forms for adding Software
 
 """
-import datetime
 from django import newforms as forms
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
@@ -24,37 +23,44 @@ def addsoftware(request):
             filename = request.FILES['tarball']['filename']
             object.save_tarball_file(filename, request.FILES['tarball']['content'])
 
+    def save_screenshot(object):
+        """
+        Retrieve filename and save the file
+        """
+        if request.FILES.has_key('screenshot'):
+            filename = request.FILES['screenshot']['filename']
+            object.save_screenshot_file(filename, request.FILES['screenshot']['content'])
+
     if not request.user.is_authenticated():
        return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
 
     AddSoftwareForm = forms.form_for_model(Software)
 
-    #,initial=request.user.__str__(),initial='http://'
-    original_id = request.GET.get('oid', None)
+    #original_id = request.GET.get('oid', None)
     if request.method == 'POST':
         form = AddSoftwareForm(request.POST)
         if form.is_valid():
-            new_software = Software(title=form.cleaned_data['title'],
+            new_software = Software(screenshot=form.cleaned_data['screenshot'],
+                                    title=form.cleaned_data['title'],
                                     authors=form.cleaned_data['authors'],
-                                    contact=form.cleaned_data['authors'],
+                                    contact=form.cleaned_data['contact'],
                                     description=form.cleaned_data['description'],
                                     project_url=form.cleaned_data['project_url'],
                                     tags=form.cleaned_data['tags'],
                                     language=form.cleaned_data['language'],
                                     os_license=form.cleaned_data['os_license'],
-                                    pub_date=datetime.datetime.now(),
-                                    updated_date=datetime.datetime.now(),
                                     tarball=form.cleaned_data['tarball'],
                                     )
-            if original_id:
-                new_software.original_id = original_id
+            #if original_id:
+            #    new_software.original_id = original_id
+
             save_tarball(new_software)
+            save_screenshot(new_software)
             new_software.save()
             return HttpResponseRedirect(new_software.get_absolute_url())
-        else:
-            print form
     else:
         form = AddSoftwareForm()
+
     return render_to_response('software/software_add.html',
                               { 'form': form },
                               context_instance=RequestContext(request))

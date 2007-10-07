@@ -3,12 +3,6 @@ Views which work with Software, allowing them to be added, modified,
 rated and viewed according to various criteria.
 
 """
-#from django import template
-#
-#register = template.Library()
-#register.tag('safe_markup')
-#
-print "entryp"
 
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext

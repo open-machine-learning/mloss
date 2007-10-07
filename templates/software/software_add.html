@@ -17,6 +17,15 @@
 <form method="POST" action="">
 {% endif %}
   <dl>
+    <dt><label for="id_screenshot">
+        Screenshot: {% if form.screenshot.errors %}
+        <span class="error">
+          {{ form.title.errors|join:", " }}
+        </span>
+        {% endif %}
+      </label>
+    </dt>
+    <dd>{{ form.screenshot }}{{ form.screenshot_file }}</dd>
     <dt><label for="id_title">
         Title: {% if form.title.errors %}
         <span class="error">
@@ -97,7 +106,7 @@
         {% endif %}
       </label>
     </dt>
-    <dd>{{ form.tarball }}</dd>
+    <dd>{{ form.tarball }}{{ form.tarball_file }}</dd>
     <dt><input type="submit" value="Save" /></dt>
   </dl>
 </form>
