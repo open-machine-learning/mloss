@@ -8,7 +8,25 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.views.generic.create_update import update_object
 
-from models import Software,editables
+from models import Software, editables, dontupdateifempty
+
+def save_tarball(request, object):
+    """
+    Retrieve filename and save the file
+    """
+    if request.FILES.has_key('tarball'):
+        filename = request.FILES['tarball']['filename']
+        print filename
+        print request.FILES['tarball']['content']
+        object.save_tarball_file(filename, request.FILES['tarball']['content'])
+
+def save_screenshot(request, object):
+    """
+    Retrieve filename and save the file
+    """
+    if request.FILES.has_key('screenshot'):
+        filename = request.FILES['screenshot']['filename']
+        object.save_screenshot_file(filename, request.FILES['screenshot']['content'])
 
 def add_software(request):
     """
@@ -27,6 +45,7 @@ def add_software(request):
         if form.is_valid():
             new_software = Software(user=request.user,
                                     title=form.cleaned_data['title'],
+                                    version=form.cleaned_data['version'],
                                     authors=form.cleaned_data['authors'],
                                     contact=form.cleaned_data['contact'],
                                     description=form.cleaned_data['description'],
@@ -51,22 +70,6 @@ def add_software(request):
                               { 'form': form },
                               context_instance=RequestContext(request))
 
-def save_tarball(request, object):
-    """
-    Retrieve filename and save the file
-    """
-    if request.FILES.has_key('tarball'):
-        filename = request.FILES['tarball']['filename']
-        object.save_tarball_file(filename, request.FILES['tarball']['content'])
-
-def save_screenshot(request, object):
-    """
-    Retrieve filename and save the file
-    """
-    if request.FILES.has_key('screenshot'):
-        filename = request.FILES['screenshot']['filename']
-        object.save_screenshot_file(filename, request.FILES['screenshot']['content'])
-
 def edit_software(request, software_id):
     """
     Show the software form, and capture the information
@@ -86,7 +89,8 @@ def edit_software(request, software_id):
         form = EditSoftwareForm(request.POST)
         if form.is_valid():
             for field in editables:
-                setattr(software, field, form.cleaned_data[field])
+                if not field in dontupdateifempty or form.cleaned_data[field]:
+                    setattr(software, field, form.cleaned_data[field])
 
             save_tarball(request, software)
             save_screenshot(request, software)

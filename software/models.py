@@ -11,6 +11,9 @@ editables=('title','version','authors',
         'contact', 'description', 'project_url', 'tags', 'language',
         'os_license', 'tarball', 'screenshot' )
 
+# don't change db of the following fields if they are empty
+dontupdateifempty=['tarball', 'screenshot']
+
 # Create your models here.
 class Software(models.Model):
     """
