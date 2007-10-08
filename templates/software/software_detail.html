@@ -9,12 +9,18 @@
 {% block content-related %}
 <h2>Manage</h2>
 <dl>
+<a href="/software">Project List</a>
+</dl>
+
+<dl>
 {% if user.is_authenticated %}
-	<a href="/software/submit">Submit new Project</a></li>
+<a href="/software/submit">Submit new Project</a>
 {% else %}
-<li><a href="/software/submit">Login</a><a> to submit a new project</a></li>
+<a href="/software/submit">Login</a><a> to submit a new project</a>
 {% endif %}
 </dl>
+
+{% ifequal user.id object.user_id %}
 <dl>
 {% if user.is_authenticated %}
 <a href="/software/update/{{ object.id}}">Update Project</a>
@@ -22,9 +28,12 @@
 <a href="/software/update/{{ object.id}}">Login</a><a> to edit this project</a>
 {% endif %}
 </dl>
+{% endifequal %}
 
 <h2>Details</h2>
 <dl>
+<dt>Submitter:</dt>
+<dd>{{ object.user.username }}</dd>
 <dt>Author(s):</dt>
 <dd>{{ object.authors }}</dd>
 <dt>Posted:</dt>
@@ -45,7 +54,7 @@
 
 {% if object.screenshot %}
 <dt>Screenshot:</dt>
-<dd><img src='/{{ object.screenshot }}' width='106' height='80' alt='screenshot'></dd>
+<dd><a href="/{{ object.screenshot }}" target="new"><img src="/{{ object.screenshot }}" width='106' height='80' alt='screenshot'></a></dd>
 {% endif %}
 
 <dt>Description:</dt>
@@ -74,8 +83,11 @@
 
 {% if comment_list %}
   {% for comment in comment_list %}
-  <p><strong>{{ comment.user }}</strong> - {{ comment.comment|safe_markdown:"safe" }}</p>
+  <dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y" }}):</dt>
+  <dd>{{ comment.comment|safe_markdown:"safe" }}
+  <p><a href="{{ comment.get_absolute_url }}">#</a></p></dd>
   {% endfor %}
+
 {% else %}
   <p>
   No one has posted any comments yet. Perhaps you'd like to be the first?

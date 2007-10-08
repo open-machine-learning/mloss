@@ -6,6 +6,15 @@
 
 {% block billboard %}Submit a software project{% endblock %}
 
+{% block content-related %}
+<dl>
+    <dt>
+    Submitting/Updating software project as user
+    {{ user.username }}
+    </dt>
+</dl>
+{% endblock %}
+
 {% block content %}
 {% if form.errors %}
 <p class="error">Please correct the errors below:</p>
@@ -17,15 +26,7 @@
 <form method="POST" action="">
 {% endif %}
   <dl>
-    <dt><label for="id_screenshot">
-        Screenshot: {% if form.screenshot.errors %}
-        <span class="error">
-          {{ form.title.errors|join:", " }}
-        </span>
-        {% endif %}
-      </label>
-    </dt>
-    <dd>{{ form.screenshot }}{{ form.screenshot_file }}</dd>
+    <input type="hidden" name="user" value="1" />
     <dt><label for="id_title">
         Title: {% if form.title.errors %}
         <span class="error">
@@ -107,6 +108,15 @@
       </label>
     </dt>
     <dd>{{ form.tarball }}{{ form.tarball_file }}</dd>
+    <dt><label for="id_screenshot">
+        Screenshot: {% if form.screenshot.errors %}
+        <span class="error">
+          {{ form.title.errors|join:", " }}
+        </span>
+        {% endif %}
+      </label>
+    </dt>
+    <dd>{{ form.screenshot }}{{ form.screenshot_file }}</dd>
     <dt><input type="submit" value="Save" /></dt>
   </dl>
 </form>

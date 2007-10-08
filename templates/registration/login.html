@@ -8,6 +8,7 @@
 
 {% block content-related %}
 <p>If you don't have an account, you can <a href="/accounts/register/">sign up</a> for one; it's free, and you'll get access to a bunch of nifty features.</p>
+<p>Forgotten your password? Then click <a href="/accounts/password/reset/">here</a> to receive an e-mail with a new one.</p>
 {% endblock %}
 
 {% block content %}
@@ -16,6 +17,7 @@
 <p class="error">Please correct the errors below:</p>
 {% endif %}
 
+<h2>Login</h2>
 <form method="post" action="{% if next %}?next={{ next }}{% endif %}">
 <dl>
 <dt><label for="id_username">Username:</label>{% if form.username.errors %} <span class="error">{{ form.username.errors|join:", " }}</span>{% endif %}</dt>
@@ -25,5 +27,6 @@
 <dt><input type="submit" value="Log in" /></dt>
 </dl>
 </form>
+
 {% endblock %}
 

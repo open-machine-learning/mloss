@@ -14,7 +14,7 @@
   <a href="{{ snippet.get_absolute_url }}">
       {{ snippet.title }}</a> 
     published
-    {{ snippet.pub_date|timesince }} ago
+    {{ snippet.pub_date|timesince }} ago by {{ snippet.user.username }}
     <p>{{ snippet.description_html }}</p>
   </li>
   {% endfor %}
@@ -38,6 +38,7 @@
 {% block content-related %}
 <h2>Manage</h2>
 <ul>
+    <li><a href="/software">Project List</a></li>
 {% if user.is_authenticated %}
 	<li><a href="/software/submit">Submit new Project</a></li>
 {% else %}

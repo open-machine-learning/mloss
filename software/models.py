@@ -3,6 +3,13 @@ from software import managers
 import datetime
 from markdown import markdown
 from django.utils.html import strip_tags
+from django.contrib.auth.models import User
+
+# make sure this list of variables is up-to-date (i.e. matches
+# the fields in the Software object
+editables=('title','authors',
+        'contact', 'description', 'project_url', 'tags', 'language',
+        'os_license', 'tarball', 'screenshot' )
 
 # Create your models here.
 class Software(models.Model):
@@ -10,7 +17,7 @@ class Software(models.Model):
     A description of some machine learning open source
     software project.
     """
-    screenshot = models.ImageField(upload_to="media/screenshot_archive/",blank=True,null=True)
+    user = models.ForeignKey(User, raw_id_admin=True)
     title = models.CharField(max_length=80)
     authors = models.CharField(max_length=200)
     contact = models.EmailField(max_length=80)
@@ -23,6 +30,10 @@ class Software(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     tarball = models.FileField(upload_to="media/code_archive/",blank=True,null=True)
+    screenshot = models.ImageField(upload_to="media/screenshot_archive/",blank=True,null=True)
+
+    def get(self, a, b):
+        return self.__dict__[a]
 
     def save(self):
         if not self.id:
@@ -52,7 +63,8 @@ class Software(models.Model):
             ('Metadata', {
             'fields': ('title', 'authors')}),
             ('None', {
-            'fields': ('description', 'project_url', 'tags', 'language', 'os_license', 'pub_date', 'updated_date')}),
+            'fields': ('user', 'description', 'project_url', 'tags', 'language',
+				'os_license', 'pub_date', 'updated_date', 'tarball', 'screenshot')}),
             )
         list_filter = ['pub_date']
         date_hierarchy = 'pub_date'

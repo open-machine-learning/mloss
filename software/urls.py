@@ -47,6 +47,6 @@ urlpatterns = patterns('',
                         (r'^author/$', object_list, software_info_dict_author),
                         (r'^tags/$', object_list, software_info_dict_tags),
                         (r'^license/$', object_list, software_info_dict_license),
-						(r'^submit/', 'software.forms.addsoftware'),
-						(r'^update/(?P<software_id>\d+)/$', 'software.forms.update_software'),
+						(r'^submit/', 'software.forms.add_software'),
+						(r'^update/(?P<software_id>\d+)/$', 'software.forms.edit_software'),
                         )
