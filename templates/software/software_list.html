@@ -12,7 +12,7 @@
   {% for snippet in object_list %}
   <li>
   <a href="{{ snippet.get_absolute_url }}">
-      {{ snippet.title }}</a> 
+	  {{ snippet.title }}</a> version {{ snippet.version }}
     published
     {{ snippet.pub_date|timesince }} ago by {{ snippet.user.username }}
     <p>{{ snippet.description_html }}</p>

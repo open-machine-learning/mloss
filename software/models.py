@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 # make sure this list of variables is up-to-date (i.e. matches
 # the fields in the Software object
-editables=('title','authors',
+editables=('title','version','authors',
         'contact', 'description', 'project_url', 'tags', 'language',
         'os_license', 'tarball', 'screenshot' )
 
@@ -19,6 +19,7 @@ class Software(models.Model):
     """
     user = models.ForeignKey(User, raw_id_admin=True)
     title = models.CharField(max_length=80)
+    version = models.CharField(max_length=80)
     authors = models.CharField(max_length=200)
     contact = models.EmailField(max_length=80)
     description = models.TextField()
@@ -43,6 +44,7 @@ class Software(models.Model):
         # Use safe_mode in Markdown to prevent arbitrary input
         # and strip all html tags from CharFields
         self.title = strip_tags(self.title)
+        self.version = strip_tags(self.version)
         self.authors = strip_tags(self.authors)
         self.description_html = markdown(self.description, safe_mode=True)
         self.tags = strip_tags(self.tags)
@@ -61,7 +63,7 @@ class Software(models.Model):
     class Admin:
         fields = (
             ('Metadata', {
-            'fields': ('title', 'authors')}),
+            'fields': ('title', 'version', 'authors')}),
             ('None', {
             'fields': ('user', 'description', 'project_url', 'tags', 'language',
 				'os_license', 'pub_date', 'updated_date', 'tarball', 'screenshot')}),

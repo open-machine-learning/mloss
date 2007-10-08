@@ -26,7 +26,6 @@
 <form method="POST" action="">
 {% endif %}
   <dl>
-    <input type="hidden" name="user" value="1" />
     <dt><label for="id_title">
         Title: {% if form.title.errors %}
         <span class="error">
@@ -36,6 +35,15 @@
       </label>
     </dt>
     <dd>{{ form.title }}</dd>
+    <dt><label for="id_version">
+        Version: {% if form.version.errors %}
+        <span class="error">
+          {{ form.version.errors|join:", " }}
+        </span>
+        {% endif %}
+      </label>
+    </dt>
+    <dd>{{ form.version }}</dd>
     <dt><label for="id_authors">
         Authors: {% if form.authors.errors %}
         <span class="error">
