@@ -9,24 +9,24 @@
     </p>
 {% else %}
     <p>
-    <label for="id_username">Username:</label>
-    <input type="text" name="username" id="id_username" />
-    <br />
-    Password:
-    <input type="password" name="password" id="id_password" />
-    (<a href="/accounts/password_reset/">
+	<label for="id_username"><tt>Username:</tt></label>
+    <input type="text" name="username" id="id_username" cols="40">
+    <br>
+	<label for="id_username"><tt>Password:</tt></label>
+    <input type="password" name="password" id="id_password">
+    (<a href="/accounts/password/reset/">
     Forgotten your password?</a>)
     </p>
 {% endif %}
 
-<p><label for="id_comment">Comment:</label><br />
+<p><label for="id_comment">Comment:</label><br>
 <textarea name="comment" id="id_comment" rows="10" cols="80"></textarea></p>
 
 <p>
-<input type="hidden" name="options" value="{{ options }}" />
-<input type="hidden" name="target" value="{{ target }}" />
-<input type="hidden" name="gonzo" value="{{ hash }}" />
-<input type="submit" name="post" value="Post comment" />
+<input type="hidden" name="options" value="{{ options }}">
+<input type="hidden" name="target" value="{{ target }}">
+<input type="hidden" name="gonzo" value="{{ hash }}">
+<input type="submit" name="post" value="Post comment">
 </p>
 </form>
 

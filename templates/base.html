@@ -25,46 +25,47 @@
   </head>
 
   <body id="{% block sectionid %}generic{% endblock %}" class="{% block coltype %}default{% endblock %}">
-
-    <div id="container">
-      <div id="header">
-	<h1 id="logo"><a href="/">
-	    <img src="/media/images/mloss.png" alt="mloss" width="180px"/></a></h1>
-	<div id="name">Machine Learning Open Source Software</div>
-	<div id="accounts">
-	  {% if user.is_authenticated %}
-	  <a href="/accounts/logout">Logout</a>
-	  {% else %}
-	  <a href="/accounts/login">Login</a>
-	  {% endif %}
-	</div>
-	<ul id="nav-global">
-		<!--<li id="nav-news"><a href="/news/">News</a></li>-->
-		<!--<li id="nav-submit"><a href="/submit/">Submit</a></li>-->
-		<li id="nav-browse"><a href="/software/">Software</a></li>
-		<li id="nav-community"><a href="/community/">Community</a></li>
-		<li id="nav-workshop"><a href="/workshop/">Workshop</a></li>
-		<!--<li id="nav-links"><a href="/links/">External Links</a></li>-->
-		<!--<li id="nav-faq"><a href="/faq/">FAQ</a></li>-->
-		<li id="nav-about"><a href="/about/">About</a></li>
-	</ul>
+      <div id="container">
+          <div id="header">
+              <div id="name">Machine Learning Open Source Software</div>
+              <div id="accounts">
+                  {% if user.is_authenticated %}
+                  <a href="/accounts/logout">Logout</a>
+                  {% else %}
+                  <a href="/accounts/login">Login</a>
+                  {% endif %}
+              </div>
+              <br>
+              <a href="/">
+                  <img id="logo" src="/media/images/mloss_small.png" alt="mloss" width="151" height="46">
+          </a>
+              <ul id="nav-global">
+                  <!--<li id="nav-news"><a href="/news/">News</a></li>-->
+                  <!--<li id="nav-submit"><a href="/submit/">Submit</a></li>-->
+                  <li id="nav-browse"><a href="/software/">Software</a></li>
+                  <li id="nav-community"><a href="/community/">Community</a></li>
+                  <li id="nav-workshop"><a href="/workshop/">Workshop</a></li>
+                  <!--<li id="nav-links"><a href="/links/">External Links</a></li>-->
+                  <!--<li id="nav-faq"><a href="/faq/">FAQ</a></li>-->
+                  <li id="nav-about"><a href="/about/">About</a></li>
+              </ul>
+          </div>
+          <!-- END Header -->
+          <div id="billboard">{% block billboard %}{% endblock %}</div>
+          <div id="columnwrap">
+              {% block columnwrap %}
+              <div id="content-main">
+                  {% block content %}{% endblock %}
+              </div>
+              <!-- END #content-main -->
+              {% endblock %}
+          </div>
+          <!-- END #content -->
+          <div id="footer">
+              <p>&copy; {% now "Y" %} Mikio Braun, Cheng Soon Ong, Soeren Sonnenburg</p>
+          </div>
       </div>
-      <!-- END Header -->
-      <div id="billboard">{% block billboard %}{% endblock %}</div>
-      <div id="columnwrap">
-	{% block columnwrap %}
-	<div id="content-main">
-	  {% block content %}{% endblock %}
-	</div>
-	<!-- END #content-main -->
-	{% endblock %}
-      </div>
-      <!-- END #content -->
-      <div id="footer">
-	<p>&copy; {% now "Y" %} Mikio Braun, Cheng Soon Ong, Soeren Sonnenburg</p>
-      </div>
-    </div>
-    <!-- END #container -->
+      <!-- END #container -->
   </body>
 </html>
 

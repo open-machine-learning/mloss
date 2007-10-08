@@ -24,7 +24,7 @@ a:hover { color:#ffe761; }
 /* HEADER */
 
 #header { position:relative; height:6.5em; background:#336699; }
-#header h1#logo { margin:0; width:180px; height:41px;  position:absolute; }
+#header #logo { width:151px; height:46px;  position:absolute; padding:1ex 1em 1ex 2em}
 #name { display:inline; text-align:left; padding-right: 20px; color:white; background:#336699 }
 #accounts { display:inline; text-align:right; padding:5em 16px 10px 16px; color:#ffc757; background:#113366 }
 
