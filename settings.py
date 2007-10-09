@@ -9,14 +9,16 @@ if not PRODUCTION:
 ADMINS = (
     ('Mikio Braun', 'mikio@cs.tu-berlin.de'),
     ('Cheng Soon Ong', 'chengsoon.ong@tuebingen.mpg.de'),
-    ('Gunnar Raetsch', 'gunnar.raetsch@tuebingen.mpg.de'),
     ('Soeren Sonnenburg', 'soeren.sonnenburg@first.fraunhofer.de'),
 )
 
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-DATABASE_NAME = 'mloss.db'             # Or path to database file if using sqlite3.
+if PRODUCTION:
+    DATABASE_NAME = '/home/mloss/mloss/mloss.db'             # Or path to database file if using sqlite3.
+else:
+    DATABASE_NAME = 'mloss.db'             # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
@@ -46,7 +48,10 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ''
+if PRODUCTION:
+    MEDIA_ROOT = '/home/mloss/mloss/media/'
+else:
+    MEDIA_ROOT = ''
 
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
@@ -55,7 +60,10 @@ MEDIA_URL = ''
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media_admin/'
+if PRODUCTION:
+    ADMIN_MEDIA_PREFIX = 'http://zut.tuebingen.mpg.de/admin_media/'
+else:
+    ADMIN_MEDIA_PREFIX = '/media_admin/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'ccku5%_-8r2#*rb(yh)j!11ar12vx_tll5u(11%3l=^k8rfe=y'
