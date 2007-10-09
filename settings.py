@@ -27,6 +27,7 @@ DATABASE_PORT = ''             # Set to empty string for default. Not used with 
 
 LOGIN_REDIRECT_URL='/'
 ACCOUNT_ACTIVATION_DAYS=1
+DEFAULT_FROM_EMAIL='admin@mloss.org'
 
 # Local time zone for this installation. Choices can be found here:
 # http://www.postgresql.org/docs/8.1/static/datetime-keywords.html#DATETIME-TIMEZONE-SET-TABLE
