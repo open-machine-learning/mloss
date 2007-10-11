@@ -14,14 +14,14 @@
       <span class="error">{{ comment_form.username.error_list|join:", " }}</span>
     {% endif %}
     </label>
-      {{ comment_form.username }}</p>
+      {{ comment_form.username|escape }}</p>
     <p><label for="id_password">Password:
     {% if comment_form.password.errors %}
       <span class="error">{{ comment_form.password.error_list|join:", " }}</span>
     {% endif %}
-    </label> {{ comment_form.password }}</p>
+    </label> {{ comment_form.password|escape }}</p>
   {% else %}
-    <p>User: <strong>{{ comment.user }}</strong></p>
+    <p>User: <strong>{{ comment.user|escape }}</strong></p>
   {% endif %}
 
   <p><label for="id_comment">Comment:
@@ -30,7 +30,7 @@
       {{ comment_form.comment.error_list|join:", "  }}
     </span>
   {% endif %}
-  </label><br />{{ comment_form.comment }}</p>
+  </label><br />{{ comment_form.comment|escape }}</p>
   <input type="hidden" name="options" value="{{ options }}" />
   <input type="hidden" name="target" value="{{ target }}" />
   <input type="hidden" name="gonzo" value="{{ hash }}" />
