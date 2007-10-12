@@ -56,14 +56,14 @@
 
 {% if object.screenshot %}
 <dt>Screenshot:</dt>
-<dd><a href="/{{ object.screenshot }}" target="new"><img src="/{{ object.screenshot }}" width='106' height='80' alt='screenshot'></a></dd>
+<dd><a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width='128' height='80' alt='screenshot'></a></dd>
 {% endif %}
 
 <dt>Description:</dt>
 <dd>{{ object.description_html }}</dd>
 
 <dt>URL:</dt>
-<dd>{{ object.project_url }}</dd>
+<dd>{{ object.project_url|urlize }}</dd>
 
 {% if object.tags %}
 <dt>Tag(s):</dt>
@@ -72,7 +72,7 @@
 
 {% if object.tarball %}
 <dt>Archive:</dt>
-<dd><a href='/{{ object.tarball }}'>download here</a></dd>
+<dd><a href='/media/{{ object.tarball }}'>download here</a></dd>
 {% endif %}
 
 </dl>
@@ -85,18 +85,18 @@
 
 {% if comment_list %}
   {% for comment in comment_list %}
+  <div id="comment">
   <dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y" }}):</dt>
-  <dd>{{ comment.comment|safe_markdown:"safe" }}
-  <p><a href="{{ comment.get_absolute_url }}">#</a></p></dd>
+  <dd>{{ comment.comment|safe_markdown:"safe" }}</dd>
+  </div>
   {% endfor %}
-
 {% else %}
   <p>
   No one has posted any comments yet. Perhaps you'd like to be the first?
   </p>
 {% endif %}
 
-
+<h2>Leave a comment</h2>
 {% comment_form for software.software object.id %}
 
 {% endblock %}

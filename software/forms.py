@@ -41,7 +41,9 @@ def add_software(request):
     original_id = request.GET.get('oid', None)
 
     if request.method == 'POST':
-        form = AddSoftwareForm(request.POST)
+        new_data = request.POST.copy()
+        new_data.update(request.FILES)
+        form = AddSoftwareForm(new_data)
         if form.is_valid():
             new_software = Software(user=request.user,
                                     title=form.cleaned_data['title'],

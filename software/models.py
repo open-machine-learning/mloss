@@ -33,8 +33,8 @@ class Software(models.Model):
     os_license = models.CharField(max_length=200)
     pub_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    tarball = models.FileField(upload_to="media/code_archive/",blank=True,null=True)
-    screenshot = models.ImageField(upload_to="media/screenshot_archive/",blank=True,null=True)
+    tarball = models.FileField(upload_to="code_archive/",blank=True,null=True)
+    screenshot = models.ImageField(upload_to="screenshot_archive/",blank=True,null=True)
 
     def get(self, a, b):
         return self.__dict__[a]
