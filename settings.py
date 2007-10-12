@@ -89,9 +89,14 @@ ROOT_URLCONF = 'mloss.urls'
 
 
 #import os.path
-TEMPLATE_DIRS = (
-    'templates/',
-)
+if PRODUCTION:
+    TEMPLATE_DIRS = (
+        '/home/mloss/mloss/templates/',
+        )
+else:    
+    TEMPLATE_DIRS = (
+        'templates/',
+        )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
