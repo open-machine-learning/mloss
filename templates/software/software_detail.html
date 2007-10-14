@@ -54,6 +54,7 @@
 {% block content %}
 <dl>
 
+	<table><tr><td>
 {% if object.screenshot %}
 <dt>Screenshot:</dt>
 <dd><a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width='128' height='80' alt='screenshot'></a></dd>
@@ -74,6 +75,7 @@
 <dt>Archive:</dt>
 <dd><a href='/media/{{ object.tarball }}'>download here</a></dd>
 {% endif %}
+</td></tr></table>
 
 </dl>
 
@@ -86,9 +88,9 @@
 {% if comment_list %}
   {% for comment in comment_list %}
   <div id="comment">
-  <dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y" }}):</dt>
+  <dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y, h:m:s" }}):</dt>
   <dd>{{ comment.comment|safe_markdown:"safe" }}</dd>
-  </div>
+  </div><br>
   {% endfor %}
 {% else %}
   <p>

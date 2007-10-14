@@ -94,7 +94,12 @@ dd { margin-bottom:.8em; }
 #billboard { background:#CCCCCC repeat-x; border-bottom:6px solid #113366; font-size:150%; line-height:1.2em; color:#113366; }
 
 /* COMMENTS */
-#comment { border:1px solid #CCCCCC }
+
+#comment { width:90%; padding:3px; border:1px solid #113366; background:#CCCCFF}
+
+table { width:90% }
+th { padding:5px; border:2px solid #113366;background:#CCCCFF }
+td { padding:5px; border:2px solid #113366;background:#CCCCFF }
 
 /* FOOTER */
 

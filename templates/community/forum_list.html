@@ -1,12 +1,13 @@
 {% extends "community/forum_base.html" %}
 
 {% block content %}
+<center>
 <table id='djangoForumList'>
 <tr>
 <th>Forum</th>
 <th>Last Post</th>
 </tr>
-
+<br>
 {% for forum in object_list %}
 <tr>
 <td class='djangoForumListDetails'><p><strong><a href='{{ forum.get_absolute_url }}'>{{ forum.title }}</a></strong><br /><span class='djangoForumStats'>{{ forum.threads }} thread{{ forum.threads|pluralize }}, {{ forum.posts }} post{{ forum.posts|pluralize }}</span></p>
@@ -15,4 +16,5 @@
 </tr>
 {% endfor %}
 </table>
+</center>
 {% endblock %}

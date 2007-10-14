@@ -7,17 +7,20 @@
 {% block billboard %}All entries{% endblock %}
 
 {% block content %}
+<br>
 {% if object_list %}
-<ul>
   {% for snippet in object_list %}
-  <li>
+  <center>
+  <table><tr><td>
   <h2>
   <a href="{{ snippet.get_absolute_url }}">
 	  {{ snippet.title }}</a> version {{ snippet.version }}</h2>
     published
     {{ snippet.pub_date|timesince }} ago by {{ snippet.user.username }}
     <p>{{ snippet.description_html }}</p>
-  </li>
+  </td></tr></table>
+  </center>
+  <br>
   {% endfor %}
 </ul>
 <p class="pagination">
