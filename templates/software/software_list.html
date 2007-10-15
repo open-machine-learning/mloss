@@ -37,7 +37,7 @@
 	{% if snippet.os_license %}<li><b>License:</b> {{ snippet.os_license}}</li> {% endif %}
 	{% if snippet.project_url %}<li><b>Homepage:</b> {{ snippet.project_url|urlize}}</li> {% endif %}
     </ul>
-    <!--<p><h3>Description</h3>{{ snippet.description_html }}</p>-->
+    <p><h3>Description</h3>{{ snippet.description_html }}</p>
   </td></tr></table>
 
 {% endfor %}
@@ -73,7 +73,7 @@
 <ul>
     <li><a href="/software/date/">Date</a></li>
     <li><a href="/software/title/">Project Title</a></li>
-    <!--<li><a href="/software/author/">Author</a></li>-->
+    <li><a href="/software/author/">Author</a></li>
     <li><a href="/software/submitter/">Submitter</a></li>
     <li><a href="/software/tags/">Tag</a></li>
     <li><a href="/software/license/">License</a></li>
