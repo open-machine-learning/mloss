@@ -4,10 +4,10 @@ PRODUCTION = False # set to True when project goes live
 
 if not PRODUCTION:
     DEBUG = True
+    TEMPLATE_DEBUG = DEBUG
 else:
     DEBUG = False
 
-TEMPLATE_DEBUG = DEBUG
     
 ADMINS = (
     ('Mikio Braun', 'mikio@cs.tu-berlin.de'),
