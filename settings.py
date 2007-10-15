@@ -3,9 +3,12 @@
 PRODUCTION = False # set to True when project goes live
 
 if not PRODUCTION:
-	DEBUG = True
-	TEMPLATE_DEBUG = DEBUG
+    DEBUG = True
+else:
+    DEBUG = False
 
+TEMPLATE_DEBUG = DEBUG
+    
 ADMINS = (
     ('Mikio Braun', 'mikio@cs.tu-berlin.de'),
     ('Cheng Soon Ong', 'chengsoon.ong@tuebingen.mpg.de'),
@@ -14,6 +17,9 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+if PRODUCTION:
+    SERVER_EMAIL = 'admin@mloss.org'
+    
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
 if PRODUCTION:
     DATABASE_NAME = '/home/mloss/mloss/mloss.db'             # Or path to database file if using sqlite3.
