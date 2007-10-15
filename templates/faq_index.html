@@ -7,14 +7,12 @@
 {% block billboard %}Frequently Asked Questions{% endblock %}
 
 {% block content-related %}
-{% if all_faq_items %}
-    <ul>
-    {% for nitem in all_faq_items %}
-        <li>{{ nitem.question }}</li>
-    {% endfor %}
-{% else %}
-    <p>No faq items</p>
-{% endif %}
+<p>
+To browse the currently listed software projects or to submit your own, 
+click on the <a href="http://mloss.org/software/">Software</a> tab. 
+You will need to register to be able to submit new projects. 
+To discuss issue regarding machine learning open source software, 
+click on the <a href="http://mloss.org/community/">Community</a> tab for our forum.</p>
 {% endblock %}
 
 {% block content %}
@@ -22,7 +20,7 @@
     <ul>
     {% for nitem in all_faq_items %}
         <li>
-            <h2>{{ nitem.question }}</h2>
+            <h3>{{ nitem.question }}</h3>
 	    {{ nitem.answer }}
 	</li>
     {% endfor %}

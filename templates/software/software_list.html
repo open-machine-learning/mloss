@@ -7,41 +7,54 @@
 {% block billboard %}All entries{% endblock %}
 
 {% block content %}
-<br>
+
 {% if object_list %}
+
+  <p class="pagination">
+    {% if has_previous %}
+    <a href="?page={{ previous }}">&lt; 
+      Previous {{ results_per_page }}
+    </a>
+    {% endif %}&nbsp;&nbsp;
+    {% if has_next %}
+    <a href="?page={{ next }}">
+      Next {{ results_per_page }} &gt;
+    </a>
+    {% endif %}
+  </p>
+
+
   {% for snippet in object_list %}
-<table><tr><td>
+  <table><tr><td>
   <h2><a href="{{ snippet.get_absolute_url }}">
-	  {{ snippet.title }} {{ snippet.version }}</a></h2>
-<p>
-by <a href="{{ snippet.user.get_absolute_url }}">{{ snippet.user.username }}</a> - {{ snippet.pub_date|date:"F j, Y, h:m:s" }}
-</p>
-<ul>{% if snippet.tags %} <li><b>Tags:</b> {{ snippet.tags }}</li> {% endif %}
+	{{ snippet.title }} {{ snippet.version }}</a></h2>
+    <p>
+      by <a href="{{ snippet.user.get_absolute_url }}">{{ snippet.user.username }}</a> 
+      - {{ snippet.pub_date|date:"F j, Y, h:m:s" }}
+    </p>
+    <ul>{% if snippet.tags %} <li><b>Tags:</b> {{ snippet.tags }}</li> {% endif %}
 	{% if snippet.authors %}<li><b>Authors:</b> {{ snippet.authors }}</li> {% endif %}
 	{% if snippet.os_license %}<li><b>License:</b> {{ snippet.os_license}}</li> {% endif %}
 	{% if snippet.project_url %}<li><b>Homepage:</b> {{ snippet.project_url|urlize}}</li> {% endif %}
-</ul>
-</p>
-<p>
-<h3>Description</h3>
-{{ snippet.description_html }}
-</p>
-</td></tr></table>
-<br>
+    </ul>
+    <!--<p><h3>Description</h3>{{ snippet.description_html }}</p>-->
+  </td></tr></table>
+
 {% endfor %}
 
-<p class="pagination">
-  {% if has_previous %}
-  <a href="?page={{ previous }}">&lt; 
-    Previous {{ results_per_page }}
-  </a>
-  {% endif %}&nbsp;&nbsp;
-  {% if has_next %}
-  <a href="?page={{ next }}">
-    Next {{ results_per_page }} &gt;
-  </a>
-  {% endif %}
-</p>
+  <p class="pagination">
+    {% if has_previous %}
+    <a href="?page={{ previous }}">&lt; 
+      Previous {{ results_per_page }}
+    </a>
+    {% endif %}&nbsp;&nbsp;
+    {% if has_next %}
+    <a href="?page={{ next }}">
+      Next {{ results_per_page }} &gt;
+    </a>
+    {% endif %}
+  </p>
+
 {% else %}
 <p>No software posted yet.</p>
 {% endif %}
@@ -50,18 +63,17 @@ by <a href="{{ snippet.user.get_absolute_url }}">{{ snippet.user.username }}</a>
 {% block content-related %}
 <h2>Manage</h2>
 <ul>
-    <li><a href="/software">Project List</a></li>
 {% if user.is_authenticated %}
-	<li><a href="/software/submit">Submit new Project</a></li>
+  <li><a href="/software/submit">Submit new Project</a></li>
 {% else %}
-<li><a href="/software/submit">Login</a><a> to submit a new project</a></li>
+  <li><a href="/software/submit">Login</a><a> to submit a new project</a></li>
 {% endif %}
 </ul>
 <h2>Browse by</h2>
 <ul>
     <li><a href="/software/date/">Date</a></li>
     <li><a href="/software/title/">Project Title</a></li>
-    <li><a href="/software/author/">Author</a></li>
+    <!--<li><a href="/software/author/">Author</a></li>-->
     <li><a href="/software/submitter/">Submitter</a></li>
     <li><a href="/software/tags/">Tag</a></li>
     <li><a href="/software/license/">License</a></li>
