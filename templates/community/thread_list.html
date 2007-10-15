@@ -6,7 +6,6 @@
 
 
 {% block content %}
-<center>
 <br>
 <table id='djangoForumThreadList'>
 
@@ -26,7 +25,6 @@
 </tr>
 {% endfor %}
 </table>
-</center>
 
 <h2>Create a Thread</h2>
 {% if user.is_authenticated %}
@@ -34,9 +32,16 @@
 	<p><label for='title'>Title</label><br> <input type='text' name='title' maxlength='100' /></p>
 <p><label>Posting as </label> <span>{{ user.username }}</span></p>
 <textarea name='body' rows='8' cols='50'></textarea></p>
+<p>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</p>
 <p><input type='submit' value='Post' /></p>
 </form>
 {% else %}
 <p>Please login to create a thread.</p>
 {% endif %}
+{% endblock %}
+
+{% block content-related %}
+<p>
+Choose the thread thread you would like to read or contribute to. Or simply create a new one if the existing threads do not fit.
+</p>
 {% endblock %}

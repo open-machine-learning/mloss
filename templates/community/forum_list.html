@@ -1,7 +1,6 @@
 {% extends "community/forum_base.html" %}
 
 {% block content %}
-<center>
 <table id='djangoForumList'>
 <tr>
 <th>Forum</th>
@@ -16,5 +15,12 @@
 </tr>
 {% endfor %}
 </table>
-</center>
+{% endblock %}
+
+{% block content-related %}
+<h2>Use ...</h2>
+<p>
+the discussion forums to inform us about problems with this site, missing features.
+Or just discuss general MLOSS issues.
+</p>
 {% endblock %}

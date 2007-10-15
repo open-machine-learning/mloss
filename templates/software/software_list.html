@@ -10,19 +10,26 @@
 <br>
 {% if object_list %}
   {% for snippet in object_list %}
-  <center>
-  <table><tr><td>
-  <h2>
-  <a href="{{ snippet.get_absolute_url }}">
-	  {{ snippet.title }}</a> version {{ snippet.version }}</h2>
-    published
-    {{ snippet.pub_date|timesince }} ago by {{ snippet.user.username }}
-    <p>{{ snippet.description_html }}</p>
-  </td></tr></table>
-  </center>
-  <br>
-  {% endfor %}
+<table><tr><td>
+  <h2><a href="{{ snippet.get_absolute_url }}">
+	  {{ snippet.title }} {{ snippet.version }}</a></h2>
+<p>
+by <a href="{{ snippet.user.get_absolute_url }}">{{ snippet.user.username }}</a> - {{ snippet.pub_date|date:"F j, Y, h:m:s" }}
+</p>
+<ul>{% if snippet.tags %} <li><b>Tags:</b> {{ snippet.tags }}</li> {% endif %}
+	{% if snippet.authors %}<li><b>Authors:</b> {{ snippet.authors }}</li> {% endif %}
+	{% if snippet.os_license %}<li><b>License:</b> {{ snippet.os_license}}</li> {% endif %}
+	{% if snippet.project_url %}<li><b>Homepage:</b> {{ snippet.project_url|urlize}}</li> {% endif %}
 </ul>
+</p>
+<p>
+<h3>Description</h3>
+{{ snippet.description_html }}
+</p>
+</td></tr></table>
+<br>
+{% endfor %}
+
 <p class="pagination">
   {% if has_previous %}
   <a href="?page={{ previous }}">&lt; 
@@ -55,6 +62,7 @@
     <li><a href="/software/date/">Date</a></li>
     <li><a href="/software/title/">Project Title</a></li>
     <li><a href="/software/author/">Author</a></li>
+    <li><a href="/software/submitter/">Submitter</a></li>
     <li><a href="/software/tags/">Tag</a></li>
     <li><a href="/software/license/">License</a></li>
 </ul>
