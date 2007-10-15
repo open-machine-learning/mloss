@@ -22,7 +22,7 @@ if PRODUCTION:
     
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
 if PRODUCTION:
-    DATABASE_NAME = '/home/mloss/mloss/mloss.db'             # Or path to database file if using sqlite3.
+    DATABASE_NAME = '/home/mloss/media/db/mloss.db'             # Or path to database file if using sqlite3.
 else:
     DATABASE_NAME = 'mloss.db'             # Or path to database file if using sqlite3.
 DATABASE_USER = ''             # Not used with sqlite3.
