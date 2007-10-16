@@ -1,9 +1,10 @@
 from django.db import models
-from software import managers
 import datetime
 from markdown import markdown
 from django.utils.html import strip_tags
 from django.contrib.auth.models import User
+from django.db import models
+
 
 # make sure this list of variables is up-to-date (i.e. matches
 # the fields in the Software object
@@ -13,6 +14,28 @@ editables=('title','version','authors',
 
 # don't change db of the following fields if they are empty
 dontupdateifempty=['tarball', 'screenshot']
+
+
+
+
+class SoftwareManager(models.Manager):
+    """
+    Custom manager for the Software model.
+    
+    Adds shortcuts for common filtering operations, and for retrieving
+    popular related objects.
+    
+    """
+    def get_by_submitter(self, username):
+        """
+        Returns a QuerySet of Software submitted by a particular User.
+        
+        """
+        return self.filter(user__username__exact=username)
+    
+
+
+
 
 # Create your models here.
 class Software(models.Model):
@@ -35,6 +58,8 @@ class Software(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     tarball = models.FileField(upload_to="code_archive/",blank=True,null=True)
     screenshot = models.ImageField(upload_to="screenshot_archive/",blank=True,null=True)
+
+    objects = SoftwareManager()
 
     def get(self, a, b):
         return self.__dict__[a]
@@ -77,4 +102,7 @@ class Software(models.Model):
 
     class Meta:
         ordering = ('-pub_date',)
+
+
+
 

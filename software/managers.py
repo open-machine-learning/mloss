@@ -1,5 +1,5 @@
 """
-Custom managers for most of the models; these add useful logic for
+Custom managers for Software; these add useful logic for
 various custom filters and queries.
 
 """
@@ -15,9 +15,9 @@ class SoftwareManager(models.Manager):
     popular related objects.
     
     """
-    def get_by_author(self, username):
+    def get_by_submitter(self, username):
         """
-        Returns a QuerySet of Snippets submitted by a particular User.
+        Returns a QuerySet of Software submitted by a particular User.
         
         """
         return self.filter(author__username__exact=username)
