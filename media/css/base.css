@@ -91,15 +91,15 @@ dd { margin-bottom:.8em; }
 
 #billboard h2 { margin:0; }
 #generic #billboard { display:none; }
-#billboard { background:#CCCCFF repeat-x; border-bottom:6px solid #113366; font-size:150%; line-height:1.2em; color:#113366; }
+#billboard { background:#F7F7F7 repeat-x; border-bottom:6px solid #113366; font-size:150%; line-height:1.2em; color:#113366; }
 
 /* COMMENTS */
 
-#comment { width:90%; padding:3px; border:1px solid #113366; background:#CCCCFF}
+#comment { width:90%; padding:3px; border:1px solid #113366; background:#F7F7F7}
 
 table { width:95% }
-th { padding:5px; border:2px solid #113366;background:#CCCCFF }
-td { padding:5px; border:2px solid #113366;background:#CCCCFF }
+th { padding:5px; border:1px solid #113366;background:#F7F7F7 }
+td { padding:5px; border:1px solid #113366;background:#F7F7F7 }
 
 /* FOOTER */
 
