@@ -71,7 +71,8 @@ MEDIA_URL = ''
 if PRODUCTION:
     ADMIN_MEDIA_PREFIX = 'http://zut.tuebingen.mpg.de/admin_media/'
 else:
-    ADMIN_MEDIA_PREFIX = 'admin_media/'
+    ADMIN_MEDIA_PREFIX = '/media_admin/'
+
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'ccku5%_-8r2#*rb(yh)j!11ar12vx_tll5u(11%3l=^k8rfe=y'

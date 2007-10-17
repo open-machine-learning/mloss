@@ -91,10 +91,11 @@ class Software(models.Model):
     class Admin:
         fields = (
             ('Metadata', {
-            'fields': ('title', 'version', 'authors')}),
+            'fields': ('user', 'title', 'version', 'authors')}),
             ('None', {
-            'fields': ('user', 'description', 'project_url', 'tags', 'language',
-				'os_license', 'pub_date', 'updated_date', 'tarball', 'screenshot')}),
+            'fields': ( 'contact', 'description',
+				'project_url', 'tags', 'language', 'os_license', 
+				'pub_date', 'updated_date', 'tarball', 'screenshot')}),
             )
         list_filter = ['pub_date']
         date_hierarchy = 'pub_date'
