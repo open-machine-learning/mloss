@@ -82,15 +82,25 @@
 <h2>Comments</h2>
 {% load comments %}
 {% load safe_markup %}
+{% load show_stars %}
 
 {% get_comment_list for software.software object.id as comment_list %}
 
 {% if comment_list %}
   {% for comment in comment_list %}
   <div id="comment">
-  <dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y, h:m:s" }}):</dt>
-  <dd>{{ comment.comment|safe_markdown:"safe" }}</dd>
-  </div><br>
+	  <dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y, h:m:s" }})
+	  , Karma
+	  {% ifnotequal comment.user user %}
+	  (<a href="/comments/karma/vote/{{ comment.id }}/up/">+</a>/<a href="/comments/karma/vote/{{ comment.id }}/down/">-</a>)
+	  {% endifnotequal %}
+	  :{% show_stars comment.get_karma_total of 5 round to half %}
+	  <!--{{ comment.get_karma_total }}{{ comment.get_good_karma_total }} positive {{ comment.get_bad_karma_total }} negative-->
+
+	  </dd></dt>
+	  <dd>{{ comment.comment|safe_markdown:"safe" }}</dd>
+  </div>
+  <br>
   {% endfor %}
 {% else %}
   <p>

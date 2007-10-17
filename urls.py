@@ -33,7 +33,6 @@ urlpatterns = patterns('',
 
     # Enable comments
     (r'^comments/', include('django.contrib.comments.urls.comments')),
-
 )
 
 if settings.DEBUG and not settings.PRODUCTION:
