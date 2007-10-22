@@ -5,18 +5,13 @@ from django.views.generic.list_detail import object_list
 
 
 
-user_info_dict = dict(paginate_by=10,
-                      queryset=User.objects.all(),
-                      template_name='software/user_list.html')
-
-
 urlpatterns = patterns('',
     # administration
     (r'^admin/', include('django.contrib.admin.urls')),
 
     # Using cab to browse software
     (r'^software/', include('software.urls')),
-    (r'^users/$', object_list, user_info_dict),
+    (r'^users/$', 'software.views.user.user_with_software'),
     (r'^users/(?P<username>[^/]+)/$', 'software.views.entry.software_by_user'),
 
     # Using registration

@@ -1,4 +1,4 @@
-{% extends "base_2col.html" %}
+{% extends "software/user_list.html" %}
 
 {% block sectionid %}browse{% endblock %}
 
@@ -11,22 +11,6 @@
     {{ object.username }} has
   {% endifequal %}
   posted {{ object_list.count }} project{{ object_list.count|pluralize }}.
-{% endblock %}
-
-{% block content-related %}
-<h2>Manage</h2>
-<dl>
-<a href="/software">Project List</a>
-</dl>
-
-<dl>
-{% if user.is_authenticated %}
-<a href="/software/submit">Submit new Project</a>
-{% else %}
-<a href="/software/submit">Login</a><a> to submit a new project</a>
-{% endif %}
-</dl>
-
 {% endblock %}
 
 

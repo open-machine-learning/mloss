@@ -7,7 +7,28 @@
 {% block billboard %}All entries{% endblock %}
 
 {% block content %}
-<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    <h2>Users who have software projects</h2>
+    <ul>
+    {% for curuser in object_list %}
+        <li><a href="/users/{{ curuser.username }}/">
+	    {{ curuser.username }}</a>
+	</li>
+    {% endfor %}
+    </ul>
+
+    <p class="pagination">
+        {% if has_previous %}
+        <a href="?page={{ previous }}">&lt; 
+            Previous {{ results_per_page }}
+        </a>
+        {% endif %}&nbsp;&nbsp;
+        {% if has_next %}
+            <a href="?page={{ next }}">
+                Next {{ results_per_page }} &gt;
+            </a>
+        {% endif %}
+    </p>
+
 {% endblock %}
 
 {% block content-related %}
@@ -30,11 +51,6 @@
 <h2>Filter by</h2>
 <ul>
     <li><a href="/users/">Users</a></li>
-    <ul>
-    {% for curuser in object_list %}
-        <li><a href="/users/{{ curuser.username }}/">{{ curuser.username }}</a></li>
-    {% endfor %}
-    </ul>
 </ul>
 {% endblock %}
 
