@@ -43,6 +43,21 @@ def safe_markdown(value, arg=''):
             safe_mode = True
         else:
             safe_mode = False
+        if len(extensions) > 0 and extensions[0].startswith("cut"):
+            cutoff = int(extensions[0][extensions[0].rfind("=")+1:])
+            extensions = extensions[1:]
+            if len(value)>cutoff:
+                p = value[:cutoff].find("\n")
+                append=""
+                if p == -1:
+                    append=" [...]"
+                    p = value[:cutoff-1].rfind(" ")
+                    if p >= 0:
+                        cutoff = p
+                else:
+                    cutoff = p
+
+                value = value[:cutoff] + append
         return markdown.markdown(value, extensions, safe_mode=safe_mode)
 
 register.filter('safe_markdown', safe_markdown)

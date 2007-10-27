@@ -7,11 +7,11 @@
 {% block billboard %}All entries{% endblock %}
 
 {% block content %}
-    <h2>Users who have software projects</h2>
+    <h2>Software Licenses</h2>
     <ul>
-    {% for curuser in object_list %}
-        <li><a href="/software/users/{{ curuser.username }}/">
-	    {{ curuser.username }}</a>
+    {% for curlicense in object_list %}
+        <li><a href="/software/license/{{ curlicense.os_license }}/">
+	    {{ curlicense.os_license }}</a>
 	</li>
     {% endfor %}
     </ul>
@@ -54,4 +54,5 @@
 </ul>
 <h3><a href="/software/rss/latest"><img src="/media/images/rss.png" alt="RSS Feat" border="0" width="16" height="16" align="top"> RSS Feed</a></h3>
 {% endblock %}
+
 

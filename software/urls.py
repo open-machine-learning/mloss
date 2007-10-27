@@ -11,7 +11,7 @@ from django.conf.urls.defaults import *
 from django.views.generic.list_detail import object_list
 from models import Software
 from views.entry import software_detail
-
+from software.feeds import RssSoftwareFeed
 
 # Info for generic views.
 base_generic_dict = {
@@ -42,6 +42,7 @@ software_info_dict_license = dict(base_generic_dict,
 		queryset=Software.objects.all().order_by('os_license'),
 		template_name='software/software_list.html')
 
+
 # General softwares views.
 urlpatterns = patterns('',
     (r'^view/(?P<software_id>\d+)/$', software_detail),
@@ -51,7 +52,11 @@ urlpatterns = patterns('',
     (r'^author/$', object_list, software_info_dict_author),
     (r'^submitter/$', object_list, software_info_dict_submitter),
     (r'^tags/$', object_list, software_info_dict_tags),
-    (r'^license/$', object_list, software_info_dict_license),
     (r'^submit/', 'software.forms.add_software'),
     (r'^update/(?P<software_id>\d+)/$', 'software.forms.edit_software'),
+	(r'^rss/latest/$', RssSoftwareFeed),
+    (r'^users/$', 'software.views.user.user_with_software'),
+    (r'^users/(?P<username>[^/]+)/$', 'software.views.entry.software_by_user'),
+    (r'^license/$', 'software.views.license.license_with_software'),
+    (r'^license/(?P<license>[^/]+)/$', 'software.views.entry.software_by_license'),
 )

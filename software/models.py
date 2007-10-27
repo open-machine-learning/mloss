@@ -15,9 +15,6 @@ editables=('title','version','authors',
 # don't change db of the following fields if they are empty
 dontupdateifempty=['tarball', 'screenshot']
 
-
-
-
 class SoftwareManager(models.Manager):
     """
     Custom manager for the Software model.
@@ -32,11 +29,14 @@ class SoftwareManager(models.Manager):
         
         """
         return self.filter(user__username__exact=username)
+
+    def get_by_license(self, license):
+        """
+        Returns a QuerySet of Software submitted by a particular User.
+        
+        """
+        return self.filter(os_license__exact=license)
     
-
-
-
-
 # Create your models here.
 class Software(models.Model):
     """
@@ -79,6 +79,13 @@ class Software(models.Model):
         self.language = strip_tags(self.language)
         self.os_license = strip_tags(self.os_license)
         super(Software, self).save()
+
+    def get_taglist(self):
+        return [x.strip().encode('utf-8') for x in self.tags.split(',')]
+
+    def get_description_page(self):
+        s="<html>" + self.description_html + "</html>"
+        return s.encode('utf-8')
 
     def __str__(self):
         return self.title

@@ -1,3 +1,5 @@
+{% load safe_markup %}
+
 {% extends "base_2col.html" %}
 
 {% block sectionid %}browse{% endblock %}
@@ -29,7 +31,7 @@
   <h2><a href="{{ snippet.get_absolute_url }}">
 	{{ snippet.title }} {{ snippet.version }}</a></h2>
     <p>
-      by <a href="{{ snippet.user.get_absolute_url }}">{{ snippet.user.username }}</a> 
+      by <a href="/software{{ snippet.user.get_absolute_url }}">{{ snippet.user.username }}</a> 
       - {{ snippet.pub_date|date:"F j, Y, h:m:s" }}
     </p>
     <ul>{% if snippet.tags %} <li><b>Tags:</b> {{ snippet.tags }}</li> {% endif %}
@@ -37,7 +39,7 @@
 	{% if snippet.os_license %}<li><b>License:</b> {{ snippet.os_license}}</li> {% endif %}
 	{% if snippet.project_url %}<li><b>Homepage:</b> {{ snippet.project_url|urlize}}</li> {% endif %}
     </ul>
-    <p><h3>Description</h3>{{ snippet.description_html }}</p>
+    <p><h3>Description</h3>{{ snippet.description|safe_markdown:"safe,cut=200" }}</p>
   </td></tr></table><br>
 
 {% endfor %}
@@ -74,12 +76,13 @@
     <li><a href="/software/date/">Date</a></li>
     <li><a href="/software/title/">Project Title</a></li>
     <li><a href="/software/author/">Author</a></li>
-    <li><a href="/software/tags/">Tag</a></li>
-    <li><a href="/software/license/">License</a></li>
 </ul>
 <h2>Filter by</h2>
 <ul>
-    <li><a href="/users/">Users</a></li>
+    <li><a href="/software/users/">Users</a></li>
+    <li><a href="/software/tags/">Tag</a></li>
+    <li><a href="/software/license/">License</a></li>
 </ul>
+<h3><a href="/software/rss/latest"><img src="/media/images/rss.png" alt="RSS Feat" border="0" width="16" height="16" align="top"> RSS Feed</a></h3>
 {% endblock %}
 

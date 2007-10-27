@@ -11,8 +11,6 @@ urlpatterns = patterns('',
 
     # Using cab to browse software
     (r'^software/', include('software.urls')),
-    (r'^users/$', 'software.views.user.user_with_software'),
-    (r'^users/(?P<username>[^/]+)/$', 'software.views.entry.software_by_user'),
 
     # Using registration
     (r'^accounts/', include('registration.urls')),
