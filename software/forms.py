@@ -28,6 +28,16 @@ def save_screenshot(request, object):
         filename = request.FILES['screenshot']['filename']
         object.save_screenshot_file(filename, request.FILES['screenshot']['content'])
 
+def form_callback(f, **kw):
+    if f.name == 'description':
+        return forms.CharField(widget=forms.Textarea(attrs={"rows":30, "cols":80}))
+    elif f.name == 'authors' or f.name == 'contact' or f.name == 'project_url':
+        return forms.CharField(widget=forms.TextInput(attrs={'size':'60'}))
+    return f.formfield(**kw)
+
+def create_form():
+    return forms.form_for_model(Software, formfield_callback=form_callback, fields=editables)
+
 def add_software(request):
     """
     Show the software form, and capture the information
@@ -36,7 +46,7 @@ def add_software(request):
     if not request.user.is_authenticated():
        return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
 
-    AddSoftwareForm = forms.form_for_model(Software,fields=editables)
+    AddSoftwareForm = create_form()
 
     original_id = request.GET.get('oid', None)
 
@@ -81,7 +91,7 @@ def edit_software(request, software_id):
     if not request.user.is_authenticated():
        return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
 
-    EditSoftwareForm = forms.form_for_model(Software,fields=editables)
+    EditSoftwareForm = create_form()
 
     software = get_object_or_404(Software,
                                 pk=software_id,

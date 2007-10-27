@@ -6,7 +6,7 @@ Copyright 2007: Mikio Braun, Cheng Soon Ong and Soeren Sonnenburg
 
 /* SETUP */
 
-body { margin:0; padding:0; background:#113366; color:white; }
+body { margin:0; padding:0; color:#113366; background:#113366; color:white; }
 body, th, td { font:12px/1.4em Verdana,sans-serif; }
 #container { position:relative; min-width:62em; max-width:100em; }
 #homepage #container { max-width:100em; }
@@ -17,15 +17,15 @@ a {text-decoration: none;}
 a img {border: none;}
 a:link, a:visited { color:#ffc757; }
 #content-main a:link, #content-main a:visited { color:#ab5603; text-decoration:underline; }
-a:hover { color:#ffe761; }
-#content-main a:hover { background-color:#CCCCCC; color:#113366; text-decoration:none; }
+a:hover { color:#FFFFFF; }
+#content-main a:hover { background-color:#DDDDFF; color:#113366; text-decoration:none; }
 #content-main h2 a, #content-main h3 a { text-decoration:none !important; }
 
 /* HEADER */
 
 #header { position:relative; height:6.5em; background:#336699; }
-#header #logo { width:151px; height:46px;  position:absolute; padding:1ex 1em 1ex 2em}
-#name { display:inline; text-align:left; padding-right: 20px; color:white; background:#336699 }
+#header #logo { width:165px; height:64px;  position:absolute; padding:0ex 1em 1ex 2em}
+#name { display:inline; text-align:left; padding-right: 20px; color:white;}
 #accounts { display:inline; text-align:right; padding:5em 16px 10px 16px; color:#ffc757; background:#113366 }
 
 
@@ -34,9 +34,11 @@ a:hover { color:#ffe761; }
 #nav-global { position:absolute; margin:0; bottom:0; right:0; font-family:"Trebuchet MS",sans-serif; white-space:nowrap; }
 #nav-global li { display:block; float:left; list-style-type:none; margin:0; padding:0; }
 #nav-global a { display:block; float:left; padding:5em 16px 10px 16px; background:#336699; }
-#nav-global a:hover { color:#113366; background:#CCCCCC; }
+#nav-global a:hover { color:#113366; background:#DDDDFF; }
 #news #nav-news a, #browse #nav-browse a, #submit #nav-submit a, #community #nav-community a, #Workshop #nav-workshop a, #links #nav-links a, #faq #nav-faq a, #About #nav-about a { color:white; background:#113366 bottom repeat-x; }
-
+#nav-global h1,h2,h3 { margin-top:.8em; font-family:"Trebuchet MS",sans-serif; font-weight:normal; }
+#nav-global h1 { font-size:158%; margin-top:.6em; margin-bottom:.6em; color:#FFFFFF; line-height:1.1em; }
+#nav-global h2 { font-size:110%; margin-top:1em; margin-bottom:.2em; line-height:1.2em; color:#FFFFFF; }
 /* COLUMNS */
 
 #columnwrap { background:#336699; padding-bottom:10px; }
@@ -55,11 +57,11 @@ a:hover { color:#ffe761; }
 
 /* CONTENT */
 
-h1,h2,h3 { margin-top:.8em; font-family:"Trebuchet MS",sans-serif; font-weight:normal; }
-h1 { font-size:218%; margin-top:.6em; margin-bottom:.6em; color:#113366; line-height:1.1em; }
-h2 { font-size:150%; margin-top:1em; margin-bottom:.2em; line-height:1.2em; color:#113366; }
+#content-main h1,h2,h3 { margin-top:.8em; font-family:"Trebuchet MS",sans-serif; font-weight:normal; }
+#content-main h1 { font-size:218%; margin-top:.6em; margin-bottom:.6em; color:#113366; line-height:1.1em; }
+#content-main h2 { font-size:150%; margin-top:1em; margin-bottom:.2em; line-height:1.2em; color:#113366; }
+#content-main h3 { font-size:125%; font-weight:bold; margin-bottom:.2em; color:#113366; }*/
 #homepage h2 { font-size:140%; }
-h3 { font-size:125%; font-weight:bold; margin-bottom:.2em; color:#113366; }
 h4 { font-size:100%; font-weight:bold; margin-bottom:-3px; margin-top:1.2em; text-transform:uppercase; letter-spacing:1px; }
 h4 pre, h4 tt, h4 .literal { text-transform:none; }
 h5 { font-size:1em; font-weight:bold; margin-top:1.5em; margin-bottom:3px; }
