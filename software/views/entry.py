@@ -47,7 +47,7 @@ def software_by_user(request, username):
     return list_detail.object_list(request,
                                    queryset=Software.objects.get_by_submitter(user.username),
                                    extra_context={ 'object': user },
-                                   template_name='software/user_detail.html'
+                                   template_name='software/software_list.html'
                                    )
 def software_by_license(request, license):
     """
@@ -66,7 +66,7 @@ def software_by_license(request, license):
     """
     return list_detail.object_list(request,
                                    queryset=Software.objects.get_by_license(license),
-                                   template_name='software/license_detail.html',
+                                   template_name='software/software_list.html',
                                    extra_context={ 'os_license': license },
                                    )
 
@@ -87,6 +87,6 @@ def software_by_language(request, language):
     """
     return list_detail.object_list(request,
                                    queryset=Software.objects.get_by_language(language),
-                                   template_name='software/language_detail.html',
+                                   template_name='software/software_list.html',
                                    extra_context={ 'language': language },
                                    )

@@ -4,9 +4,44 @@
 
 {% block sectionid %}browse{% endblock %}
 
-{% block title %}All entries{% endblock %}
+{% block title %} 
+{% if os_license %}
+Projects that use the {{ os_license }} license.
+{% else %}
+{% if language %}
+Projects that use {{ language }} as the programming language.
+{% else %}
+{% if object.username %}
+Projects submitted by {{ object.username }}
+{% else %}
+All entries
+{% endif %}
+{% endif %}
+{% endif %}
+{% endblock %}
 
-{% block billboard %}All entries{% endblock %}
+
+
+{% block billboard %}
+{% if os_license %}
+{{ object_list.count }} projects found that use the {{ os_license }} license.
+{% else %}
+{% if language %}
+{{ object_list.count }} projects found that use {{ language }} as the programming language.
+{% else %}
+{% if object.username %}
+  {% ifequal user.username object.username %}
+    You've
+  {% else %}
+    {{ object.username }} has
+  {% endifequal %}
+  posted {{ object_list.count }} project{{ object_list.count|pluralize }}.
+{% else %}
+  All entries
+{% endif %}
+{% endif %}
+{% endif %}
+{% endblock %}
 
 {% block content %}
 
