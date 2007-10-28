@@ -59,4 +59,6 @@ urlpatterns = patterns('',
     (r'^users/(?P<username>[^/]+)/$', 'software.views.entry.software_by_user'),
     (r'^license/$', 'software.views.license.license_with_software'),
     (r'^license/(?P<license>[^/]+)/$', 'software.views.entry.software_by_license'),
+    (r'^language/$', 'software.views.language.language_with_software'),
+    (r'^language/(?P<language>[^/]+)/$', 'software.views.entry.software_by_language'),
 )

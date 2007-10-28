@@ -69,3 +69,24 @@ def software_by_license(request, license):
                                    template_name='software/license_detail.html',
                                    extra_context={ 'os_license': license },
                                    )
+
+def software_by_language(request, language):
+    """
+    List of Software submitted with a particular License.
+
+    Context::
+    Same as generic ``list_detail.object_list'' view, with
+    one extra variable:
+    
+        object
+            The User
+    
+    Template::
+        software/user_detail.html
+    
+    """
+    return list_detail.object_list(request,
+                                   queryset=Software.objects.get_by_language(language),
+                                   template_name='software/language_detail.html',
+                                   extra_context={ 'language': language },
+                                   )

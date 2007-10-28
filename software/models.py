@@ -36,6 +36,13 @@ class SoftwareManager(models.Manager):
         
         """
         return self.filter(os_license__exact=license)
+
+    def get_by_language(self, language):
+        """
+        Returns a QuerySet of Software submitted by a particular User.
+        
+        """
+        return self.filter(language__exact=language)
     
 # Create your models here.
 class Software(models.Model):
