@@ -16,7 +16,7 @@ body, th, td { font:12px/1.4em Verdana,sans-serif; }
 a {text-decoration: none;}
 a img {border: none;}
 a:link, a:visited { color:#ffc757; }
-#content-main a:link, #content-main a:visited { color:#ab5603; text-decoration:underline; }
+#content-main a:link, #content-main a:visited { color:#103163; text-decoration:underline; }
 a:hover { color:#FFFFFF; }
 #content-main a:hover { background-color:#FFFFFF; color:#113366; text-decoration:none; }
 #content-main h2 a, #content-main h3 a { text-decoration:none !important; }
@@ -59,8 +59,8 @@ a:hover { color:#FFFFFF; }
 
 #content-main h1,h2,h3 { margin-top:.8em; font-family:"Trebuchet MS",sans-serif; font-weight:normal; }
 #content-main h1 { font-size:218%; margin-top:.6em; margin-bottom:.6em; color:#113366; line-height:1.1em; }
-#content-main h2 { font-size:150%; margin-top:1em; margin-bottom:.2em; line-height:1.2em; color:#113366; }
-#content-main h3 { font-size:125%; font-weight:bold; margin-bottom:.2em; color:#113366; }*/
+#content-main h2 { font-size:150%; margin-top:0.2em; margin-bottom:.2em; line-height:1.2em; color:#113366; }
+#content-main h3 { font-size:125%; margin-top:0.2em; font-weight:bold; margin-bottom:.2em; color:#113366; }*/
 #homepage h2 { font-size:140%; }
 h4 { font-size:100%; font-weight:bold; margin-bottom:-3px; margin-top:1.2em; text-transform:uppercase; letter-spacing:1px; }
 h4 pre, h4 tt, h4 .literal { text-transform:none; }
@@ -71,7 +71,6 @@ p.date { color:#487858; margin-top:-.2em; }
 p.more { margin-top:-.4em; }
 .sidebar p.date { color:#90ba9e; }
 .sidebar h2:first-child { margin-top:.8em; }
-#content-main h2, #content-main h3 { margin-top:1.2em; }
 h2.deck { margin-top:-.5em !important; margin-bottom:.6em; color:#487858; }
 
 /* LISTS */
