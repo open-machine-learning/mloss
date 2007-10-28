@@ -106,8 +106,14 @@ def search_description(request, q):
         software/user_detail.html
     
     """
-    return list_detail.object_list(request,
-                                   queryset=Software.objects.get_by_searchterm(q),
+    qs=Software.objects.get_by_searchterm(q)
+    if qs.count()==0:
+        return render_to_response('software/software_list.html',
+                              { 'search_term': q, },
+                                context_instance=RequestContext(request))
+    else:
+        return list_detail.object_list(request,
+                                   queryset=qs,
                                    template_name='software/software_list.html',
                                    extra_context={ 'search_term': q },
                                    )

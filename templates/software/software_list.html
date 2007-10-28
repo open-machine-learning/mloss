@@ -101,7 +101,11 @@ Projects matching {{ search_term|escape }}.
   </p>
 
 {% else %}
+{% if search_term %}
+<p>Could not find any software matching query {{ search_term|escape }}.</p>
+{% else %}
 <p>No software posted yet.</p>
+{% endif %}
 {% endif %}
 {% endblock %}
 
