@@ -104,7 +104,7 @@
 	  <!--{{ comment.get_karma_total }}{{ comment.get_good_karma_total }} positive {{ comment.get_bad_karma_total }} negative-->
 
 	  </dd></dt>
-	  <dd>{{ comment.comment|safe_markdown:"safe,cut=100" }}</dd>
+	  <dd>{{ comment.comment|safe_markdown:"safe" }}</dd>
   </div>
   <br>
   {% endfor %}
