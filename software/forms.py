@@ -5,8 +5,9 @@ Forms for adding Software
 from django import newforms as forms
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.views.generic.create_update import update_object
+import software.views.entry
 
 from models import Software, editables, dontupdateifempty
 
@@ -79,6 +80,16 @@ def add_software(request):
     return render_to_response('software/software_add.html',
                               { 'form': form },
                               context_instance=RequestContext(request))
+
+class SearchForm(forms.Form):
+    searchterm = forms.CharField(max_length=40)
+
+def search_software(request):
+    searchform = SearchForm()
+
+    if request.method == 'POST':
+        q = request.POST['searchterm'];
+        return software.views.entry.search_description(request, q)
 
 def edit_software(request, software_id):
     """

@@ -4,6 +4,7 @@ from markdown import markdown
 from django.utils.html import strip_tags
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Q
 
 
 # make sure this list of variables is up-to-date (i.e. matches
@@ -43,6 +44,13 @@ class SoftwareManager(models.Manager):
         
         """
         return self.filter(language__exact=language)
+
+    def get_by_searchterm(self, searchterm):
+        """
+        Returns a QuerySet of Software submitted by a particular User.
+        
+        """
+        return self.filter(Q(description__icontains=searchterm) | Q(authors__icontains=searchterm) | Q(title__icontains=searchterm))
     
 # Create your models here.
 class Software(models.Model):
