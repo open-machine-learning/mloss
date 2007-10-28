@@ -18,13 +18,13 @@ a img {border: none;}
 a:link, a:visited { color:#ffc757; }
 #content-main a:link, #content-main a:visited { color:#ab5603; text-decoration:underline; }
 a:hover { color:#FFFFFF; }
-#content-main a:hover { background-color:#DDDDFF; color:#113366; text-decoration:none; }
+#content-main a:hover { background-color:#FFFFFF; color:#113366; text-decoration:none; }
 #content-main h2 a, #content-main h3 a { text-decoration:none !important; }
 
 /* HEADER */
 
 #header { position:relative; height:6.5em; background:#336699; }
-#header #logo { width:182px; height:64px;  position:absolute; padding:0ex 1em 1ex 2em}
+#header #logo { width:165px; height:64px;  position:absolute; padding:0ex 1em 1ex 2em}
 #name { display:inline; text-align:left; padding-right: 20px; color:white;}
 #accounts { display:inline; text-align:right; padding:5em 16px 10px 16px; color:#ffc757; background:#113366 }
 
@@ -34,7 +34,7 @@ a:hover { color:#FFFFFF; }
 #nav-global { position:absolute; margin:0; bottom:0; right:0; font-family:"Trebuchet MS",sans-serif; white-space:nowrap; }
 #nav-global li { display:block; float:left; list-style-type:none; margin:0; padding:0; }
 #nav-global a { display:block; float:left; padding:5em 16px 10px 16px; background:#336699; }
-#nav-global a:hover { color:#113366; background:#DDDDFF; }
+#nav-global a:hover { color:#113366; background:#f7f7f7; }
 #news #nav-news a, #browse #nav-browse a, #submit #nav-submit a, #community #nav-community a, #Workshop #nav-workshop a, #links #nav-links a, #faq #nav-faq a, #About #nav-about a { color:white; background:#113366 bottom repeat-x; }
 #nav-global h1,h2,h3 { margin-top:.8em; font-family:"Trebuchet MS",sans-serif; font-weight:normal; }
 #nav-global h1 { font-size:158%; margin-top:.6em; margin-bottom:.6em; color:#FFFFFF; line-height:1.1em; }

@@ -29,8 +29,8 @@ def save_screenshot(request, object):
 def form_callback(f, **kw):
     if f.name == 'description':
         return forms.CharField(widget=forms.Textarea(attrs={"rows":30, "cols":80}))
-    elif f.name == 'authors' or f.name == 'contact' or f.name == 'project_url':
-        return forms.CharField(widget=forms.TextInput(attrs={'size':'60'}))
+    elif f.name in ('tags', 'authors', 'contact', 'project_url'):
+        return forms.CharField(widget=forms.TextInput(attrs={'size':'60'}), required=not f.blank)
     return f.formfield(**kw)
 
 def create_form():
