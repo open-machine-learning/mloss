@@ -50,7 +50,15 @@ class SoftwareManager(models.Manager):
         Returns a QuerySet of Software submitted by a particular User.
         
         """
-        return self.filter(Q(description__icontains=searchterm) | Q(authors__icontains=searchterm) | Q(title__icontains=searchterm))
+        return self.filter(
+				Q(user__username__icontains=searchterm) |
+				Q(title__icontains=searchterm) |
+				Q(version__icontains=searchterm) |
+				Q(authors__icontains=searchterm) |
+				Q(description__icontains=searchterm) |
+				Q(tags__icontains=searchterm) |
+				Q(language__icontains=searchterm) |
+				Q(os_license__icontains=searchterm))
     
 # Create your models here.
 class Software(models.Model):
