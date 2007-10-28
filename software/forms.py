@@ -16,8 +16,6 @@ def save_tarball(request, object):
     """
     if request.FILES.has_key('tarball'):
         filename = request.FILES['tarball']['filename']
-        print filename
-        print request.FILES['tarball']['content']
         object.save_tarball_file(filename, request.FILES['tarball']['content'])
 
 def save_screenshot(request, object):
@@ -89,13 +87,17 @@ def edit_software(request, software_id):
 
 
     if not request.user.is_authenticated():
-       return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
+        return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
 
     EditSoftwareForm = create_form()
 
-    software = get_object_or_404(Software,
-                                pk=software_id,
-                                user__pk=request.user.id)
+    if request.user.is_superuser:
+        software = get_object_or_404(Software,
+                pk=software_id)
+    else:
+        software = get_object_or_404(Software,
+                pk=software_id,
+                user__pk=request.user.id)
 
     if request.method == 'POST':
         form = EditSoftwareForm(request.POST)

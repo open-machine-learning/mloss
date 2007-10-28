@@ -18,7 +18,6 @@ def license_with_software(request):
             unique_licenses.add(l.os_license)
             unique_sw_ids.append(l.id)
     unique_sw_ids=tuple(unique_sw_ids)
-    print unique_sw_ids
     licenselist=licenselist.extra(where=['id IN ' + `unique_sw_ids`])
 
     return list_detail.object_list(request,

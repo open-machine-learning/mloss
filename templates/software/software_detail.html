@@ -25,15 +25,19 @@
 {% endif %}
 </dl>
 
-{% ifequal user.id object.user_id %}
-<dl>
 {% if user.is_authenticated %}
-<a href="/software/update/{{ object.id}}">Update Project</a>
+{% if user.is_superuser %}
+<dl>
+	<a href="/software/update/{{ object.id}}">Update Project</a>
+</dl>
 {% else %}
-<a href="/software/update/{{ object.id}}">Login</a><a> to edit this project</a>
-{% endif %}
+{% ifequal user.id object.user_id %} 
+<dl>
+	<a href="/software/update/{{ object.id}}">Update Project</a>
 </dl>
 {% endifequal %}
+{% endif %}
+{% endif %}
 
 <h2>Details</h2>
 <dl>

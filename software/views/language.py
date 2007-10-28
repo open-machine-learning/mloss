@@ -18,7 +18,6 @@ def language_with_software(request):
             unique_languages.add(l.language)
             unique_sw_ids.append(l.id)
     unique_sw_ids=tuple(unique_sw_ids)
-    print unique_sw_ids
     languagelist=languagelist.extra(where=['id IN ' + `unique_sw_ids`])
 
     return list_detail.object_list(request,
