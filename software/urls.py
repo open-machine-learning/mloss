@@ -15,7 +15,7 @@ from software.feeds import RssSoftwareFeed
 
 # Info for generic views.
 base_generic_dict = {
-    'paginate_by': 10,
+    'paginate_by': 2,
     }
 
 software_info_dict_date = dict(base_generic_dict,

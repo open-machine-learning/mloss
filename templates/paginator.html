@@ -1,0 +1,28 @@
+{% if page_numbers %}
+<div id="pagination:important" align="center">
+	<h5>
+		Showing Items {{ first_this_page }}-{{ last_this_page }} of {{ hits }} on page {{ page }} of {{ pages }}:
+		{% if show_first %}<a> </a>
+		<a href="?page=1">First</a>
+		{% endif %}
+
+		{% if has_previous %}<a> </a>
+		<a href="?page={{ previous }}">Previous</a>
+		{% endif %}
+
+		{% for pg in page_numbers %}
+		<a> </a><a href="?page={{ pg }}">{{ pg }}</a><a> </a>
+		{% endfor %}
+
+		{% if has_next %}
+		<a href="?page={{ next }}">Next</a><a> </a>
+		{% endif %}
+
+		{% if show_last %}
+		<a href="?page=last">Last</a>
+		{% endif %}
+	</h5>
+</div>
+{% else %}
+<br>
+{% endif %}

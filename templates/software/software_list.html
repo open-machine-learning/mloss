@@ -1,4 +1,5 @@
 {% load safe_markup %}
+{% load paginator %}
 
 {% extends "base_2col.html" %}
 
@@ -55,19 +56,7 @@ Projects matching {{ search_term|escape }}.
 
 {% if object_list %}
 
-  <p class="pagination">
-    {% if has_previous %}
-    <a href="?page={{ previous }}">&lt; 
-      Previous {{ results_per_page }}
-    </a>
-    {% endif %}&nbsp;&nbsp;
-    {% if has_next %}
-    <a href="?page={{ next }}">
-      Next {{ results_per_page }} &gt;
-    </a>
-    {% endif %}
-  </p>
-
+  {% paginator 5%} 
 
   {% for snippet in object_list %}
   <table><tr><td>
@@ -83,22 +72,11 @@ Projects matching {{ search_term|escape }}.
 	{% if snippet.project_url %}<li><b>Homepage:</b> {{ snippet.project_url|urlize}}</li> {% endif %}
     </ul>
 	</p>
-  </td></tr></table><br>
+  </td></tr></table>
 
 {% endfor %}
 
-  <p class="pagination">
-    {% if has_previous %}
-    <a href="?page={{ previous }}">&lt; 
-      Previous {{ results_per_page }}
-    </a>
-    {% endif %}&nbsp;&nbsp;
-    {% if has_next %}
-    <a href="?page={{ next }}">
-      Next {{ results_per_page }} &gt;
-    </a>
-    {% endif %}
-  </p>
+{% paginator 5%} 
 
 {% else %}
 {% if search_term %}
@@ -137,4 +115,3 @@ Projects matching {{ search_term|escape }}.
 </ul>
 <h3><a href="/software/rss/latest"><img src="/media/images/rss.png" alt="RSS Feat" border="0" width="16" height="16" align="top"> RSS Feed</a></h3>
 {% endblock %}
-

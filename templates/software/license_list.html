@@ -8,6 +8,7 @@
 
 {% block content %}
     <h2>Software Licenses</h2>
+	{% paginator 5 %}
     <ul>
     {% for curlicense in object_list %}
         <li><a href="/software/license/{{ curlicense.os_license }}/">
@@ -15,20 +16,7 @@
 	</li>
     {% endfor %}
     </ul>
-
-    <p class="pagination">
-        {% if has_previous %}
-        <a href="?page={{ previous }}">&lt; 
-            Previous {{ results_per_page }}
-        </a>
-        {% endif %}&nbsp;&nbsp;
-        {% if has_next %}
-            <a href="?page={{ next }}">
-                Next {{ results_per_page }} &gt;
-            </a>
-        {% endif %}
-    </p>
-
+	{% paginator 5 %}
 {% endblock %}
 
 {% block content-related %}

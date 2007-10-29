@@ -45,6 +45,7 @@ def software_by_user(request, username):
     """
     user = get_object_or_404(User, username__exact=username)
     return list_detail.object_list(request,
+                                   paginate_by=10,
                                    queryset=Software.objects.get_by_submitter(user.username),
                                    extra_context={ 'object': user },
                                    template_name='software/software_list.html'
@@ -65,6 +66,7 @@ def software_by_license(request, license):
     
     """
     return list_detail.object_list(request,
+                                   paginate_by=10,
                                    queryset=Software.objects.get_by_license(license),
                                    template_name='software/software_list.html',
                                    extra_context={ 'os_license': license },
@@ -86,6 +88,7 @@ def software_by_language(request, language):
     
     """
     return list_detail.object_list(request,
+                                   paginate_by=10,
                                    queryset=Software.objects.get_by_language(language),
                                    template_name='software/software_list.html',
                                    extra_context={ 'language': language },
@@ -113,6 +116,7 @@ def search_description(request, q):
                                 context_instance=RequestContext(request))
     else:
         return list_detail.object_list(request,
+                                   paginate_by=10,
                                    queryset=qs,
                                    template_name='software/software_list.html',
                                    extra_context={ 'search_term': q },

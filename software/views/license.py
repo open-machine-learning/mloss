@@ -21,7 +21,7 @@ def license_with_software(request):
     licenselist=licenselist.extra(where=['id IN ' + `unique_sw_ids`])
 
     return list_detail.object_list(request,
-                                   paginate_by=10,
+                                   paginate_by=20,
                                    queryset=licenselist,
                                    template_name='software/license_list.html',
                                    )

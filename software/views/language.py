@@ -21,7 +21,7 @@ def language_with_software(request):
     languagelist=languagelist.extra(where=['id IN ' + `unique_sw_ids`])
 
     return list_detail.object_list(request,
-                                   paginate_by=10,
+                                   paginate_by=20,
                                    queryset=languagelist,
                                    template_name='software/language_list.html',
                                    )

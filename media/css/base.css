@@ -17,10 +17,11 @@ a {text-decoration: none;}
 a img {border: none;}
 a:link, a:visited { color:#ffc757; }
 #content-main a:link, #content-main a:visited { color:#103163; text-decoration:underline; }
-a:hover { color:#FFFFFF; }
+#content-main a:hover { color:#FFFFFF; }
 #content-main a:hover { background-color:#FFFFFF; color:#113366; text-decoration:none; }
 #content-main h2 a, #content-main h3 a { text-decoration:none !important; }
-
+#pagination a, #pagination h5 a, #pagination a:link, #pagination a:visited { color:#103163; text-decoration:underline; }
+#pagination a:hover { color:#113366; background:#f7f7f7; }
 /* HEADER */
 
 #header { position:relative; height:6.5em; background:#336699; }
