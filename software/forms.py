@@ -90,6 +90,8 @@ def search_software(request):
     if request.method == 'POST':
         q = request.POST['searchterm'];
         return software.views.entry.search_description(request, q)
+    else:
+        return HttpResponseRedirect('/software')
 
 def edit_software(request, software_id):
     """
