@@ -35,5 +35,3 @@ def paginator(context, adjacent_pages=2):
             'show_first': 1 not in page_numbers,
             'show_last': context['pages'] not in page_numbers,
     }
-#register.inclusion_tag('paginator.html', takes_context=True)(paginator)
-#return dict(context.dicts[5], existing_key='val to overwrite old val', new_key='new_val')
