@@ -29,6 +29,12 @@ class RegistrationForm(forms.Form):
     and that the username is not already taken.
     
     """
+    firstname = forms.CharField(max_length=30,
+                               widget=forms.TextInput(attrs=attrs_dict),
+                               label=u'First Name', required=False)
+    lastname = forms.CharField(max_length=30,
+                               widget=forms.TextInput(attrs=attrs_dict),
+                               label=u'Last Name', required=False)
     username = forms.CharField(max_length=30,
                                widget=forms.TextInput(attrs=attrs_dict),
                                label=u'Username')
@@ -41,6 +47,24 @@ class RegistrationForm(forms.Form):
                                 label=u'Password (again, to catch typos)')
     tos = forms.BooleanField(widget=forms.CheckboxInput(attrs=attrs_dict),
                              label=u'I have read and agree to the Terms of Service')
+
+    def clean_firstname(self):
+        """
+        Validates that the first is alphanumeric
+        """
+        if 'firstname' in self.cleaned_data:
+            if self.cleaned_data['firstname'] and not username_re.search(self.cleaned_data['firstname']):
+                raise forms.ValidationError(u'First name can only contain letters, numbers and underscores')
+        return self.cleaned_data['firstname']
+
+    def clean_lastname(self):
+        """
+        Validates that the lastname is alphanumeric
+        """
+        if 'firstname' in self.cleaned_data:
+            if self.cleaned_data['lastname'] and not username_re.search(self.cleaned_data['lastname']):
+                raise forms.ValidationError(u'Last name can only contain letters, numbers and underscores')
+        return self.cleaned_data['lastname']
     
     def clean_username(self):
         """
@@ -86,7 +110,9 @@ class RegistrationForm(forms.Form):
         the new ``User``.
 
         """
-        new_user = RegistrationProfile.objects.create_inactive_user(username=self.cleaned_data['username'],
+        new_user = RegistrationProfile.objects.create_inactive_user(firstname=self.cleaned_data['firstname'],
+                                                                    lastname=self.cleaned_data['lastname'],
+                                                                    username=self.cleaned_data['username'],
                                                                     password=self.cleaned_data['password1'],
                                                                     email=self.cleaned_data['email'],
                                                                     profile_callback=profile_callback)

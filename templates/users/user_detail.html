@@ -1,0 +1,68 @@
+{% extends "base_2col.html" %}
+{% block sectionid %}browse{% endblock %}
+
+{% block title %}User Details{% endblock %}
+
+{% block billboard %}User Details{% endblock %}
+
+{% block content %}
+<h2> User Details for {{ object.username }}</h2>
+	<table>
+		<tr>
+			<td>Username:</td>
+			<td><a href="/user/view/{{ object.pk }}/"> {{ object.username }}</a></td>
+		</tr>
+		<tr>
+			<td>Full Name:</td>
+			<td>{{object.get_full_name}}</td>
+		</tr>
+		<tr>
+			<td>Email Address:</td>
+			<td>{{object.email}}</td>
+		</tr>
+	</table><br></br>
+	{% if softwares %}
+	<h2> Currently listed Software</h2>
+	<table>
+		{% for sw in softwares %}
+		<tr>
+			<td> <a href="{{ sw.get_absolute_url }}"> {{ sw.title }} {{ sw.version }}</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+	{% endif %}
+	<h2> Change User Details</h3>
+{% if form.errors %}
+<p class="error">Please correct the errors below:</p>
+{% endif %}
+
+<form method="post" action="/user/update/{{object.pk}}/">
+<dl>
+<dt><label for="id_firstname">First Name:</label>{% if form.firstname.errors %} <span class="error">{{ form.firstname.errors|join:", " }}</span>{% endif %}</dt>
+<dd>{{ form.firstname }}</dd>
+<dt><label for="id_lastname">Last Name:</label>{% if form.lastname.errors %} <span class="error">{{ form.lastname.errors|join:", " }}</span>{% endif %}</dt>
+<dd>{{ form.lastname }}</dd>
+<dt><label for="id_email">Email address:</label>{% if form.email.errors %} <span class="error">{{ form.email.errors|join:", " }}</span>{% endif %}</dd>
+<dd>{{ form.email }}</dd>
+<dt><label for="id_password1">Password:</label>{% if form.password1.errors %} <span class="error">{{ form.password2.errors|join:", " }}</span>{% endif %}</dt>
+<dd>{{ form.password1 }}</dd>
+<dt><label for="id_password2">Password (type again to catch any typos):</label>{% if form.password2.errors %} <span class="error">{{ form.password2.errors|join:", " }}</span>{% endif %}</dt>
+<dd>{{ form.password2 }}</dd>
+<dt><input type="submit" value="Update" /></dt>
+</dl>
+</form>
+{% endblock %}
+
+{% block content-related %}
+<dt>Viewing details of:</dt>
+<dd>{{object.username}}</dd>
+
+<dt>Last login:</dt>
+<dd>{{object.last_login}}</dd>
+<dt>Date joined:</dt>
+<dd>{{object.date_joined}}</dd>
+
+{% if user.is_superuser %}
+<p>To browse the currently registered users click <a href="/user">here</a>.</p>
+{% endif %}
+{% endblock %}

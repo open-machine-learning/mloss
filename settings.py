@@ -23,8 +23,11 @@ if PRODUCTION:
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
 if PRODUCTION:
     DATABASE_NAME = '/home/mloss/media/db/mloss.db'             # Or path to database file if using sqlite3.
+    EMAIL_HOST='mailhost.tuebingen.mpg.de'
 else:
     DATABASE_NAME = 'mloss.db'             # Or path to database file if using sqlite3.
+    EMAIL_HOST='localhost'
+
 DATABASE_USER = ''             # Not used with sqlite3.
 DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
@@ -34,7 +37,6 @@ DATABASE_PORT = ''             # Set to empty string for default. Not used with 
 LOGIN_REDIRECT_URL='/'
 ACCOUNT_ACTIVATION_DAYS=1
 DEFAULT_FROM_EMAIL='admin@mloss.org'
-EMAIL_HOST='mailhost.tuebingen.mpg.de'
 
 # Local time zone for this installation. Choices can be found here:
 # http://www.postgresql.org/docs/8.1/static/datetime-keywords.html#DATETIME-TIMEZONE-SET-TABLE
@@ -89,7 +91,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
-	'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 ROOT_URLCONF = 'mloss.urls'
@@ -114,11 +116,12 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'django.contrib.markup',
     'django.contrib.syndication',
-	'django.contrib.flatpages',
-	'django.contrib.humanize',
-	'mloss',
-	'mloss.software',
-	'mloss.registration',
-	'mloss.community',
-	'mloss.forshow',
+    'django.contrib.flatpages',
+    'django.contrib.humanize',
+    'mloss',
+    'mloss.software',
+    'mloss.registration',
+    'mloss.community',
+    'mloss.forshow',
+    'mloss.user',
 )

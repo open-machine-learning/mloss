@@ -28,13 +28,19 @@
       <div id="container">
           <div id="header">
               <div id="name">Machine Learning Open Source Software</div>
-              <div id="accounts">
-                  {% if user.is_authenticated %}
-                  <a href="/accounts/logout">Logout</a>
-                  {% else %}
-                  <a href="/accounts/login">Login</a>
-                  {% endif %}
-              </div>
+			  <div id="accounts">
+				  {% if user.is_authenticated %} Welcome
+				  {% if user.get_full_name %}
+				  <a href="/user/view/{{user.pk}}">{{user.get_full_name}}</a>
+				  |
+				  {% else %}
+				  <a href="/user/view/{{user.pk}}">{{user}}</a>|
+				  {% endif %}
+				  <a href="/accounts/logout">Logout</a>
+				  {% else %}
+				  <a href="/accounts/login">Login</a>
+				  {% endif %}
+			  </div>
               <br>
               <a href="/">
                   <img id="logo" src="/media/images/mloss_flat_small.png" alt="mloss" width="165" height="64">

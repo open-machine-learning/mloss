@@ -18,6 +18,10 @@
 
 <form method="post" action="">
 <dl>
+<dt><label for="id_firstname">First Name:</label>{% if form.firstname.errors %} <span class="error">{{ form.firstname.errors|join:", " }}</span>{% endif %}</dt>
+<dd>{{ form.firstname }}</dd>
+<dt><label for="id_lastname">Last Name:</label>{% if form.lastname.errors %} <span class="error">{{ form.lastname.errors|join:", " }}</span>{% endif %}</dt>
+<dd>{{ form.lastname }}</dd>
 <dt><label for="id_username">Username:</label>{% if form.username.errors %} <span class="error">{{ form.username.errors|join:", " }}</span>{% endif %}</dt>
 <dd>{{ form.username }}</dd>
 <dt><label for="id_email">Email address:</label>{% if form.email.errors %} <span class="error">{{ form.email.errors|join:", " }}</span>{% endif %}</dd>

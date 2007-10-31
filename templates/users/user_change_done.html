@@ -1,0 +1,15 @@
+{% extends "base_2col.html" %}
+
+{% block sectionid %}login{% endblock %}
+
+{% block title %}User details updated successfully.{% endblock %}
+
+{% block billboard %}User details updated successfully.{% endblock %}
+
+{% block content %}
+
+<h2>User details change change successful</h2>
+
+<p>Your user details were successfully updated. Click <a href="/user/view/{{object.pk}}">here</a> to return to your user page.</p>
+
+{% endblock %}

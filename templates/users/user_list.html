@@ -1,0 +1,27 @@
+{% extends "base_2col.html" %}
+{% load paginator %}
+
+{% block sectionid %}browse{% endblock %}
+
+{% block title %}User List{% endblock %}
+
+{% block billboard %}User List{% endblock %}
+
+{% block content %}
+	{% paginator 5 %}
+	<table>
+    {% for curuser in object_list %}
+	<tr>
+		<td><a href="/user/view/{{ curuser.pk }}/"> {{ curuser.username }}</a></td>
+		<td>{{curuser.get_full_name}}</td>
+		<td>{{ curuser.email }}</td>
+	</tr>
+    {% endfor %}
+	</table>
+	{% paginator 5 %}
+{% endblock %}
+
+{% block content-related %}
+<dt>Viewing List of Users.</dt>
+{% endblock %}
+

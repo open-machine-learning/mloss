@@ -4,6 +4,7 @@ from software.models import Software
 from django.utils.feedgenerator import Atom1Feed
 from django.utils.feedgenerator import Rss201rev2Feed
 from django.http import HttpResponse
+from django.http import Http404
 
 def RssSoftwareFeed(request):
     try:
