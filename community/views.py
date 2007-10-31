@@ -153,7 +153,6 @@ def newthread(request, forum):
 	if request.method == 'POST':
 		form = create_newthreadform(request)
 		if form.is_valid():
-			print "form valid"
 			if request.user.is_authenticated() or form.login(request):
 				t = Thread(
 					forum=f,
@@ -168,8 +167,6 @@ def newthread(request, forum):
 				)
 				p.save()
 				return HttpResponseRedirect(t.get_absolute_url())
-		else:
-			print "form not valid"
 	else:
 		form = create_newthreadform(request)
 	
