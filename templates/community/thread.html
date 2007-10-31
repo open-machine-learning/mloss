@@ -21,19 +21,39 @@
 {% if thread.closed %}
 <p>Sorry, this thread is closed. No further replies are permitted.</p>
 {% else %}
-{% if user.is_authenticated %}
-<form method='post' action='reply/'>
-	<dt><label>Posting as </label>{{ user.username }}</dt>
-<p><label for='body'>Your Post</label><br>
-<textarea name='body' rows='8' cols='50'></textarea></p>
-<p>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</p>
-<input type='submit' value='Submit' />
-</form>
+<form method='post' action='{{form_action}}'>
+{% if not user.is_authenticated %}
+<h3>Please login to create a thread.</h3>
+<dt>
+<label for="id_username"><tt>Username:</tt>
+	{% if form.username.errors %}
+	<span class="error">{{ form.username.errors|join:", " }}</span>
+	{% endif %}
+</label>
+</dt>
+	{{ form.username }}
+<dt>
+<label for="id_username"><tt>Password:</tt>
+	{% if form.password.errors %}
+	<span class="error">{{ form.password.errors|join:", " }}</span>
+	{% endif %}
+</label>
+</dt>
+	{{ form.password }} (<a href="/accounts/password/reset/">
+		Forgotten your password?</a>)
 {% else %}
-<p>Please login to post a reply.</p>
+	<dt><label>Posting as </label>{{ user.username }}</dt>
 {% endif %}
+<p>
+<dt><label>Posting
+{% if form.body.errors %}
+<span class="error">{{ form.body.errors|join:", " }}</span>
+{% endif %}</label></dt>
+{{ form.body }} <p>
+<p>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</p>
+<p><input type='submit' value='Post' /></p>
+</form>
 {% endif %}
-
 {% endblock %}
 
 {% block content-related %}

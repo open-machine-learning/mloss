@@ -9,13 +9,13 @@
 {% block content %}
 <form action="/comments/post/" method="post">
   {% if comment_form.username.errors or comment_form.password.errors %}
-    <p><label for="id_username">Username:{{ comment_form.username }}
+  <p><label for="id_username"><tt>Username:</tt>{{ comment_form.username }}
     {% if comment_form.username.errors %}
       <span class="error">{{ comment_form.username.error_list|join:", " }}</span>
     {% endif %}
     </label>
       </p>
-    <p><label for="id_password">Password:{{ comment_form.password }}
+	  <p><label for="id_password"><tt>Password:</tt>{{ comment_form.password }}
     {% if comment_form.password.errors %}
       <span class="error">{{ comment_form.password.error_list|join:", " }}</span>
     {% endif %}
