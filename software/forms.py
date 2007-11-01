@@ -12,7 +12,6 @@ from django.newforms.widgets import RadioSelect
 from django.utils.html import strip_tags
 from software.models import Software
 from StringIO import StringIO  
-from PIL import Image  
 
 import software.views.entry
 import re
@@ -116,12 +115,16 @@ class UpdateSoftwareForm(forms.Form):
             if len(screenshot['content']) > settings.MAX_IMAGE_UPLOAD_SIZE * 1024:
                 raise forms.ValidationError(u'Image too big, max allowed size is %d KB' % settings.MAX_IMAGE_UPLOAD_SIZE)
 
-            img = Image.open(StringIO(screenshot['content']))  
-            width, height = img.size
-            if width > settings.MAX_IMAGE_UPLOAD_WIDTH:
-                raise forms.ValidationError('Maximum image width is %s' % settings.MAX_IMAGE_UPLOAD_WIDTH)
-            if height > settings.MAX_IMAGE_UPLOAD_HEIGHT:
-                raise forms.ValidationError('Maximum image height is %s' % settings.MAX_IMAGE_UPLOAD_HEIGHT)
+            try:
+                from PIL import Image  
+                img = Image.open(StringIO(screenshot['content']))  
+                width, height = img.size
+                if width > settings.MAX_IMAGE_UPLOAD_WIDTH:
+                    raise forms.ValidationError('Maximum image width is %s' % settings.MAX_IMAGE_UPLOAD_WIDTH)
+                if height > settings.MAX_IMAGE_UPLOAD_HEIGHT:
+                    raise forms.ValidationError('Maximum image height is %s' % settings.MAX_IMAGE_UPLOAD_HEIGHT)
+            except ImportError:
+                pass
 
         return self.cleaned_data['screenshot']
 
