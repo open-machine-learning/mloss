@@ -61,21 +61,24 @@ Projects matching {{ search_term|escape }}.
 
   {% for snippet in object_list %}
   <table><tr><td>
-	  <h2><img src="/media/images/cray_flat_small.png" border="0"
+	  <table class=rating><tr><td valign=top>
+		  <h2><img src="/media/images/cray_flat_small.png" border="0"
   height="32 width="30 align=top><a href="{{ snippet.get_absolute_url }}"> {{ snippet.title }} {{ snippet.version }}
-{% if snippet.get_features_rating %}
-<br>(features:
-{% show_stars snippet.get_features_rating of 5 round to half %},
-usability:
-{% show_stars snippet.get_usability_rating of 5 round to half %},
-documentation:
-{% show_stars snippet.get_documentation_rating of 5 round to half %})
-{% endif %}
 </a></h2>
     <p>
       by <a href="/software{{ snippet.user.get_absolute_url }}">{{ snippet.user.username }}</a> 
       - {{ snippet.pub_date|date:"F j, Y, h:m:s" }}
     </p>
+	  </td><td>
+{% if snippet.get_features_rating %}
+<font size=2>
+	<table>
+		<tr><td>features</td><td>{% show_stars snippet.get_features_rating of 5 round to half %}</td></tr>
+		<tr><td>usability</td><td>{% show_stars snippet.get_usability_rating of 5 round to half %}</td></tr>
+		<tr><td>documentation</td><td>{% show_stars snippet.get_documentation_rating of 5 round to half %}</td></tr>
+</table>
+{% endif %}
+</tr></table>
 	<p>{{ snippet.description|safe_markdown:"safe,cut=500" }}<hr>
     <ul>{% if snippet.tags %} <li><b>Tags:</b> {{ snippet.tags }}</li> {% endif %}
 	{% if snippet.authors %}<li><b>Authors:</b> {{ snippet.authors }}</li> {% endif %}
@@ -100,7 +103,7 @@ documentation:
 
 {% block content-related %}
 <h2>Search<form method="POST" action="/software/search/">
-	<input type="text" name="searchterm" id="searchterm" size="15">
+	<input type="text" name="searchterm" id="searchterm" size="10">
 	<button type="submit" name="post">Go</button>
 </form></h2>
 <h2>Manage</h2>

@@ -142,7 +142,7 @@ def rate(request, software_id):
     if request.method == 'POST':
         if request.user.is_authenticated and request.user != software.user:
             r, flag = SoftwareRating.objects.get_or_create(user=request.user,
-                                                           software=software_id)
+                                                           software=software)
             r.features = request.POST['features']
             r.usability = request.POST['usability']
             r.documentation = request.POST['documentation']

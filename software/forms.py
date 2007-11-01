@@ -7,10 +7,94 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.views.generic.create_update import update_object
-import software.views.entry
 from django.newforms.widgets import RadioSelect
+from django.utils.html import strip_tags
+from software.models import Software
+import software.views.entry
+import re
+
+title_re = re.compile(r'^\w+$')
+authors_re = re.compile(r'^[a-zA-Z ,]+$')
+tags_re = re.compile(r'^[a-z0-9 ,]+$')
+os_license_re = re.compile(r'^[a-zA-Z0-9 ,]+$')
+language_re = re.compile(r'^[a-zA-Z\+ ,]+$')
 
 from models import Software, editables, dontupdateifempty
+
+class SoftwareForm(forms.Form):
+    title = forms.CharField(max_length=80,
+            widget=forms.TextInput(attrs={'size' : '30'}),
+            label=u'Title', required=True) 
+    version = forms.CharField(max_length=80,
+            widget=forms.TextInput(attrs={'size' : '30'}), label=u'Version')
+    authors = forms.CharField(max_length=200, 
+            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Authors')
+    contact = forms.EmailField(max_length=80, 
+        widget=forms.TextInput(attrs={'size' : '60'}), label=u"Main Author's Email Address:")
+    description = forms.CharField(
+            widget=forms.Textarea(attrs={"rows":30, "cols":80}), label=u'Description')
+    project_url = forms.URLField(
+            widget=forms.TextInput(attrs={'size' : '60'}),
+            label=u'Project Homepage', required=False)
+    tags = forms.CharField(widget=forms.TextInput(attrs={'size' : '60'}),
+            label=u'Tags', required=False)
+    language = forms.CharField(max_length=200,
+            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Programming Language(s)')
+    os_license = forms.CharField(max_length=200,
+            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Title')
+    tarball = forms.FileField(widget=forms.FileInput(attrs={'size' : '30'}),
+            label=u'Project Archive', required=False)
+    screenshot = forms.ImageField(widget=forms.FileInput(attrs={'size' : '30'}),
+            label=u'Screenshot', required=False)
+
+    def clean_title(self):
+        """
+        Validates that title is alphanumeric
+        """
+        if 'title' in self.cleaned_data:
+            if not title_re.search(self.cleaned_data['title']):
+                raise forms.ValidationError(u'Title may only contain letters, numbers and underscores')
+            try:
+                sw = Software.objects.get(title__exact=self.cleaned_data['title'])
+            except Software.DoesNotExist:
+                return self.cleaned_data['title']
+            raise forms.ValidationError(u'This software project title is already taken. Please choose another name.')
+
+    def clean_authors(self):
+        """
+        Validates that author names are alphanumeric
+        """
+        if 'authors' in self.cleaned_data:
+            if not authors_re.search(self.cleaned_data['authors']):
+                raise forms.ValidationError(u'Author names may only contain letters, comma and spaces.')
+            else:
+                return self.cleaned_data['authors']
+
+    def clean_tags(self):
+        """
+        Validates that tags are lowercase alphanumeric
+        """
+        if 'tags' in self.cleaned_data and self.cleaned_data['tags'] and not tags_re.search(self.cleaned_data['tags']):
+                raise forms.ValidationError(u'Tags must be comma separated names and may only contain lowercase letters and spaces.')
+        return self.cleaned_data['tags']
+
+    def clean_os_license(self):
+        """
+        Validates that license is lowercase alphanumeric
+        """
+        if 'os_license' in self.cleaned_data:
+            if not os_license_re.search(self.cleaned_data['os_license']):
+                raise forms.ValidationError(u'License must be comma separated license names and may only contain letters, numbers and spaces.')
+        return self.cleaned_data['os_license']
+
+    def clean_language(self):
+        """
+        Validates that language is alphanumeric/plus, comma, whitespace
+        """
+        if 'language' in self.cleaned_data:
+            if not language_re.search(self.cleaned_data['language']):
+                raise forms.ValidationError(u'Language must be comma separated language names and may only contain letters, plusses and spaces.')
+        return self.cleaned_data['language']
 
 def save_tarball(request, object):
     """
@@ -35,9 +119,6 @@ def form_callback(f, **kw):
         return forms.CharField(widget=forms.TextInput(attrs={'size':'60'}), required=not f.blank)
     return f.formfield(**kw)
 
-def create_form():
-    return forms.form_for_model(Software, formfield_callback=form_callback, fields=editables)
-
 def add_software(request):
     """
     Show the software form, and capture the information
@@ -46,14 +127,12 @@ def add_software(request):
     if not request.user.is_authenticated():
        return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
 
-    AddSoftwareForm = create_form()
-
     original_id = request.GET.get('oid', None)
 
     if request.method == 'POST':
         new_data = request.POST.copy()
         new_data.update(request.FILES)
-        form = AddSoftwareForm(new_data)
+        form = SoftwareForm(new_data)
         if form.is_valid():
             new_software = Software(user=request.user,
                                     title=form.cleaned_data['title'],
@@ -76,7 +155,7 @@ def add_software(request):
             new_software.save()
             return HttpResponseRedirect(new_software.get_absolute_url())
     else:
-        form = AddSoftwareForm(initial={'user':request.user})
+        form = SoftwareForm(initial={'user':request.user})
 
     return render_to_response('software/software_add.html',
                               { 'form': form },
