@@ -67,6 +67,12 @@ else:
 # Example: "http://media.lawrence.com"
 MEDIA_URL = '/media/'
 
+# max size of files that can be uploaded in KB (10M, 200K)
+MAX_FILE_UPLOAD_SIZE = 10240
+MAX_IMAGE_UPLOAD_SIZE = 200
+MAX_IMAGE_UPLOAD_WIDTH = 800
+MAX_IMAGE_UPLOAD_HEIGHT = 600
+
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".

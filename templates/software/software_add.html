@@ -27,7 +27,7 @@
 {% endif %}
   <dl>
     <dt><label for="id_title">
-        Title: {% if form.title.errors %}
+        {{ form.title.label }} {% if form.title.errors %}
         <span class="error">
           {{ form.title.errors|join:", " }}
         </span>
@@ -36,7 +36,7 @@
     </dt>
     <dd>{{ form.title }}</dd>
     <dt><label for="id_version">
-        Version: {% if form.version.errors %}
+        {{ form.version.label }} {% if form.version.errors %}
         <span class="error">
           {{ form.version.errors|join:", " }}
         </span>
@@ -45,7 +45,7 @@
     </dt>
     <dd>{{ form.version }}</dd>
     <dt><label for="id_authors">
-        Authors: {% if form.authors.errors %}
+        {{ form.authors.label }} {% if form.authors.errors %}
         <span class="error">
           {{ form.authors.errors|join:", " }}
         </span>
@@ -54,7 +54,7 @@
     </dt>
     <dd>{{ form.authors }}</dd>
     <dt><label for="id_contact">
-        Main Author's Email Address: {% if form.contact.errors %}
+        {{ form.contact.label }} {% if form.contact.errors %}
         <span class="error">
           {{ form.contact.errors|join:", " }}
         </span>
@@ -63,7 +63,7 @@
     </dt>
     <dd>{{ form.contact }}</dd>
     <dt><label for="id_description">
-        Description: {% if form.description.errors %}
+        {{ form.description.label }} {% if form.description.errors %}
         <span class="error">
           {{ form.description.errors|join:", " }}
         </span>
@@ -72,7 +72,7 @@
     </dt>
     <dd>{{ form.description }}</dd>
     <dt><label for="id_project_url">
-        Project URL: {% if form.project_url.errors %}
+        {{ form.project_url.label }} {% if form.project_url.errors %}
         <span class="error">
           {{ form.project_url.errors|join:", " }}
         </span>
@@ -81,7 +81,7 @@
     </dt>
     <dd>{{ form.project_url }}</dd>
     <dt><label for="tags">
-        Tags: {% if form.tags.errors %}
+        {{ form.tags.label }} {% if form.tags.errors %}
         <span class="error">
           {{ form.tags.errors|join:", " }}
         </span>
@@ -90,7 +90,7 @@
     </dt>
     <dd>{{ form.tags }}</dd>
     <dt><label for="language">
-        Programming Language(s): {% if form.language.errors %}
+        {{ form.language.label }} {% if form.language.errors %}
         <span class="error">
           {{ form.language.errors|join:", " }}
         </span>
@@ -99,7 +99,7 @@
     </dt>
     <dd>{{ form.language }}</dd>
     <dt><label for="os_license">
-        Open Source License: {% if form.os_license.errors %}
+        {{ form.os_license.label }} {% if form.os_license.errors %}
         <span class="error">
           {{ form.os_license.errors|join:", " }}
         </span>
@@ -108,7 +108,7 @@
     </dt>
     <dd>{{ form.os_license }}</dd>
     <dt><label for="tarball">
-        Project Archive: {% if form.tarball.errors %}
+        {{ form.tarball.label }} {% if form.tarball.errors %}
         <span class="error">
           {{ form.tarball.errors|join:", " }}
         </span>
@@ -117,9 +117,9 @@
     </dt>
     <dd>{{ form.tarball }}{{ form.tarball_file }}</dd>
     <dt><label for="id_screenshot">
-        Screenshot: {% if form.screenshot.errors %}
+        {{ form.screenshot.label }} {% if form.screenshot.errors %}
         <span class="error">
-          {{ form.title.errors|join:", " }}
+          {{ form.screenshot.errors|join:", " }}
         </span>
         {% endif %}
       </label>

@@ -2,6 +2,7 @@
 Forms for adding Software
 
 """
+from django.conf import settings
 from django import newforms as forms
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
@@ -10,6 +11,9 @@ from django.views.generic.create_update import update_object
 from django.newforms.widgets import RadioSelect
 from django.utils.html import strip_tags
 from software.models import Software
+from StringIO import StringIO  
+from PIL import Image  
+
 import software.views.entry
 import re
 
@@ -20,19 +24,15 @@ os_license_re = re.compile(r'^[a-zA-Z0-9 ,]+$')
 language_re = re.compile(r'^[a-zA-Z\+ ,]+$')
 
 from models import Software, editables, dontupdateifempty
-
-class SoftwareForm(forms.Form):
-    title = forms.CharField(max_length=80,
-            widget=forms.TextInput(attrs={'size' : '30'}),
-            label=u'Title', required=True) 
+class UpdateSoftwareForm(forms.Form):
     version = forms.CharField(max_length=80,
             widget=forms.TextInput(attrs={'size' : '30'}), label=u'Version')
     authors = forms.CharField(max_length=200, 
             widget=forms.TextInput(attrs={'size' : '60'}), label=u'Authors')
     contact = forms.EmailField(max_length=80, 
-        widget=forms.TextInput(attrs={'size' : '60'}), label=u"Main Author's Email Address:")
+        widget=forms.TextInput(attrs={'size' : '60'}), label=u"Main Author's Email Address")
     description = forms.CharField(
-            widget=forms.Textarea(attrs={"rows":30, "cols":80}), label=u'Description')
+            widget=forms.Textarea(attrs={"rows":20, "cols":70}), label=u'Description')
     project_url = forms.URLField(
             widget=forms.TextInput(attrs={'size' : '60'}),
             label=u'Project Homepage', required=False)
@@ -41,24 +41,11 @@ class SoftwareForm(forms.Form):
     language = forms.CharField(max_length=200,
             widget=forms.TextInput(attrs={'size' : '60'}), label=u'Programming Language(s)')
     os_license = forms.CharField(max_length=200,
-            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Title')
+            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Open Source License')
     tarball = forms.FileField(widget=forms.FileInput(attrs={'size' : '30'}),
             label=u'Project Archive', required=False)
     screenshot = forms.ImageField(widget=forms.FileInput(attrs={'size' : '30'}),
             label=u'Screenshot', required=False)
-
-    def clean_title(self):
-        """
-        Validates that title is alphanumeric
-        """
-        if 'title' in self.cleaned_data:
-            if not title_re.search(self.cleaned_data['title']):
-                raise forms.ValidationError(u'Title may only contain letters, numbers and underscores')
-            try:
-                sw = Software.objects.get(title__exact=self.cleaned_data['title'])
-            except Software.DoesNotExist:
-                return self.cleaned_data['title']
-            raise forms.ValidationError(u'This software project title is already taken. Please choose another name.')
 
     def clean_authors(self):
         """
@@ -95,6 +82,65 @@ class SoftwareForm(forms.Form):
             if not language_re.search(self.cleaned_data['language']):
                 raise forms.ValidationError(u'Language must be comma separated language names and may only contain letters, plusses and spaces.')
         return self.cleaned_data['language']
+
+    def clean_tarball(self):
+        """
+        Check that archive is only .tar.gz .tar.bz2 .zip 
+        """
+        if 'tarball' in self.data:
+            tarball = self.data['tarball']
+            if tarball and tarball.get('content-type') not in ('application/zip',
+                    'application/gzip', 
+                    'application/x-gzip', 
+                    'application/tar', 
+                    'application/x-tar', 
+                    'application/x-gzip', 
+                    'application/x-bzip', 
+                    'application/x-bzip-compressed-tar'):
+                raise forms.ValidationError(u'Only compressed or uncompressed zip or tar archives allowed.')
+            if len(tarball['content']) > settings.MAX_FILE_UPLOAD_SIZE * 1024:
+                raise forms.ValidationError(u'Tarball too big, max allowed size is %d KB' % settings.MAX_FILE_UPLOAD_SIZE)
+
+        return self.cleaned_data['tarball']
+
+    def clean_screenshot(self):
+        """
+        Check that screenshot is only jpeg/png/gif
+        """
+        if 'screenshot' in self.data:
+            screenshot = self.data['screenshot']
+            if screenshot and screenshot.get('content-type') not in ('image/jpeg',
+                    'image/gif', 'image/png'):
+                raise forms.ValidationError(u'Only images of type png, gif or jpeg allowed.')
+
+            if len(screenshot['content']) > settings.MAX_IMAGE_UPLOAD_SIZE * 1024:
+                raise forms.ValidationError(u'Image too big, max allowed size is %d KB' % settings.MAX_IMAGE_UPLOAD_SIZE)
+
+            img = Image.open(StringIO(screenshot['content']))  
+            width, height = img.size
+            if width > settings.MAX_IMAGE_UPLOAD_WIDTH:
+                raise forms.ValidationError('Maximum image width is %s' % settings.MAX_IMAGE_UPLOAD_WIDTH)
+            if height > settings.MAX_IMAGE_UPLOAD_HEIGHT:
+                raise forms.ValidationError('Maximum image height is %s' % settings.MAX_IMAGE_UPLOAD_HEIGHT)
+
+        return self.cleaned_data['screenshot']
+
+class SoftwareForm(UpdateSoftwareForm):
+    title = forms.CharField(max_length=80,
+            widget=forms.TextInput(attrs={'size' : '30'}),
+            label=u'Title', required=True) 
+    def clean_title(self):
+        """
+        Validates that title is alphanumeric
+        """
+        if 'title' in self.cleaned_data:
+            if not title_re.search(self.cleaned_data['title']):
+                raise forms.ValidationError(u'Title may only contain letters, numbers and underscores')
+            try:
+                sw = Software.objects.get(title__exact=self.cleaned_data['title'])
+            except Software.DoesNotExist:
+                return self.cleaned_data['title']
+            raise forms.ValidationError(u'This software project title is already taken. Please choose another name.')
 
 def save_tarball(request, object):
     """
@@ -182,8 +228,6 @@ def edit_software(request, software_id):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
 
-    EditSoftwareForm = create_form()
-
     if request.user.is_superuser:
         software = get_object_or_404(Software,
                 pk=software_id)
@@ -193,7 +237,10 @@ def edit_software(request, software_id):
                 user__pk=request.user.id)
 
     if request.method == 'POST':
-        form = EditSoftwareForm(request.POST)
+        new_data = request.POST.copy()
+        new_data.update(request.FILES)
+        form = UpdateSoftwareForm(new_data)
+
         if form.is_valid():
             for field in editables:
                 if not field in dontupdateifempty or form.cleaned_data[field]:
@@ -204,7 +251,7 @@ def edit_software(request, software_id):
             software.save()
             return HttpResponseRedirect(software.get_absolute_url())
     else:
-        form = EditSoftwareForm(software)
+        form = UpdateSoftwareForm(software)
 
     return render_to_response('software/software_add.html',
                               { 'form': form },

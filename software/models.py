@@ -9,7 +9,7 @@ from django.db.models import Q
 
 # make sure this list of variables is up-to-date (i.e. matches
 # the fields in the Software object
-editables=('title','version','authors',
+editables=('version','authors',
         'contact', 'description', 'project_url', 'tags', 'language',
         'os_license', 'tarball', 'screenshot' )
 
