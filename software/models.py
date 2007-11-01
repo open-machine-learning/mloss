@@ -80,7 +80,12 @@ class Software(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     tarball = models.FileField(upload_to="code_archive/",blank=True,null=True)
-    screenshot = models.ImageField(upload_to="screenshot_archive/",blank=True,null=True)
+    try:
+        from PIL import Image  
+        screenshot = models.ImageField(upload_to="screenshot_archive/",blank=True,null=True)
+    except ImportError:
+        screenshot = models.FileField(upload_to="screenshot_archive/",blank=True,null=True)
+       
 
     objects = SoftwareManager()
 
@@ -148,21 +153,24 @@ class Software(models.Model):
 
     def get_features_rating(self):
         ratings = SoftwareRating.objects.filter(software=self)
-        l = float(len(ratings))
+        l = float(ratings.count())
         if l > 0.0:
             return sum([ r.features for r in ratings])/l            
 
     def get_documentation_rating(self):
         ratings = SoftwareRating.objects.filter(software=self)
-        l = float(len(ratings))
+        l = float(ratings.count())
         if l > 0.0:
             return sum([ r.documentation for r in ratings])/l            
 
     def get_usability_rating(self):
         ratings = SoftwareRating.objects.filter(software=self)
-        l = float(len(ratings))
+        l = float(ratings.count())
         if l > 0.0:
             return sum([ r.usability for r in ratings])/l            
+
+    def get_num_votes(self):
+        return float(SoftwareRating.objects.filter(software=self).count())
 
     class Meta:
         ordering = ('-pub_date',)

@@ -73,7 +73,7 @@ All entries
 							</p>
 						</td>
 						<td>
-							{% if snippet.get_features_rating %}
+							{% if snippet.get_num_votes %}
 							<font size=2>
 								<table>
 									<tr><td>Features</td><td>{% show_stars snippet.get_features_rating of 5 round to half %}</td></tr>
