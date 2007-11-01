@@ -30,8 +30,8 @@
               <div id="name">Machine Learning Open Source Software</div>
 			  <div id="accounts">
 				  {% if user.is_authenticated %} Welcome
-				  {% if user.get_full_name %}
-				  <a href="/user/view/{{user.pk}}">{{user.get_full_name}}</a>
+				  {% if user.first_name %}
+				  <a href="/user/view/{{user.pk}}">{{user.first_name}}</a>
 				  |
 				  {% else %}
 				  <a href="/user/view/{{user.pk}}">{{user}}</a>|

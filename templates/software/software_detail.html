@@ -14,15 +14,15 @@
 
 <h2>Manage</h2>
 <dl>
-<a href="/software">Project List</a>
+	<a href="/software">Project List</a>
 </dl>
 
 <dl>
-{% if user.is_authenticated %}
-<a href="/software/submit">Submit new Project</a>
-{% else %}
-<a href="/software/submit">Login</a><a> to submit a new project</a>
-{% endif %}
+	{% if user.is_authenticated %}
+	<a href="/software/submit">Submit new Project</a>
+	{% else %}
+	<a href="/software/submit">Login</a><a> to submit a new project</a>
+	{% endif %}
 </dl>
 
 {% if user.is_authenticated %}
@@ -41,109 +41,130 @@
 
 <h2>Details</h2>
 <dl>
-<dt>Version:</dt>
-<dd>{{ object.version }}</dd>
-<dt>Submitter:</dt>
-<dd>{{ object.user.username }}</dd>
-<dt>Author(s):</dt>
-<dd>{{ object.authors }}</dd>
-<dt>Posted:</dt>
-<dd>{{ object.pub_date|date:"j F Y" }}</dd>
-<dt>Last Updated:</dt>
-<dd>{{ object.updated_date|date:"j F Y" }}</dd>
-<dt>Open Source License:</dt>
-<dd>{{ object.os_license }}</dd>
-{% if object.language %}
-<dt>Programming Language(s):</dt>
-<dd>{{ object.language }}</dd>
-{% endif %}
+	<dt>Version:</dt>
+	<dd>{{ object.version }}</dd>
+	<dt>Submitter:</dt>
+	<dd>{{ object.user.username }}</dd>
+	<dt>Author(s):</dt>
+	<dd>{{ object.authors }}</dd>
+	<dt>Posted:</dt>
+	<dd>{{ object.pub_date|date:"j F Y" }}</dd>
+	<dt>Last Updated:</dt>
+	<dd>{{ object.updated_date|date:"j F Y" }}</dd>
+	<dt>Open Source License:</dt>
+	<dd>{{ object.os_license }}</dd>
+	{% if object.language %}
+	<dt>Programming Language(s):</dt>
+	<dd>{{ object.language }}</dd>
+	{% endif %}
 </dl>
 {% endblock %}
 
 {% block content %}
 <dl>
+	<table>
+		<tr>
+			<td>
+				<div class="rating">
+					<h2><a href="{{ object.get_absolute_url }}">
+							{{ object.title }} 
+					</a></h2>
+					<table>
+						<tr>
+							<td valign=top>
+								<h2>
+									{% if object.screenshot %}
+									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width='128' height='80' alt='screenshot'></img></a>
+									{% else %}
+									<img src="/media/images/cray_flat_small.png" border="0" height="32 width="30 align=top><a href="{{ object.get_absolute_url }}"> {{ object.title }} {{ object.version }}</img>
+										{% endif %}
+									</h2>
+									<p>
+									by <a href="/software{{ object.user.get_absolute_url }}">{{ object.user.username }}</a> 
+									- {{ object.pub_date|date:"F j, Y, h:m:s" }}
+									</p>
+								</td>
+								<td>
+									{% if object.get_features_rating %}
+									<font size=2>
+										<table>
+											<tr><td>Features</td><td>{% show_stars object.get_features_rating of 5 round to half %}</td></tr>
+											<tr><td>Usability</td><td>{% show_stars object.get_usability_rating of 5 round to half %}</td></tr>
+											<tr><td>Documentation</td><td>{% show_stars object.get_documentation_rating of 5 round to half %}</td></tr>
+										</table>
+										{% endif %}
 
-<table><tr><td>
-  <h2><a href="{{ object.get_absolute_url }}">
-	{{ object.title }} 
-{% if object.get_features_rating %}
-<br>(features:
-{% show_stars object.get_features_rating of 5 round to half %},
-usability:
-{% show_stars object.get_usability_rating of 5 round to half %},
-documentation:
-{% show_stars object.get_documentation_rating of 5 round to half %})
-{% endif %}
-</a></h2>
-{% if object.screenshot %}
-<dt>Screenshot:</dt>
-<dd><a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width='128' height='80' alt='screenshot'></a></dd>
-{% endif %}
+									</td>
+								</tr>
+							</table>
+						</div>
+						<dt>Description:</dt>
+						<dd>{{ object.description_html }}</dd>
 
-<dt>Description:</dt>
-<dd>{{ object.description_html }}</dd>
+						<dt>URL:</dt>
+						<dd>{{ object.project_url|urlize }}</dd>
 
-<dt>URL:</dt>
-<dd>{{ object.project_url|urlize }}</dd>
+						{% if object.tags %}
+						<dt>Tag(s):</dt>
+						<dd> {{ object.tags }} </dd>
+						{% endif %}
 
-{% if object.tags %}
-<dt>Tag(s):</dt>
-<dd> {{ object.tags }} </dd>
-{% endif %}
+						{% if object.tarball %}
+						<dt>Archive:</dt>
+						<dd><a href='/media/{{ object.tarball }}'>download here</a></dd>
+						{% endif %}
 
-{% if object.tarball %}
-<dt>Archive:</dt>
-<dd><a href='/media/{{ object.tarball }}'>download here</a></dd>
-{% endif %}
-</td></tr></table>
+					</dl>
 
-</dl>
+					{% if ratingform %}
+					<div class="ratingform" align="center">
+						<h2>Rating</h2>
 
-{% if ratingform %}
-<div class="ratingform">
-<h2>Rating</h2>
+						<p>Rate this software. "0" means poor and "5" means excellent. Ratings can
+						be changed later on.</p>
+						<form method="post" action="/software/rate/{{ object.id }}/">
+							<table>
+								{{ ratingform }}
+							</table>
+							<input type="submit" value="Submit my ratings!">
+						</form>
+					</div>
+					{% endif %}
 
-<p>Rate this software. "0" means poor and "5" means excellent. Ratings can
-be changed later on.</p>
-<form method="post" action="/software/rate/{{ object.id }}/">
-<table>
-{{ ratingform }}
-</table>
-<input type="submit" value="Submit my ratings!">
-</form>
-</div>
-{% endif %}
+					<h2>Comments</h2>
 
-<h2>Comments</h2>
+					{% get_comment_list for software.software object.id as comment_list %}
 
-{% get_comment_list for software.software object.id as comment_list %}
+					{% if comment_list %}
+					{% for comment in comment_list %}
+					<div id="comment">
+						<dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y, h:m:s" }})
+						, Karma
+						{% if user.is_authenticated %}
+						{% ifnotequal comment.user user %}
+						(<a href="/comments/karma/vote/{{ comment.id }}/up/">+</a>/<a href="/comments/karma/vote/{{ comment.id }}/down/">-</a>)
+						{% endifnotequal %}
+						{% endif %}
+						:{% show_stars comment.get_karma_total of 5 round to half %}
+						<!--{{ comment.get_karma_total }}{{ comment.get_good_karma_total }} positive {{ comment.get_bad_karma_total }} negative-->
 
-{% if comment_list %}
-  {% for comment in comment_list %}
-  <div id="comment">
-	  <dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y, h:m:s" }})
-	  , Karma
-	  {% if user.is_authenticated %}
-	  {% ifnotequal comment.user user %}
-	  (<a href="/comments/karma/vote/{{ comment.id }}/up/">+</a>/<a href="/comments/karma/vote/{{ comment.id }}/down/">-</a>)
-	  {% endifnotequal %}
-	  {% endif %}
-	  :{% show_stars comment.get_karma_total of 5 round to half %}
-	  <!--{{ comment.get_karma_total }}{{ comment.get_good_karma_total }} positive {{ comment.get_bad_karma_total }} negative-->
+						</dd></dt>
+						<dd>{{ comment.comment|safe_markdown:"safe" }}</dd>
+					</div>
+					<br>
+					{% endfor %}
+					{% else %}
+					<p>
+					No one has posted any comments yet. Perhaps you'd like to be the first?
+					</p>
+					{% endif %}
 
-	  </dd></dt>
-	  <dd>{{ comment.comment|safe_markdown:"safe" }}</dd>
-  </div>
-  <br>
-  {% endfor %}
-{% else %}
-  <p>
-  No one has posted any comments yet. Perhaps you'd like to be the first?
-  </p>
-{% endif %}
+					<h2>Leave a comment</h2>
+					{% comment_form for software.software object.id %}
 
-<h2>Leave a comment</h2>
-{% comment_form for software.software object.id %}
-
-{% endblock %}
+				</td>
+			</tr>
+		</table>
+	</dl>
+	{% endblock %}
 

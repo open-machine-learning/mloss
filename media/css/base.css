@@ -75,6 +75,11 @@ p.more { margin-top:-.4em; }
 .sidebar h2:first-child { margin-top:.8em; }
 h2.deck { margin-top:-.5em !important; margin-bottom:.6em; color:#487858; }
 
+#content-main table { width:95% }
+#content-main th { padding:5px; border:1px solid #113366;background:#F7F7F7 }
+#content-main td { padding:5px; border:1px solid #113366;background:#F7F7F7 }
+
+
 /* LISTS */
 
 ul { padding-left:2em; }
@@ -100,10 +105,6 @@ dd { margin-bottom:.8em; }
 
 #comment { width:90%; padding:3px; border:1px solid #113366; background:#F7F7F7}
 
-table { width:95% }
-th { padding:5px; border:1px solid #113366;background:#F7F7F7 }
-td { padding:5px; border:1px solid #113366;background:#F7F7F7 }
-
 /* FOOTER */
 
 #footer { clear:both; color:#CCCCCC; padding:10px 20px; font-size:90%; }
@@ -112,10 +113,13 @@ td { padding:5px; border:1px solid #113366;background:#F7F7F7 }
 .error { color:#FF0000 }
 
 /* RATING FORM */
-.ratingform li { list-style-type: none; display: inline; padding-left: 30px; }
-.ratingform table, tr, td, th  { padding: 0px; margin: 0px; }
-.ratingform td { border: 0px solid; }
-.ratingform th { border: 0px solid; font-weight: bold; }
+#content-main .ratingform li { list-style-type: none; display: inline; padding-left: 30px; }
+#content-main .ratingform table  { width: 70%; }
+#content-main .ratingform table, tr, td, th  { padding: 0px; margin: 0px; }
+#content-main .ratingform td { padding-left: 0px; padding-right: 0px; border: 1px solid; padding: 0px; margin:0px; }
+#content-main .ratingform th { border: 1px solid; font-weight: bold; }
+#content-main .rating table { width: 100%;}
+#content-main .rating td { padding-left: 0px; padding-right: 0px; border: 0px solid; padding: 0px; margin:0px; }
 
 /*  CLEARFIX KLUDGE */
 

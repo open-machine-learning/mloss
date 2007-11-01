@@ -61,7 +61,8 @@ Projects matching {{ search_term|escape }}.
 
   {% for snippet in object_list %}
   <table><tr><td>
-	  <table class=rating><tr><td valign=top>
+	<div class="rating">
+	  <table><tr><td valign=top>
 		  <h2><img src="/media/images/cray_flat_small.png" border="0"
   height="32 width="30 align=top><a href="{{ snippet.get_absolute_url }}"> {{ snippet.title }} {{ snippet.version }}
 </a></h2>
@@ -73,10 +74,11 @@ Projects matching {{ search_term|escape }}.
 {% if snippet.get_features_rating %}
 <font size=2>
 	<table>
-		<tr><td>features</td><td>{% show_stars snippet.get_features_rating of 5 round to half %}</td></tr>
-		<tr><td>usability</td><td>{% show_stars snippet.get_usability_rating of 5 round to half %}</td></tr>
-		<tr><td>documentation</td><td>{% show_stars snippet.get_documentation_rating of 5 round to half %}</td></tr>
+		<tr><td>Features</td><td>{% show_stars snippet.get_features_rating of 5 round to half %}</td></tr>
+		<tr><td>Usability</td><td>{% show_stars snippet.get_usability_rating of 5 round to half %}</td></tr>
+		<tr><td>Documentation</td><td>{% show_stars snippet.get_documentation_rating of 5 round to half %}</td></tr>
 </table>
+</div>
 {% endif %}
 </tr></table>
 	<p>{{ snippet.description|safe_markdown:"safe,cut=500" }}<hr>
