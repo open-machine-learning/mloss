@@ -111,6 +111,12 @@ td { padding:5px; border:1px solid #113366;background:#F7F7F7 }
 /* HIGHLIGHTING */
 .error { color:#FF0000 }
 
+/* RATING FORM */
+.ratingform li { list-style-type: none; display: inline; padding-left: 30px; }
+.ratingform table, tr, td, th  { padding: 0px; margin: 0px; }
+.ratingform td { border: 0px solid; }
+.ratingform th { border: 0px solid; font-weight: bold; }
+
 /*  CLEARFIX KLUDGE */
 
 #columnwrap:after {

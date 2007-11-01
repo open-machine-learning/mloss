@@ -131,9 +131,52 @@ class Software(models.Model):
         date_hierarchy = 'pub_date'
         search_fields = ['title']
 
+    def get_ratings(self):
+        """get_ratings(self) -> features, usability, documentation
+
+        return the average ratings or [None, None, None] if no ratings
+        have been given so far.""" 
+        ratings = SoftwareRating.objects.filter(software=self)
+        l = float(len(ratings))
+        if l > 0.0:
+            features = sum([ r.features for r in ratings])/l
+            usability = sum([ r.usability for r in ratings])/l
+            documentation = sum([ r.documentation for r in ratings])/l
+            return features, usability, documentation
+        else:
+            return None, None, None
+
+    def get_features_rating(self):
+        ratings = SoftwareRating.objects.filter(software=self)
+        l = float(len(ratings))
+        if l > 0.0:
+            return sum([ r.features for r in ratings])/l            
+
+    def get_documentation_rating(self):
+        ratings = SoftwareRating.objects.filter(software=self)
+        l = float(len(ratings))
+        if l > 0.0:
+            return sum([ r.documentation for r in ratings])/l            
+
+    def get_usability_rating(self):
+        ratings = SoftwareRating.objects.filter(software=self)
+        l = float(len(ratings))
+        if l > 0.0:
+            return sum([ r.usability for r in ratings])/l            
+
     class Meta:
         ordering = ('-pub_date',)
 
+class SoftwareRating(models.Model):
+    """Rating for a software
 
+    Each user can rate a software only once (but she might change
+    her rating?)"""
+    user = models.ForeignKey(User, raw_id_admin=True)
+    software = models.ForeignKey(Software)
+    features = models.IntegerField()
+    usability = models.IntegerField()
+    documentation = models.IntegerField()
 
-
+    class Admin:
+        pass

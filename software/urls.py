@@ -62,4 +62,5 @@ urlpatterns = patterns('',
     (r'^language/$', 'software.views.language.language_with_software'),
     (r'^language/(?P<language>[^/]+)/$', 'software.views.entry.software_by_language'),
     (r'^search/$', 'software.forms.search_software'),
+    (r'^rate/(?P<software_id>\d+)/$', 'software.views.entry.rate')
 )

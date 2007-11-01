@@ -65,7 +65,16 @@
 
 <table><tr><td>
   <h2><a href="{{ object.get_absolute_url }}">
-	{{ object.title }}</a></h2>
+	{{ object.title }} 
+{% if object.get_features_rating %}
+<br>(features:
+{% show_stars object.get_features_rating of 5 round to half %},
+usability:
+{% show_stars object.get_usability_rating of 5 round to half %},
+documentation:
+{% show_stars object.get_documentation_rating of 5 round to half %})
+{% endif %}
+</a></h2>
 {% if object.screenshot %}
 <dt>Screenshot:</dt>
 <dd><a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width='128' height='80' alt='screenshot'></a></dd>
@@ -89,6 +98,21 @@
 </td></tr></table>
 
 </dl>
+
+{% if ratingform %}
+<div class="ratingform">
+<h2>Rating</h2>
+
+<p>Rate this software. "0" means poor and "5" means excellent. Ratings can
+be changed later on.</p>
+<form method="post" action="/software/rate/{{ object.id }}/">
+<table>
+{{ ratingform }}
+</table>
+<input type="submit" value="Submit my ratings!">
+</form>
+</div>
+{% endif %}
 
 <h2>Comments</h2>
 

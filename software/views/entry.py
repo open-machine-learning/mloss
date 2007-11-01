@@ -9,7 +9,9 @@ from django.template import RequestContext
 from django.views.generic import list_detail
 from django.contrib.auth.models import User
 
-from software.models import Software
+from software.models import Software, SoftwareRating
+
+from software.forms import RatingForm
 
 def software_detail(request, software_id):
     """
@@ -24,8 +26,21 @@ def software_detail(request, software_id):
     
     """
     entry = get_object_or_404(Software, pk=software_id)
+    ratingform = None
+    if request.user.is_authenticated and request.user != entry.user:
+        r = SoftwareRating.objects.filter(user=request.user).filter(software=entry)
+        if len(r) == 1:
+            r = r[0]
+            #ratingform = 'f: %d, u: %d, d: %d' % (r.features, r.usability, r.documentation)
+            ratingform = RatingForm({'features': r.features,
+                                     'usability': r.usability,
+                                     'documentation': r.documentation})
+        else:
+            ratingform = RatingForm()
+    
     return render_to_response('software/software_detail.html',
-                              { 'object': entry, },
+                              { 'object': entry,
+                                'ratingform': ratingform },
                                 context_instance=RequestContext(request))
 
 def software_by_user(request, username):
@@ -121,3 +136,16 @@ def search_description(request, q):
                                    template_name='software/software_list.html',
                                    extra_context={ 'search_term': q },
                                    )
+
+def rate(request, software_id):
+    software = get_object_or_404(Software, pk=software_id)
+    if request.method == 'POST':
+        if request.user.is_authenticated and request.user != software.user:
+            r, flag = SoftwareRating.objects.get_or_create(user=request.user,
+                                                           software=software_id)
+            r.features = request.POST['features']
+            r.usability = request.POST['usability']
+            r.documentation = request.POST['documentation']
+            r.save()
+    return software_detail(request, software_id)
+                              

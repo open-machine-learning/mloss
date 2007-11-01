@@ -8,6 +8,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.views.generic.create_update import update_object
 import software.views.entry
+from django.newforms.widgets import RadioSelect
 
 from models import Software, editables, dontupdateifempty
 
@@ -129,3 +130,11 @@ def edit_software(request, software_id):
     return render_to_response('software/software_add.html',
                               { 'form': form },
                               context_instance=RequestContext(request))
+
+class RatingForm(forms.Form):
+    features = forms.IntegerField(widget=RadioSelect(choices=( (0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5') )))
+    usability = forms.IntegerField(widget=RadioSelect(choices=( (0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5') )))
+    documentation = forms.IntegerField(widget=RadioSelect(choices=( (0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5') )))
+    #features = forms.IntegerField()
+    #usability = forms.IntegerField()
+    #documentation = forms.IntegerField()
