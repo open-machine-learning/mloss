@@ -19,7 +19,7 @@ import re
 title_re = re.compile(r'^\w+$')
 authors_re = re.compile(r'^[a-zA-Z ,]+$')
 tags_re = re.compile(r'^[a-z0-9 ,]+$')
-os_license_re = re.compile(r'^[a-zA-Z0-9 ,]+$')
+os_license_re = re.compile(r'^[a-zA-Z0-9\. ,]+$')
 language_re = re.compile(r'^[a-zA-Z\+ ,]+$')
 
 from models import Software, editables, dontupdateifempty
@@ -264,6 +264,3 @@ class RatingForm(forms.Form):
     features = forms.IntegerField(widget=RadioSelect(choices=( (0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5') )))
     usability = forms.IntegerField(widget=RadioSelect(choices=( (0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5') )))
     documentation = forms.IntegerField(widget=RadioSelect(choices=( (0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5') )))
-    #features = forms.IntegerField()
-    #usability = forms.IntegerField()
-    #documentation = forms.IntegerField()
