@@ -27,7 +27,8 @@
 {% endif %}
   <dl>
     <dt><label for="id_title">
-        {{ form.title.label }} {% if form.title.errors %}
+        {{ form.title.label }} <span class="help">{{ form.title.help_text }}</span>
+	{% if form.title.errors %}
         <span class="error">
           {{ form.title.errors|join:", " }}
         </span>
@@ -36,7 +37,8 @@
     </dt>
     <dd>{{ form.title }}</dd>
     <dt><label for="id_version">
-        {{ form.version.label }} {% if form.version.errors %}
+        {{ form.version.label }} <span class="help">{{ form.version.help_text }}</span>
+	{% if form.version.errors %}
         <span class="error">
           {{ form.version.errors|join:", " }}
         </span>
@@ -45,7 +47,8 @@
     </dt>
     <dd>{{ form.version }}</dd>
     <dt><label for="id_authors">
-        {{ form.authors.label }} {% if form.authors.errors %}
+        {{ form.authors.label }} <span class="help">{{ form.authors.help_text }}</span>
+	{% if form.authors.errors %}
         <span class="error">
           {{ form.authors.errors|join:", " }}
         </span>
@@ -54,7 +57,8 @@
     </dt>
     <dd>{{ form.authors }}</dd>
     <dt><label for="id_contact">
-        {{ form.contact.label }} {% if form.contact.errors %}
+        {{ form.contact.label }} <span class="help">{{ form.contact.help_text }}</span>
+	{% if form.contact.errors %}
         <span class="error">
           {{ form.contact.errors|join:", " }}
         </span>
@@ -63,7 +67,8 @@
     </dt>
     <dd>{{ form.contact }}</dd>
     <dt><label for="id_description">
-        {{ form.description.label }} {% if form.description.errors %}
+        {{ form.description.label }} <span class="help">{{ form.description.help_text }}</span>
+	{% if form.description.errors %}
         <span class="error">
           {{ form.description.errors|join:", " }}
         </span>
@@ -72,7 +77,8 @@
     </dt>
     <dd>{{ form.description }}</dd>
     <dt><label for="id_project_url">
-        {{ form.project_url.label }} {% if form.project_url.errors %}
+        {{ form.project_url.label }} <span class="help">{{ form.project_url.help_text }}</span>
+	{% if form.project_url.errors %}
         <span class="error">
           {{ form.project_url.errors|join:", " }}
         </span>
@@ -81,7 +87,8 @@
     </dt>
     <dd>{{ form.project_url }}</dd>
     <dt><label for="tags">
-        {{ form.tags.label }} {% if form.tags.errors %}
+        {{ form.tags.label }} <span class="help">{{ form.tags.help_text }}</span>
+	{% if form.tags.errors %}
         <span class="error">
           {{ form.tags.errors|join:", " }}
         </span>
@@ -90,7 +97,8 @@
     </dt>
     <dd>{{ form.tags }}</dd>
     <dt><label for="language">
-        {{ form.language.label }} {% if form.language.errors %}
+        {{ form.language.label }} <span class="help">{{ form.language.help_text }}</span>
+	{% if form.language.errors %}
         <span class="error">
           {{ form.language.errors|join:", " }}
         </span>
@@ -99,7 +107,8 @@
     </dt>
     <dd>{{ form.language }}</dd>
     <dt><label for="os_license">
-        {{ form.os_license.label }} {% if form.os_license.errors %}
+        {{ form.os_license.label }} <span class="help">{{ form.os_license.help_text }}</span>
+	{% if form.os_license.errors %}
         <span class="error">
           {{ form.os_license.errors|join:", " }}
         </span>
@@ -108,7 +117,8 @@
     </dt>
     <dd>{{ form.os_license }}</dd>
     <dt><label for="tarball">
-        {{ form.tarball.label }} {% if form.tarball.errors %}
+        {{ form.tarball.label }} <span class="help">{{ form.tarball.help_text }}</span>
+	{% if form.tarball.errors %}
         <span class="error">
           {{ form.tarball.errors|join:", " }}
         </span>
@@ -117,14 +127,15 @@
     </dt>
     <dd>{{ form.tarball }}{{ form.tarball_file }}</dd>
     <dt><label for="id_screenshot">
-        {{ form.screenshot.label }} {% if form.screenshot.errors %}
+        {{ form.screenshot.label }} <span class="help">{{ form.screenshot.help_text }}</span>
+	{% if form.screenshot.errors %}
         <span class="error">
           {{ form.screenshot.errors|join:", " }}
         </span>
         {% endif %}
       </label>
     </dt>
-    <dd>{{ form.screenshot }}{{ form.screenshot_file }}</dd>
+    <dd>{{ form.screenshot }} {{ form.screenshot_file }}</dd>
     <dt><input type="submit" value="Save" /></dt>
   </dl>
 </form>

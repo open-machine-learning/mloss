@@ -23,28 +23,37 @@ os_license_re = re.compile(r'^[a-zA-Z0-9\. ,]+$')
 language_re = re.compile(r'^[a-zA-Z\+ ,]+$')
 
 from models import Software, editables, dontupdateifempty
+
 class UpdateSoftwareForm(forms.Form):
     version = forms.CharField(max_length=80,
-            widget=forms.TextInput(attrs={'size' : '30'}), label=u'Version')
+            widget=forms.TextInput(attrs={'size' : '30'}), label=u'Version',
+            help_text=u'(required)')
     authors = forms.CharField(max_length=200, 
-            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Authors')
+            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Authors',
+            help_text=u'(required) A comma seperated list, up to 200 characters long')
     contact = forms.EmailField(max_length=80, 
-        widget=forms.TextInput(attrs={'size' : '60'}), label=u"Main Author's Email Address")
+            widget=forms.TextInput(attrs={'size' : '60'}), label=u"Main Author's Email Address",
+            help_text=u'(required)')
     description = forms.CharField(
-            widget=forms.Textarea(attrs={"rows":20, "cols":70}), label=u'Description')
+            widget=forms.Textarea(attrs={"rows":20, "cols":70}), label=u'Description',
+            help_text=u'(required) The first paragraph, truncated at 500 characters, is displayed as the summary')
     project_url = forms.URLField(
             widget=forms.TextInput(attrs={'size' : '60'}),
             label=u'Project Homepage', required=False)
     tags = forms.CharField(widget=forms.TextInput(attrs={'size' : '60'}),
-            label=u'Tags', required=False)
+            label=u'Tags', required=False,
+            help_text=u'A comma seperated list of keywords')
     language = forms.CharField(max_length=200,
-            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Programming Language(s)')
+            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Programming Language(s)',
+            help_text=u'(required) A comma seperated list, up to 200 characters long')
     os_license = forms.CharField(max_length=200,
-            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Open Source License')
+            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Open Source License',
+            help_text=u'(required) A comma seperated list, up to 200 characters long')
     tarball = forms.FileField(widget=forms.FileInput(attrs={'size' : '30'}),
             label=u'Project Archive', required=False)
     screenshot = forms.ImageField(widget=forms.FileInput(attrs={'size' : '30'}),
-            label=u'Screenshot', required=False)
+            label=u'Screenshot', required=False,
+            help_text=u'Please limit to 1280x1024 pixels. We recommend .png, .jpg or .pdf')
 
     def clean_authors(self):
         """
@@ -131,7 +140,8 @@ class UpdateSoftwareForm(forms.Form):
 class SoftwareForm(UpdateSoftwareForm):
     title = forms.CharField(max_length=80,
             widget=forms.TextInput(attrs={'size' : '30'}),
-            label=u'Title', required=True) 
+            label=u'Title', required=True, help_text=u'(required) Up to 80 characters long')
+    
     def clean_title(self):
         """
         Validates that title is alphanumeric
