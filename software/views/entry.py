@@ -116,7 +116,6 @@ def software_by_rating(request):
     sw_list=list()
 
     for s in software:
-        print s.pk
         r=s.get_overall_rating()
         sw_list.append((s.id,r))
 
