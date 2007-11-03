@@ -67,17 +67,22 @@ a:link, a:visited { color:#ffc757; }
 h4 { font-size:100%; font-weight:bold; margin-bottom:-3px; margin-top:1.2em; text-transform:uppercase; letter-spacing:1px; }
 h4 pre, h4 tt, h4 .literal { text-transform:none; }
 h5 { font-size:1em; font-weight:bold; margin-top:1.5em; margin-bottom:3px; }
-p, ul, dl { margin-top:.6em; margin-bottom:.8em; }
+/*p, ul, dl { margin-top:0.2em; margin-bottom:0.2em; }*/
 hr { color:#ccc; background-color:#ccc; height:1px; border:0; }
-p.date { color:#487858; margin-top:-.2em; }
-p.more { margin-top:-.4em; }
+p.date { color:#485858; margin-top:-.2em; }
+p.more { color:#485858; margin-top:-.4em; }
 .sidebar p.date { color:#90ba9e; }
 .sidebar h2:first-child { margin-top:.8em; }
 h2.deck { margin-top:-.5em !important; margin-bottom:.6em; color:#487858; }
-
 #content-main table { width:100% }
-#content-main th { padding:5px; border:1px solid #113366;background:#F7F7F7 }
-#content-main td { padding:5px; border:1px solid #113366;background:#F7F7F7 }
+#content-main th { padding:0px; padding-left:.4em; border:1px solid #113366;background:#F7F7F7 }
+#content-main td { padding:0px; padding-left:.4em; border:1px solid #113366;background:#F7F7F7 }
+p.swlist { margin-top:.5em; margin-bottom:.5em; }
+table.swlist { margin-top:-0.5em; margin-bottom:0.5em;padding:0px; }
+td.swlist { margin-top:-0.5em; margin-bottom:0.5em;padding:0px; }
+tr.swlist { margin-top:-0.5em; margin-bottom:0.5em;padding:0px; }
+#content-main .description p { margin-top:-0.5em; margin-bottom:-0.1em;}
+#content-main .description li { font-size:90%; padding:0px; margin-bottom:-0.6ex;}
 
 /* LISTS */
 
@@ -121,6 +126,10 @@ dd { margin-bottom:.8em; }
 #content-main .ratingform th { border: 1px solid; font-weight: bold; }
 #content-main .rating table { width: 100%;}
 #content-main .rating td { padding-left: 0px; padding-right: 0px; border: 0px solid; padding: 0px; margin:0px; }
+#content-main td.rating { width:20%;}
+#content-main table.starlab {padding:0px; padding-left: 0px; padding-right: 0px; border:0px solid; padding: 0px; margin:0px; width: 15em; min-width:150px;}
+#content-main td.starlab {padding:0px; font-size:75%; padding-left: 0px; padding-right: 0px; border:0px solid; padding: 0px; margin:0px; width: 5em;}
+#content-main td.stars { text-align:right; padding:0px; padding-left: 0px; padding-right: 0px; border:0px solid; padding: 0px; margin:0px; width: 80px;}
 
 /*  CLEARFIX KLUDGE */
 
