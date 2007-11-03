@@ -68,47 +68,52 @@
 				<div class="rating">
 					<table>
 						<tr>
-							<td valign=top>
+							<td valign="top">
 								<h2>
 									{% if object.screenshot %}
-									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width='128' height='80' alt='screenshot'></img></a>
+									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="128" height='80' alt='screenshot'></img></a>
 									{% else %}
-									<img src="/media/images/cray_flat_small.png" border="0" height="32 width="30 align=top><a href="{{ object.get_absolute_url }}"> {{ object.title }} {{ object.version }}
+									<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align=top><a href="{{ object.get_absolute_url }}"> {{ object.title }} {{ object.version }}
 									</a></img>
 									{% endif %}
 								</h2>
-								<p>
+								<p class="more">
 								by <a href="/software{{ object.user.get_absolute_url }}">{{ object.user.username }}</a> 
 								- {{ object.pub_date|date:"F j, Y, h:m:s" }}
+								[
+								{% if object.project_url %}<a href="{{ object.project_url }}"><img src="/media/images/homepage.png" width="14" height=14"></img></a> {% endif %}
+								<a href=/software/bib/{{ object.id }}><img src="/media/images/bib.png" width="14" height=14"></img></a>
+								{% if object.paper_bib %}<a href="/software/paperbib/{{ object.id }}"><img src="/media/images/paper.png" width="14" height=14"></img></a>{% endif %}
+								{% if object.tarball %}<a href=/media/{{ object.tarball }}><img src="/media/images/disk.png" width="14" height=14"></img></a>{% endif %}
+								]
 								</p>
 							</td>
-							<td>
-								{% if object.get_num_votes %}
+							{% if object.get_num_votes %}
+							<td class="rating">
 								<font size=2>
-									<table>
-										<tr><td>Features</td><td>{% show_stars object.get_features_rating of 5 round to half %}</td></tr>
-										<tr><td>Usability</td><td>{% show_stars object.get_usability_rating of 5 round to half %}</td></tr>
-										<tr><td>Documentation</td><td>{% show_stars object.get_documentation_rating of 5 round to half %}</td></tr>
+									<table class="starlab">
+										<tr><td class="starlab">Features</td><td class="stars">{% show_stars object.get_features_rating of 5 round to half %}</td></tr>
+										<tr><td class="starlab">Usability</td><td class="stars">{% show_stars object.get_usability_rating of 5 round to half %}</td></tr>
+										<tr><td class="starlab">Documentation</td><td class="stars">{% show_stars object.get_documentation_rating of 5 round to half %}</td></tr>
 									</table>
-									{% endif %}
-
-								</td>
-							</tr>
-						</table>
+								</font>
+							</td>
+							{% endif %}
+						</tr></table>
 					</div>
 					<dt>Description:</dt>
 					<dd>{{ object.description_html }}</dd>
 
 					<dt>BibTeX Entry:</dt>
-					<dd><a href="/software/bib/{{ object.id }}">download</a></dd>
-
-					<dt>URL:</dt>
-					<dd>{{ object.project_url|urlize }}</dd>
+					<dd><a href="/software/bib/{{ object.id }}">Download</a></dd>
 
 					{% if object.paper_bib %}
 					<dt>Corresponding Paper BibTeX Entry:</dt>
-					<dd><a href="/software/paperbib/{{ object.id }}">download</a></dd>
+					<dd><a href="/software/paperbib/{{ object.id }}">Download</a></dd>
 					{% endif %}
+
+					<dt>URL:</dt>
+					<dd>{{ object.project_url|urlize }}</dd>
 
 					{% if object.operating_systems %}
 					<dt>Supported Operating Systems:</dt>
