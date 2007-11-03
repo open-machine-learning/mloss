@@ -6,12 +6,10 @@ rated and viewed according to various criteria.
 
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.views.generic import list_detail
-from django.contrib.auth.models import User
-
 from software.models import Software, SoftwareRating
-
 from software.forms import RatingForm
+from django.http import HttpResponse
+from django.contrib.sites.models import Site
 
 def software_detail(request, software_id):
     """
@@ -42,121 +40,29 @@ def software_detail(request, software_id):
                 { 'object': entry, 'ratingform': ratingform },
                 context_instance=RequestContext(request))
 
-def software_by_user(request, username):
-    """
-    List of Software submitted by a particular User.
+def get_bibitem(request, software_id):
+    entry = get_object_or_404(Software, pk=software_id)
+    key=''
+    authors=''
+    author_list = entry.authors.split(',')
+    for i in xrange(len(author_list)):
+        a=author_list[i]
+        key+=a.split(' ')[-1][:3]
+        authors+=a.strip()
+        if i<len(author_list)-1:
+            authors += ' and '
 
-    Context::
-    Same as generic ``list_detail.object_list'' view, with
-    one extra variable:
-    
-        object
-            The User
-    
-    Template::
-        software/user_detail.html
-    
-    """
-    user = get_object_or_404(User, username__exact=username)
-    return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=Software.objects.get_by_submitter(user.username),
-                                   extra_context={ 'object': user },
-                                   template_name='software/software_list.html'
-                                   )
-def software_by_license(request, license):
-    """
-    List of Software submitted with a particular License.
+    key+= `entry.pub_date.year`[2:4]
 
-    Context::
-    Same as generic ``list_detail.object_list'' view, with
-    one extra variable:
-    
-        object
-            The User
-    
-    Template::
-        software/user_detail.html
-    
-    """
-    return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=Software.objects.get_by_license(license),
-                                   template_name='software/software_list.html',
-                                   extra_context={ 'os_license': license },
-                                   )
-
-def software_by_language(request, language):
-    """
-    List of Software submitted with a particular License.
-
-    Context::
-    Same as generic ``list_detail.object_list'' view, with
-    one extra variable:
-    
-        object
-            The User
-    
-    Template::
-        software/user_detail.html
-    
-    """
-    return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=Software.objects.get_by_language(language),
-                                   template_name='software/software_list.html',
-                                   extra_context={ 'language': language },
-                                   )
-
-def software_by_rating(request):
-    """
-    List of Software ranked by rating
-    """
-    software = Software.objects.all().order_by('-pub_date')
-    sw_list=list()
-
-    for s in software:
-        r=s.get_overall_rating()
-        sw_list.append((s.id,r))
-
-    sw_list.sort(lambda x,y : cmp(x[1], y[1]))
-    ids = tuple([ i[0] for i in sw_list])
-
-    softwarelist=software.extra(where=['id IN ' + `ids`])
-
-    return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=softwarelist,
-                                   template_name='software/software_list.html',
-                                   )
-
-def search_description(request, q):
-    """
-    List of Software submitted with a particular License.
-
-    Context::
-    Same as generic ``list_detail.object_list'' view, with
-    one extra variable:
-    
-        object
-            The User
-    
-    Template::
-        software/user_detail.html
-    
-    """
-    qs=Software.objects.get_by_searchterm(q)
-    if qs.count()==0:
-        return render_to_response('software/software_list.html',
-                              { 'search_term': q, },
-                                context_instance=RequestContext(request))
-    else:
-        return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=qs,
-                                   template_name='software/software_list.html',
-                                   extra_context={ 'search_term': q },
-                                   )
+    response = HttpResponse(mimetype='application/text')
+    response['Content-Disposition'] = 'attachment; filename=%s.bib' % key
+    response.write(u"@misc{%s,\n author={%s},\n title={%s},\n year={%s},\n note={\\url{%s}}\n}" %
+            (key,
+            authors,
+            entry.title,
+            `entry.pub_date.year`,
+            'http://' + Site.objects.get_current().domain + entry.get_absolute_url()))
+    return response
 
 def rate(request, software_id):
     software = get_object_or_404(Software, pk=software_id)

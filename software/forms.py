@@ -12,8 +12,7 @@ from django.newforms.widgets import RadioSelect
 from django.utils.html import strip_tags
 from software.models import Software
 from StringIO import StringIO  
-
-import software.views.entry
+import software.views.list
 import re
 
 title_re = re.compile(r'^\w+$')
@@ -228,7 +227,7 @@ def search_software(request):
 
     if request.method == 'POST':
         q = request.POST['searchterm'];
-        return software.views.entry.search_description(request, q)
+        return software.views.list.search_description(request, q)
     else:
         return HttpResponseRedirect('/software')
 

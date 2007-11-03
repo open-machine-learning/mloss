@@ -74,6 +74,10 @@ All entries
 							<p>
 							by <a href="/software{{ snippet.user.get_absolute_url }}">{{ snippet.user.username }}</a> 
 							- {{ snippet.pub_date|date:"F j, Y, h:m:s" }}
+									(<a href=/software/bib/{{ snippet.id }}>BibTeX</a>{% if snippet.project_url %},
+									 <a href="{{ snippet.project_url }}">Homepage</a> {% endif %} {% if object.tarball %},
+									<a href=/media/{{ snippet.tarball }}>Download</a>
+									{% endif %})
 							</p>
 						</td>
 						<td>
@@ -93,7 +97,6 @@ All entries
 			<ul>{% if snippet.tags %} <li><b>Tags:</b> {{ snippet.tags }}</li> {% endif %}
 				{% if snippet.authors %}<li><b>Authors:</b> {{ snippet.authors }}</li> {% endif %}
 				{% if snippet.os_license %}<li><b>License:</b> {{ snippet.os_license}}</li> {% endif %}
-				{% if snippet.project_url %}<li><b>Homepage:</b> {{ snippet.project_url|urlize}}</li> {% endif %}
 				{% if snippet.jmlr_mloss_url %}<li><b>JMLR-MLOSS
 					Publication:</b> {{ snippet.jmlr_mloss_url|urlize}}</li> {% endif %}
 			</ul>

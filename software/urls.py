@@ -19,12 +19,12 @@ base_generic_dict = {
     }
 
 software_info_dict_date = dict(base_generic_dict,
-		queryset=Software.objects.all().order_by('-pub_date'),
-		template_name='software/software_list.html')
+        queryset=Software.objects.all().order_by('-pub_date'),
+        template_name='software/software_list.html')
 
 software_info_dict_software = dict(base_generic_dict,
-		queryset=Software.objects.all().order_by('title'),
-		template_name='software/software_list.html')
+        queryset=Software.objects.all().order_by('title'),
+        template_name='software/software_list.html')
 
 # General softwares views.
 urlpatterns = patterns('',
@@ -32,16 +32,19 @@ urlpatterns = patterns('',
     (r'^$', object_list, software_info_dict_date),
     (r'^date/$', object_list, software_info_dict_date),
     (r'^title/$', object_list, software_info_dict_software),
-    (r'^rating/$', 'software.views.entry.software_by_rating'),
+    (r'^rating/$', 'software.views.list.software_by_rating'),
     (r'^submit/', 'software.forms.add_software'),
     (r'^update/(?P<software_id>\d+)/$', 'software.forms.edit_software'),
-	(r'^rss/latest/$', RssSoftwareFeed),
+    (r'^bib/(?P<software_id>\d+)/$', 'software.views.entry.get_bibitem'),
+    (r'^rss/latest/$', RssSoftwareFeed),
+    (r'^author/$', object_list, software_info_dict_date),
     (r'^users/$', 'software.views.user.user_with_software'),
-    (r'^users/(?P<username>[^/]+)/$', 'software.views.entry.software_by_user'),
+    (r'^users/(?P<username>[^/]+)/$', 'software.views.list.software_by_user'),
     (r'^license/$', 'software.views.license.license_with_software'),
-    (r'^license/(?P<license>[^/]+)/$', 'software.views.entry.software_by_license'),
+    (r'^license/(?P<license>[^/]+)/$', 'software.views.list.software_by_license'),
     (r'^language/$', 'software.views.language.language_with_software'),
-    (r'^language/(?P<language>[^/]+)/$', 'software.views.entry.software_by_language'),
+    (r'^language/(?P<language>[^/]+)/$', 'software.views.list.software_by_language'),
     (r'^search/$', 'software.forms.search_software'),
-    (r'^rate/(?P<software_id>\d+)/$', 'software.views.entry.rate')
+    (r'^rate/(?P<software_id>\d+)/$', 'software.views.entry.rate'),
+    (r'^tags/$', object_list, software_info_dict_date),
 )
