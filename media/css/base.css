@@ -74,13 +74,13 @@ p.more { color:#485858; margin-top:-.4em; }
 .sidebar p.date { color:#90ba9e; }
 .sidebar h2:first-child { margin-top:.8em; }
 h2.deck { margin-top:-.5em !important; margin-bottom:.6em; color:#487858; }
-#content-main table { width:100% }
+#content-main table { width:95% }
 #content-main th { padding:0px; padding-left:.4em; border:1px solid #113366;background:#F7F7F7 }
 #content-main td { padding:0px; padding-left:.4em; border:1px solid #113366;background:#F7F7F7 }
 p.swlist { margin-top:.5em; margin-bottom:.5em; }
-table.swlist { margin-top:-0.5em; margin-bottom:0.5em;padding:0px; }
-td.swlist { margin-top:-0.5em; margin-bottom:0.5em;padding:0px; }
-tr.swlist { margin-top:-0.5em; margin-bottom:0.5em;padding:0px; }
+#content-main .swlist table { margin-top:-0.5em; margin-bottom:0.5em;padding:0px; }
+#content-main .swlist tr { margin-top:-0.5em; margin-bottom:0.5em;padding:0px; }
+#content-main .swlist td { margin-top:-0.5em; margin-bottom:0.5em;padding:5px; border:1px solid #113366;}
 #content-main .description p { margin-top:-0.5em; margin-bottom:-0.1em;}
 #content-main .description li { font-size:90%; padding:0px; margin-bottom:-0.6ex;}
 
