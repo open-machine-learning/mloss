@@ -64,6 +64,21 @@ def get_bibitem(request, software_id):
             'http://' + Site.objects.get_current().domain + entry.get_absolute_url()))
     return response
 
+def get_paperbibitem(request, software_id):
+    entry = get_object_or_404(Software, pk=software_id)
+    key=''
+    author_list = entry.authors.split(',')
+    for i in xrange(len(author_list)):
+        a=author_list[i]
+        key+=a.split(' ')[-1][:3]
+
+    key+= `entry.pub_date.year`[2:4]
+
+    response = HttpResponse(mimetype='application/text')
+    response['Content-Disposition'] = 'attachment; filename=%s_paper.bib' % key
+    response.write("%s" % entry.paper_bib)
+    return response
+
 def rate(request, software_id):
     software = get_object_or_404(Software, pk=software_id)
     if request.user.is_authenticated() and not request.user == software.user:

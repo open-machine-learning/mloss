@@ -20,6 +20,7 @@ authors_re = re.compile(r'^[a-zA-Z ,]+$')
 tags_re = re.compile(r'^[a-z0-9 ,]+$')
 os_license_re = re.compile(r'^[a-zA-Z0-9\. ,]+$')
 language_re = re.compile(r'^[a-zA-Z\+ ,]+$')
+bib_re = re.compile(r'^[a-zA-Z{}@, \+ ,]+$')
 
 from models import Software, editables, dontupdateifempty
 
@@ -52,7 +53,13 @@ class UpdateSoftwareForm(forms.Form):
             label=u'Project Archive', required=False)
     screenshot = forms.ImageField(widget=forms.FileInput(attrs={'size' : '30'}),
             label=u'Screenshot', required=False,
-            help_text=u'Please limit to 1280x1024 pixels. We recommend .png, .jpg or .pdf')
+            help_text=u'Limited to 1280x1024 pixels and less than 200K; .png, .jpg or .gif only.')
+    paper_bib = forms.CharField(
+            widget=forms.Textarea(attrs={"rows":5, "cols":30}), label=u'Corresponding paper',
+            required=False, help_text=u'BibTeX entry of a corresponding paper.')
+    operating_systems = forms.CharField(widget=forms.TextInput(attrs={'size' : '40'}),
+            label=u'Operating Systems',
+            help_text=u'A comma seperated list of supported OSes')
 
     def clean_authors(self):
         """

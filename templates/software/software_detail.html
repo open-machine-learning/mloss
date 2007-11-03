@@ -100,10 +100,20 @@
 					<dd>{{ object.description_html }}</dd>
 
 					<dt>BibTeX Entry:</dt>
-					<dd><a href=/software/bib/{{ snippet.id }}>download</a></dd>
+					<dd><a href="/software/bib/{{ object.id }}">download</a></dd>
 
 					<dt>URL:</dt>
 					<dd>{{ object.project_url|urlize }}</dd>
+
+					{% if object.paper_bib %}
+					<dt>Corresponding Paper BibTeX Entry:</dt>
+					<dd><a href="/software/paperbib/{{ object.id }}">download</a></dd>
+					{% endif %}
+
+					{% if object.operating_systems %}
+					<dt>Supported Operating Systems:</dt>
+					<dd>{{ object.operating_systems }}</dd>
+					{% endif %}
 
 					{% if object.tags %}
 					<dt>Tag(s):</dt>

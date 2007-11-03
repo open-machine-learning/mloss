@@ -106,6 +106,26 @@
       </label>
     </dt>
     <dd>{{ form.language }}</dd>
+    <dt><label for="paper_bib">
+        {{ form.paper_bib.label }} <span class="help">{{ form.paper_bib.help_text }}</span>
+	{% if form.paper_bib.errors %}
+        <span class="error">
+          {{ form.paper_bib.errors|join:", " }}
+        </span>
+        {% endif %}
+      </label>
+    </dt>
+    <dd>{{ form.paper_bib }}</dd>
+    <dt><label for="operating_systems">
+        {{ form.operating_systems.label }} <span class="help">{{ form.operating_systems.help_text }}</span>
+	{% if form.operating_systems.errors %}
+        <span class="error">
+          {{ form.operating_systems.errors|join:", " }}
+        </span>
+        {% endif %}
+      </label>
+    </dt>
+    <dd>{{ form.operating_systems }}</dd>
     <dt><label for="os_license">
         {{ form.os_license.label }} <span class="help">{{ form.os_license.help_text }}</span>
 	{% if form.os_license.errors %}

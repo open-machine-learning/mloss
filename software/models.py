@@ -11,7 +11,8 @@ from django.db.models import Q
 # the fields in the Software object
 editables=('version','authors',
         'contact', 'description', 'project_url', 'tags', 'language',
-        'os_license', 'tarball', 'screenshot' )
+        'os_license', 'tarball', 'screenshot', 'operating_systems',
+		'paper_bib')
 
 # don't change db of the following fields if they are empty
 dontupdateifempty=['tarball', 'screenshot']
@@ -58,6 +59,7 @@ class SoftwareManager(models.Manager):
 				Q(description__icontains=searchterm) |
 				Q(tags__icontains=searchterm) |
 				Q(language__icontains=searchterm) |
+				Q(operating_systems__icontains=searchterm) |
 				Q(os_license__icontains=searchterm))
 
     
@@ -79,6 +81,8 @@ class Software(models.Model):
     tags = models.CharField(max_length=200,blank=True)
     language = models.CharField(max_length=200,blank=True)
     os_license = models.CharField(max_length=200)
+    operating_systems = models.CharField(max_length=200)
+    paper_bib = models.TextField(blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     tarball = models.FileField(upload_to="code_archive/",blank=True,null=True)
@@ -108,6 +112,8 @@ class Software(models.Model):
         self.tags = strip_tags(self.tags)
         self.language = strip_tags(self.language)
         self.os_license = strip_tags(self.os_license)
+        self.paper_bib = strip_tags(self.paper_bib)
+        self.operating_systems = strip_tags(self.operating_systems)
         super(Software, self).save()
 
     def get_taglist(self):
@@ -132,7 +138,8 @@ class Software(models.Model):
             ('None', {
             'fields': ( 'contact', 'description',
 				'project_url', 'jmlr_mloss_url', 'tags', 'language', 'os_license', 
-				'pub_date', 'updated_date', 'tarball', 'screenshot')}),
+				'pub_date', 'updated_date', 'tarball', 'screenshot', 'operating_systems',
+				'paper_bib')}),
             )
         list_filter = ['pub_date']
         date_hierarchy = 'pub_date'

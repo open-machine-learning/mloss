@@ -70,8 +70,8 @@ MEDIA_URL = '/media/'
 # max size of files that can be uploaded in KB (10M, 200K)
 MAX_FILE_UPLOAD_SIZE = 10240
 MAX_IMAGE_UPLOAD_SIZE = 200
-MAX_IMAGE_UPLOAD_WIDTH = 800
-MAX_IMAGE_UPLOAD_HEIGHT = 600
+MAX_IMAGE_UPLOAD_WIDTH = 1280
+MAX_IMAGE_UPLOAD_HEIGHT = 1024
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
