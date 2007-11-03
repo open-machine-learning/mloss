@@ -147,7 +147,7 @@ class Software(models.Model):
         if l > 0.0:
             return sum([ r.features+r.usability+r.documentation for r in ratings])/(3*l)
         else:
-            return None
+            return -1
 
     def get_ratings(self):
         """get_ratings(self) -> features, usability, documentation

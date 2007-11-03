@@ -112,14 +112,13 @@ def software_by_rating(request):
     """
     List of Software ranked by rating
     """
-    software = Software.objects.all()
+    software = Software.objects.all().order_by('-pub_date')
     sw_list=list()
 
     for s in software:
         print s.pk
         r=s.get_overall_rating()
-        if r is not None:
-            sw_list.append((s.id,r))
+        sw_list.append((s.id,r))
 
     sw_list.sort(lambda x,y : cmp(x[1], y[1]))
     ids = tuple([ i[0] for i in sw_list])
