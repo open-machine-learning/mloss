@@ -99,7 +99,11 @@ class Post(models.Model):
 		ordering = ('-time',)
 		
 	def get_absolute_url(self):
-		return '/community/%s/%s/#post%s' % (self.thread.forum.slug, self.thread.id, self.id)
+		p=0
+		for t in Thread.objects.all():
+			if t.id == self.thread.id:
+				return '/community/%s/%s/?page=%d#post%s' % (self.thread.forum.slug, self.thread.id, p / 10+1, self.id)
+			p+=1
 	
 	class Admin:
 		pass

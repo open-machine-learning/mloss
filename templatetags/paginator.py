@@ -13,7 +13,7 @@ def paginator(context, adjacent_pages=2):
 
     """
 
-    if context['is_paginated']:
+    if context.has_key('is_paginated'):
         page_numbers = [n for n in \
                         range(context['page'] - adjacent_pages, context['page'] + adjacent_pages + 1) \
                         if n > 0 and n <= context['pages']]

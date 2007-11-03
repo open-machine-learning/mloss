@@ -1,22 +1,27 @@
+{% load paginator %}
 {% extends "community/forum_base.html" %}
 {% block title %}{{ thread.title }} ({{ forum.title }}){% endblock %}
 
 {% block pagetitle %}{{ forum.title }} &raquo; {{ thread.title }}{% endblock %}
 
 
-{% block breadcrumbs %}&raquo; <a href='{{ forum.get_absolute_url }}'>{{ forum.title }}</a> &raquo; <a href='{{ thread.get_absolute_url }}'>{{ thread.title }}</a> ({{ thread.posts }} post{{ thread.posts|pluralize }}){% endblock %}
+{% block breadcrumbs %}&raquo; <a href='{{ forum.get_absolute_url }}'>{{ forum.title }}</a> &raquo; <a href='{{ thread.get_absolute_url }}'>{{ thread.title }}</a> ({{ thread.object_list }} post{{ thread.object_list|pluralize }}){% endblock %}
 
 {% block content %}
 
 {% load safe_markup %}
 <br>
-{% for post in posts %}
+{% paginator 5 %}
+{% for post in object_list %}
 <div id="comment">
 	<dt id="post{{ post.id }}">{{ post.author }} ( on {{ post.time|date:"F j, Y, h:m:s" }} )</dt>
 	<dd>{{ post.body|safe_markdown:"safe" }}</dd>
 </div><br>
 {% endfor %}
 
+{% paginator 5 %}
+
+{% if not has_next %}
 <h2>Post a Reply</h2>
 {% if thread.closed %}
 <p>Sorry, this thread is closed. No further replies are permitted.</p>
@@ -53,6 +58,7 @@
 <p>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</p>
 <p><input type='submit' value='Post' /></p>
 </form>
+{% endif %}
 {% endif %}
 {% endblock %}
 

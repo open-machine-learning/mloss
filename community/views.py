@@ -10,6 +10,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django import newforms as forms
 from django.contrib.auth import authenticate, login
+from django.views.generic import list_detail
 
 class NewPostForm(forms.Form):
 	body = forms.CharField(widget=forms.Textarea(attrs={"rows":10, "cols":80}))
@@ -129,15 +130,16 @@ def thread(request, forum, thread):
 	t.save()
 
 	inputform = create_newpostform(request)
-	
-	return render_to_response('community/thread.html',
-		RequestContext(request, {
+
+	return list_detail.object_list(request,
+			paginate_by=10,
+			queryset=p,
+			template_name='community/thread.html',
+		extra_context= {
 			'forum': f,
 			'form': inputform,
 			'thread': t,
-			'posts': p,
-			'form_action' : 'reply/'
-		}))
+			'form_action' : 'reply/'})
 
 def newthread(request, forum):
 	"""
@@ -205,12 +207,13 @@ def reply(request, forum, thread):
 	else:
 		form = create_newpostform(request)
 
-	return render_to_response('community/thread.html',
-			RequestContext(request, {
+	return list_detail.object_list(request,
+			paginate_by=10,
+			queryset=p,
+			template_name='community/thread.html',
+		extra_context= {
 			'forum': f,
-			'thread': t,
-			'posts': p,
 			'form': form,
-			'form_action' : ''
-			}))
+			'thread': t,
+			'form_action' : ''})
 
