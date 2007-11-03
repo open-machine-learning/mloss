@@ -107,7 +107,7 @@ dd { margin-bottom:.8em; }
 
 /* COMMENTS */
 
-#comment { width:95%; padding:3px; border:1px solid #113366; background:#FFFFFF}
+#comment { width:95%; padding:3px; border:1px solid #113366; background:#FFFFFF; }
 
 /* FOOTER */
 
@@ -119,6 +119,7 @@ dd { margin-bottom:.8em; }
 #content-main .jmlr td { padding:5px; border:1px solid #FF0000;background:#FFECEC }
 
 /* RATING FORM */
+#ratingform { width:95%; padding:3px; border:1px solid #113366; background:#FFFFFF; }
 #content-main .ratingform li { list-style-type: none; display: inline; padding-left: 30px; }
 #content-main .ratingform table  { width: 70%; }
 #content-main .ratingform table, tr, td, th  { padding: 0px; margin: 0px; }

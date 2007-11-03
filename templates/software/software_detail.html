@@ -99,12 +99,15 @@
 								</font>
 							</td>
 							{% endif %}
-						</tr></table>
-					</div>
-					<dt>Description:</dt>
+					</tr></table>
+				</div>
+				<dt>Description:</dt>
+				<div id="comment">
 					<dd>{{ object.description_html }}</dd>
+				</div>
 
-					<dt>BibTeX Entry:</dt>
+				<dt>BibTeX Entry:</dt>
+				<div id="comment">
 					<dd><a href="/software/bib/{{ object.id }}">Download</a></dd>
 
 					{% if object.paper_bib %}
@@ -129,8 +132,7 @@
 					<dt>Archive:</dt>
 					<dd><a href='/media/{{ object.tarball }}'>download here</a></dd>
 					{% endif %}
-
-				</dl>
+				</div>
 
 				{% if ratingform %}
 				<div class="ratingform" align="center">
