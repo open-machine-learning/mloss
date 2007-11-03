@@ -108,6 +108,30 @@ def software_by_language(request, language):
                                    extra_context={ 'language': language },
                                    )
 
+def software_by_rating(request):
+    """
+    List of Software ranked by rating
+    """
+    software = Software.objects.all()
+    sw_list=list()
+
+    for s in software:
+        print s.pk
+        r=s.get_overall_rating()
+        if r is not None:
+            sw_list.append((s.id,r))
+
+    sw_list.sort(lambda x,y : cmp(x[1], y[1]))
+    ids = tuple([ i[0] for i in sw_list])
+
+    softwarelist=software.extra(where=['id IN ' + `ids`])
+
+    return list_detail.object_list(request,
+                                   paginate_by=10,
+                                   queryset=softwarelist,
+                                   template_name='software/software_list.html',
+                                   )
+
 def search_description(request, q):
     """
     List of Software submitted with a particular License.

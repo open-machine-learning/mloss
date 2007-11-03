@@ -33,21 +33,21 @@ class SoftwareManager(models.Manager):
 
     def get_by_license(self, license):
         """
-        Returns a QuerySet of Software submitted by a particular User.
+        Returns a QuerySet of Software sorted by a particular license.
         
         """
         return self.filter(os_license__exact=license)
 
     def get_by_language(self, language):
         """
-        Returns a QuerySet of Software submitted by a particular User.
+        Returns a QuerySet of Software sorted by a particular language.
         
         """
         return self.filter(language__exact=language)
 
     def get_by_searchterm(self, searchterm):
         """
-        Returns a QuerySet of Software submitted by a particular User.
+        Returns a QuerySet of Software matching the searchterm
         
         """
         return self.filter(
@@ -59,6 +59,7 @@ class SoftwareManager(models.Manager):
 				Q(tags__icontains=searchterm) |
 				Q(language__icontains=searchterm) |
 				Q(os_license__icontains=searchterm))
+
     
 # Create your models here.
 class Software(models.Model):
@@ -135,6 +136,18 @@ class Software(models.Model):
         list_filter = ['pub_date']
         date_hierarchy = 'pub_date'
         search_fields = ['title']
+
+    def get_overall_rating(self):
+        """get_ratings(self) -> mean(features, usability, documentation)
+
+        return the average of all ratings or None if no ratings
+        have been given so far.""" 
+        ratings = SoftwareRating.objects.filter(software=self)
+        l = float(len(ratings))
+        if l > 0.0:
+            return sum([ r.features+r.usability+r.documentation for r in ratings])/(3*l)
+        else:
+            return None
 
     def get_ratings(self):
         """get_ratings(self) -> features, usability, documentation

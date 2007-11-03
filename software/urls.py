@@ -26,32 +26,13 @@ software_info_dict_software = dict(base_generic_dict,
 		queryset=Software.objects.all().order_by('title'),
 		template_name='software/software_list.html')
 
-software_info_dict_author = dict(base_generic_dict,
-		queryset=Software.objects.all().order_by('authors'),
-		template_name='software/software_list.html')
-
-software_info_dict_submitter = dict(base_generic_dict,
-		queryset=Software.objects.all().order_by('user'),
-		template_name='software/software_list.html')
-
-software_info_dict_tags = dict(base_generic_dict,
-		queryset=Software.objects.all().order_by('tags'),
-		template_name='software/software_list.html')
-
-software_info_dict_license = dict(base_generic_dict,
-		queryset=Software.objects.all().order_by('os_license'),
-		template_name='software/software_list.html')
-
-
 # General softwares views.
 urlpatterns = patterns('',
     (r'^view/(?P<software_id>\d+)/$', software_detail),
     (r'^$', object_list, software_info_dict_date),
     (r'^date/$', object_list, software_info_dict_date),
     (r'^title/$', object_list, software_info_dict_software),
-    (r'^author/$', object_list, software_info_dict_author),
-    (r'^submitter/$', object_list, software_info_dict_submitter),
-    (r'^tags/$', object_list, software_info_dict_tags),
+    (r'^rating/$', 'software.views.entry.software_by_rating'),
     (r'^submit/', 'software.forms.add_software'),
     (r'^update/(?P<software_id>\d+)/$', 'software.forms.edit_software'),
 	(r'^rss/latest/$', RssSoftwareFeed),
