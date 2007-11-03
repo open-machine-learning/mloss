@@ -1,4 +1,6 @@
 {% load paginator %}
+{% load safe_markup %}
+
 {% extends "community/forum_base.html" %}
 {% block title %}{{ thread.title }} ({{ forum.title }}){% endblock %}
 
@@ -9,17 +11,24 @@
 
 {% block content %}
 
-{% load safe_markup %}
 <br>
 {% paginator 5 %}
 {% for post in object_list %}
-<div id="comment">
+<div id="threadlist">
 	<dt id="post{{ post.id }}">{{ post.author }} ( on {{ post.time|date:"F j, Y, h:m:s" }} )</dt>
 	<dd>{{ post.body|safe_markdown:"safe" }}</dd>
-</div><br>
+</div><br></br>
 {% endfor %}
 
 {% paginator 5 %}
+
+{% if posting %}
+<h2>Preview</h2>
+  <div id="threadlist">
+	  <dt id="post{{ posting.id }}">{{ posting.author }} ( on {{ posting.time|date:"F j, Y, h:m:s" }} )</dt>
+	  {{ posting.body|safe_markdown:"safe" }}
+  </div>
+{% endif %}
 
 {% if not has_next %}
 <h2>Post a Reply</h2>
@@ -56,7 +65,8 @@
 {% endif %}</label></dt>
 {{ form.body }} <p>
 <p>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</p>
-<p><input type='submit' value='Post' /></p>
+<p><input type="submit" name="preview" value="Preview comment" />
+<input type="submit" name="post" value="Post Message" /></p>
 </form>
 {% endif %}
 {% endif %}

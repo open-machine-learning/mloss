@@ -108,6 +108,7 @@ dd { margin-bottom:.8em; }
 /* COMMENTS */
 
 #comment { width:95%; padding:3px; border:1px solid #113366; background:#FFFFFF; }
+#threadlist { width:95%; padding:3px; border:1px solid #113366; background:#F7F7F7; }
 
 /* FOOTER */
 

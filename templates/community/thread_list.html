@@ -1,3 +1,5 @@
+{% load safe_markup %}
+
 {% extends "community/forum_base.html" %}
 {% block title %}{{ forum.title }}{% endblock %}
 {% block pagetitle %}{{ forum.title }}{% endblock %}
@@ -7,6 +9,7 @@
 
 {% block content %}
 <br>
+{% if threads %}
 <center>
 <table id='djangoForumThreadList'>
 
@@ -27,6 +30,16 @@
 {% endfor %}
 </table>
 </center>
+{% endif %}
+
+{% if posting %}
+<h2>Preview</h2>
+<p><b>Thread:</b> {{thread.title|escape}}</p>
+  <div id="threadlist">
+	  <dt id="post{{ posting.id }}">{{ posting.author }} ( on {{ posting.time|date:"F j, Y, h:m:s" }} )</dt>
+	  {{ posting.body|safe_markdown:"safe" }}
+  </div>
+{% endif %}
 
 <h2>Create a Thread</h2>
 <form method='post' action='{{form_action}}'>
@@ -64,7 +77,8 @@
 {% endif %}</label></dt>
 {{ form.body }} <p>
 <p>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</p>
-<p><input type='submit' value='Post' /></p>
+<p><input type="submit" name="preview" value="Preview comment" />
+<input type="submit" name="post" value="Post Message" /></p>
 </form>
 {% endblock %}
 

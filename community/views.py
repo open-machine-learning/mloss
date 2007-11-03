@@ -160,15 +160,26 @@ def newthread(request, forum):
 					forum=f,
 					title=form.cleaned_data['title'],
 				)
-				t.save()
+				if form.data.has_key(u'post'):
+					t.save()
 				p = Post(
 					thread=t,
 					author=request.user,
 					body=form.cleaned_data['body'],
 					time=datetime.now(),
 				)
-				p.save()
-				return HttpResponseRedirect(t.get_absolute_url())
+				if form.data.has_key(u'post'):
+					p.save()
+					return HttpResponseRedirect(t.get_absolute_url())
+				else:
+					return render_to_response('community/thread_list.html',
+							RequestContext(request, {
+							'posting' : p,
+							'forum': f,
+							'form': form,
+							'form_action' : '',
+							'thread': t
+							}))
 	else:
 		form = create_newthreadform(request)
 	
@@ -194,6 +205,7 @@ def reply(request, forum, thread):
 
 	if request.method == 'POST':
 		form = create_newpostform(request)
+
 		if form.is_valid():
 			if request.user.is_authenticated() or form.login(request):
 				p = Post(
@@ -202,8 +214,17 @@ def reply(request, forum, thread):
 					body=form.cleaned_data['body'],
 					time=datetime.now(),
 					)
-				p.save()
-				return HttpResponseRedirect(p.get_absolute_url())
+				if form.data.has_key(u'post'):
+					p.save()
+					return HttpResponseRedirect(p.get_absolute_url())
+				else:
+					return render_to_response('community/thread.html',
+						RequestContext(request, {
+							'forum': f,
+							'form': form,
+							'thread': t,
+							'posting': p,
+							'form_action' : ''}))
 	else:
 		form = create_newpostform(request)
 

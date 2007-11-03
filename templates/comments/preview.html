@@ -1,3 +1,5 @@
+{% load safe_markup %}
+
 {% extends "base_2col.html" %}
 
 {% block sectionid %}browse{% endblock %}
@@ -24,6 +26,11 @@
     <p>User: <strong>{{ comment.user }}</strong></p>
   {% endif %}
 
+  <div class="comment">
+	  {{ comment.comment|safe_markdown:"safe" }}
+	  <p class="date small">Posted by <strong>{{ comment.person_name|escape }}</strong></p>
+  </div>
+
   <p><label for="id_comment">Comment:
   {% if comment_form.comment.errors %}
     <span class="error">
@@ -34,6 +41,7 @@
   <input type="hidden" name="options" value="{{ options }}" />
   <input type="hidden" name="target" value="{{ target }}" />
   <input type="hidden" name="gonzo" value="{{ hash }}" />
+  <input type="submit" name="preview" value="Preview comment" />
   <input type="submit" name="post" value="Post comment" />
 </form>
 
