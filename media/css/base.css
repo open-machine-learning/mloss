@@ -22,8 +22,8 @@ a:link, a:visited { color:#ffc757; }
 #content-main h2 a, #content-main h3 a { text-decoration:none !important; }
 #pagination a, #pagination h5 a, #pagination a:link, #pagination a:visited { color:#103163; text-decoration:underline; }
 #pagination a:hover { color:#113366; background:#f7f7f7; }
-/* HEADER */
 
+/* HEADER */
 #header { position:relative; height:6.5em; background:#336699; }
 #header #logo { width:165px; height:64px;  position:absolute; padding:0ex 1em 1ex 2em}
 #name { display:inline; text-align:left; padding-right: 20px; color:white;}
@@ -75,10 +75,9 @@ p.more { margin-top:-.4em; }
 .sidebar h2:first-child { margin-top:.8em; }
 h2.deck { margin-top:-.5em !important; margin-bottom:.6em; color:#487858; }
 
-#content-main table { width:95% }
+#content-main table { width:100% }
 #content-main th { padding:5px; border:1px solid #113366;background:#F7F7F7 }
 #content-main td { padding:5px; border:1px solid #113366;background:#F7F7F7 }
-
 
 /* LISTS */
 
@@ -112,6 +111,7 @@ dd { margin-bottom:.8em; }
 /* HIGHLIGHTING */
 .error { color:#FF0000 }
 #content-main span.help { color:#333333; font-size:75%; }
+#content-main .jmlr td { padding:5px; border:1px solid #FF0000;background:#FFECEC }
 
 /* RATING FORM */
 #content-main .ratingform li { list-style-type: none; display: inline; padding-left: 30px; }

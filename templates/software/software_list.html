@@ -60,6 +60,10 @@ All entries
 {% paginator 5%} 
 
 {% for snippet in object_list %}
+{% if snippet.jmlr_mloss_url %}
+<div class="jmlr">
+{% endif %}
+<center>
 <table><tr><td>
 			<div class="rating">
 				<table><tr><td valign=top>
@@ -90,10 +94,15 @@ All entries
 				{% if snippet.authors %}<li><b>Authors:</b> {{ snippet.authors }}</li> {% endif %}
 				{% if snippet.os_license %}<li><b>License:</b> {{ snippet.os_license}}</li> {% endif %}
 				{% if snippet.project_url %}<li><b>Homepage:</b> {{ snippet.project_url|urlize}}</li> {% endif %}
+				{% if snippet.jmlr_mloss_url %}<li><b>JMLR-MLOSS
+					Publication:</b> {{ snippet.jmlr_mloss_url|urlize}}</li> {% endif %}
 			</ul>
 			</p>
 </td></tr></table>
-
+</center>
+{% if snippet.jmlr_mloss_url %}
+</div>
+{% endif %}
 {% endfor %}
 
 {% paginator 5%} 

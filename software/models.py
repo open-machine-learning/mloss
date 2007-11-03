@@ -75,6 +75,7 @@ class Software(models.Model):
     description = models.TextField()
     description_html = models.TextField(editable=False)
     project_url = models.URLField(verify_exists=False)
+    jmlr_mloss_url = models.URLField(verify_exists=False, blank=True)
     tags = models.CharField(max_length=200,blank=True)
     language = models.CharField(max_length=200,blank=True)
     os_license = models.CharField(max_length=200)
@@ -130,7 +131,7 @@ class Software(models.Model):
             'fields': ('user', 'title', 'version', 'authors')}),
             ('None', {
             'fields': ( 'contact', 'description',
-				'project_url', 'tags', 'language', 'os_license', 
+				'project_url', 'jmlr_mloss_url', 'tags', 'language', 'os_license', 
 				'pub_date', 'updated_date', 'tarball', 'screenshot')}),
             )
         list_filter = ['pub_date']
