@@ -60,62 +60,48 @@ All entries
 {% paginator 5%} 
 
 {% for snippet in object_list %}
-{% if snippet.jmlr_mloss_url %}
-<dl>
-	<dd>
-	<p class="jmlr">
-	<table class="jmlr"><tr class="jmlr"><td class="jmlr">
-				{% else %}
-				<p class="swlist">
-				<table class="swlist"><tr class="swlist"><td class="swlist">
-							{% endif %}
-							<div class="rating">
-								<table><tr><td valign="top">
-											<h2>
-												<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo"></img>
-												<a href="{{ snippet.get_absolute_url }}"> {{ snippet.title }} {{ snippet.version }}</a>
-											</h2>
-											<p class="more">
-											by <a href="/software{{ snippet.user.get_absolute_url }}">{{ snippet.user.username }}</a> 
-											- {{ snippet.pub_date|date:"F j, Y, h:m:s" }}
-											[
-											{% if snippet.project_url %}<a href="{{ snippet.project_url }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage"></img></a> {% endif %}
-											<a href="/software/bib/{{ snippet.id }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX"></img></a>
-											{% if snippet.paper_bib %}<a href="/software/paperbib/{{ snippet.id }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper"></img></a>{% endif %}
-											{% if snippet.tarball %}<a href="/media/{{ snippet.tarball }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download"></img></a>{% endif %}
-											]
-											</p>
-										</td>
-										{% if snippet.get_num_votes %}
-										<td class="rating">
-											<font size="2">
-												<table class="starlab">
-													<tr><td class="starlab">Features</td><td class="stars">{% show_stars snippet.get_features_rating of 5 round to half %}</td></tr>
-													<tr><td class="starlab">Usability</td><td class="stars">{% show_stars snippet.get_usability_rating of 5 round to half %}</td></tr>
-													<tr><td class="starlab">Documentation</td><td class="stars">{% show_stars snippet.get_documentation_rating of 5 round to half %}</td></tr>
-												</table>
-											</font>
-										</td>
-										{% endif %}
-								</tr></table>
-							</div>
-							<div class="description">
-								{{ snippet.description|safe_markdown:"safe,cut=200" }}
-								<hr></hr>
-								<p>
-								<ul>
-									{% if snippet.authors %}<li><b>Authors:</b> {{ snippet.authors }}</li> {% endif %}
-									{% if snippet.os_license %}<li><b>License:</b> {{ snippet.os_license}}</li> {% endif %}
-									{% if snippet.operating_systems %}<li><b>OS:</b> {{ snippet.operating_systems}}</li> {% endif %}
-									{% if snippet.jmlr_mloss_url %}<li><b>JMLR-MLOSS Publication:</b> {{ snippet.jmlr_mloss_url|urlize}}</li> {% endif %}
-									{% if snippet.tags %} <li><b>Tags:</b> {{ snippet.tags }}</li> {% endif %}
-								</ul>
-								</p>
-							</div>
-				</td></tr></table>
-				</p>
-				</dd>
-			</dl>
+<table {% if snippet.jmlr_mloss_url|escape %} class="jmlr" {% else %} class="swlist"{% endif %}>
+	<tr><td>
+			<div class="rating">
+				<table><tr><td valign="top">
+							<h2>
+								<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo"></img>
+								<a href="{{ snippet.get_absolute_url|escape }}"> {{ snippet.title }} {{ snippet.version }}</a>
+							</h2>
+							<p class="more">
+							by <a href="/software{{ snippet.user.get_absolute_url|escape }}">{{ snippet.user.username }}</a> 
+							- {{ snippet.pub_date|date:"F j, Y, h:m:s" }}
+							[
+							{% if snippet.project_url %}<a href="{{ snippet.project_url|escape }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage"></img></a> {% endif %}
+							<a href="/software/bib/{{ snippet.id }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX"></img></a>
+							{% if snippet.paper_bib %}<a href="/software/paperbib/{{ snippet.id }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper"></img></a>{% endif %}
+							{% if snippet.tarball %}<a href="/media/{{ snippet.tarball }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download"></img></a>{% endif %}
+							]
+							</p>
+						</td>
+						{% if snippet.get_num_votes %}
+						<td class="rating">
+							<table class="starlab">
+								<tr><td class="starlab">Features</td><td class="stars">{% show_stars snippet.get_features_rating of 5 round to half %}</td></tr>
+								<tr><td class="starlab">Usability</td><td class="stars">{% show_stars snippet.get_usability_rating of 5 round to half %}</td></tr>
+								<tr><td class="starlab">Documentation</td><td class="stars">{% show_stars snippet.get_documentation_rating of 5 round to half %}</td></tr>
+							</table>
+						</td>
+						{% endif %}
+				</tr></table>
+			</div>
+			<div class="description">
+				{{ snippet.description|safe_markdown:"safe,cut=200" }}
+				<hr></hr>
+				<ul>
+					{% if snippet.authors %}<li><b>Authors:</b> {{ snippet.authors }}</li> {% endif %}
+					{% if snippet.os_license %}<li><b>License:</b> {{ snippet.os_license}}</li> {% endif %}
+					{% if snippet.operating_systems %}<li><b>OS:</b> {{ snippet.operating_systems}}</li> {% endif %}
+					{% if snippet.jmlr_mloss_url %}<li><b>JMLR-MLOSS Publication:</b> <a href="{{ snippet.jmlr_mloss_url|escape }}">JMLR Page</a></li> {% endif %}
+					{% if snippet.tags %} <li><b>Tags:</b> {{ snippet.tags }}</li> {% endif %}
+				</ul>
+			</div>
+</td></tr></table>
 {% endfor %}
 
 {% paginator 5%} 
