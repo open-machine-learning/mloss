@@ -12,7 +12,7 @@ from django.db.models import Q
 editables=('version','authors',
         'contact', 'description', 'project_url', 'tags', 'language',
         'os_license', 'tarball', 'screenshot', 'operating_systems',
-		'paper_bib')
+        'paper_bib')
 
 # don't change db of the following fields if they are empty
 dontupdateifempty=['tarball', 'screenshot']
@@ -52,15 +52,15 @@ class SoftwareManager(models.Manager):
         
         """
         return self.filter(
-				Q(user__username__icontains=searchterm) |
-				Q(title__icontains=searchterm) |
-				Q(version__icontains=searchterm) |
-				Q(authors__icontains=searchterm) |
-				Q(description__icontains=searchterm) |
-				Q(tags__icontains=searchterm) |
-				Q(language__icontains=searchterm) |
-				Q(operating_systems__icontains=searchterm) |
-				Q(os_license__icontains=searchterm))
+                Q(user__username__icontains=searchterm) |
+                Q(title__icontains=searchterm) |
+                Q(version__icontains=searchterm) |
+                Q(authors__icontains=searchterm) |
+                Q(description__icontains=searchterm) |
+                Q(tags__icontains=searchterm) |
+                Q(language__icontains=searchterm) |
+                Q(operating_systems__icontains=searchterm) |
+                Q(os_license__icontains=searchterm))
 
     
 # Create your models here.
@@ -86,6 +86,8 @@ class Software(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     tarball = models.FileField(upload_to="code_archive/",blank=True,null=True)
+    average_rating = models.FloatField(editable=False, blank=True, null=True)
+
     try:
         from PIL import Image  
         screenshot = models.ImageField(upload_to="screenshot_archive/",blank=True,null=True)

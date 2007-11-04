@@ -11,7 +11,11 @@
 		{% endif %}
 
 		{% for pg in page_numbers %}
+		{% ifequal pg page %}
+		<a> </a><a>{{ pg }}</a><a> </a>
+		{% else %}
 		<a> </a><a href="?page={{ pg }}">{{ pg }}</a><a> </a>
+		{% endifequal %}
 		{% endfor %}
 
 		{% if has_next %}

@@ -74,17 +74,13 @@ def software_by_rating(request):
     """
     List of Software ranked by rating
     """
-    software = Software.objects.all().order_by('-pub_date')
-    sw_list=list()
+    # this may be omitted if we do these updates on any rating change
+    # may lead to major speedups if we have many sw projects/ratings
+    for s in Software.objects.all():
+        s.average_rating = s.get_overall_rating()
+        s.save()
 
-    for s in software:
-        r=s.get_overall_rating()
-        sw_list.append((s.id,r))
-
-    sw_list.sort(lambda x,y : cmp(x[1], y[1]))
-    ids = tuple([ i[0] for i in sw_list])
-
-    softwarelist=software.extra(where=['id IN ' + `ids`])
+    softwarelist = Software.objects.all().order_by('-average_rating','-pub_date')
 
     return list_detail.object_list(request,
                                    paginate_by=10,
