@@ -62,7 +62,7 @@
 
 {% block content %}
 <dl>
-	<table>
+	<table class="swlist">
 		<tr>
 			<td>
 				<div class="rating">
@@ -71,7 +71,7 @@
 							<td valign="top">
 								<h2>
 									{% if object.screenshot %}
-									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="128" height='80' alt='screenshot'></img></a>
+									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="128" height='80' alt='screenshot'></img> {{ object.title }} {{ object.version }}</a>
 									{% else %}
 									<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align=top><a href="{{ object.get_absolute_url }}"> {{ object.title }} {{ object.version }}
 									</a></img>
@@ -101,40 +101,46 @@
 							{% endif %}
 					</tr></table>
 				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
 				<dt>Description:</dt>
-				<div id="comment">
-					<dd>{{ object.description_html }}</dd>
-				</div>
-
+				<dd>{{ object.description_html }}</dd>
+			</td>
+		</tr>
+		<tr>
+			<td>
 				<dt>BibTeX Entry:</dt>
-				<div id="comment">
-					<dd><a href="/software/bib/{{ object.id }}">Download</a></dd>
+				<dd><a href="/software/bib/{{ object.id }}">Download</a></dd>
 
-					{% if object.paper_bib %}
-					<dt>Corresponding Paper BibTeX Entry:</dt>
-					<dd><a href="/software/paperbib/{{ object.id }}">Download</a></dd>
-					{% endif %}
+				{% if object.paper_bib %}
+				<dt>Corresponding Paper BibTeX Entry:</dt>
+				<dd><a href="/software/paperbib/{{ object.id }}">Download</a></dd>
+				{% endif %}
 
-					<dt>URL:</dt>
-					<dd>{{ object.project_url|urlize }}</dd>
+				<dt>URL:</dt>
+				<dd>{{ object.project_url|urlize }}</dd>
 
-					{% if object.operating_systems %}
-					<dt>Supported Operating Systems:</dt>
-					<dd>{{ object.operating_systems }}</dd>
-					{% endif %}
+				{% if object.operating_systems %}
+				<dt>Supported Operating Systems:</dt>
+				<dd>{{ object.operating_systems }}</dd>
+				{% endif %}
 
-					{% if object.tags %}
-					<dt>Tag(s):</dt>
-					<dd> {{ object.tags }} </dd>
-					{% endif %}
+				{% if object.tags %}
+				<dt>Tag(s):</dt>
+				<dd> {{ object.tags }} </dd>
+				{% endif %}
 
-					{% if object.tarball %}
-					<dt>Archive:</dt>
-					<dd><a href='/media/{{ object.tarball }}'>download here</a></dd>
-					{% endif %}
-				</div>
-
-				{% if ratingform %}
+				{% if object.tarball %}
+				<dt>Archive:</dt>
+				<dd><a href='/media/{{ object.tarball }}'>download here</a></dd>
+				{% endif %}
+			</td>
+		</tr>
+		{% if ratingform %}
+		<tr>
+			<td>
 				<div class="ratingform" align="center">
 					<h2>Rating</h2>
 
@@ -147,8 +153,11 @@
 						<input type="submit" value="Submit my ratings!">
 					</form>
 				</div>
-				{% endif %}
-
+			</td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td>
 				<h2>Comments</h2>
 
 				{% get_comment_list for software.software object.id as comment_list %}

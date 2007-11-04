@@ -54,6 +54,8 @@ a:link, a:visited { color:#ffc757; }
 .sidebar * * { margin-left:0; margin-right:0; }
 #content-extra { float:left; width:18%; }
 #content-related { float:left; width:20%;}
+#content-related h2 { font-weight:normal; font-size:150%; margin-bottom:0em;}
+#content-related ul,form { margin-top:0.5ex; margin-bottom:0.5ex;}
 .subcol-primary, .subcol-secondary { width:40%; float:left; padding-bottom:1.2em; }
 .subcol-primary { margin-right:1%; }
 
@@ -78,9 +80,13 @@ h2.deck { margin-top:-.5em !important; margin-bottom:.6em; color:#487858; }
 #content-main th { padding:0px; padding-left:.4em; border:1px solid #113366;background:#F7F7F7 }
 #content-main td { padding:0px; padding-left:.4em; border:1px solid #113366;background:#F7F7F7 }
 p.swlist { margin-top:.5em; margin-bottom:.5em; }
-#content-main .swlist table { margin-top:-0.5em; margin-bottom:0.5em;padding:0px; }
+#content-main .swlist table { margin-top:0em; margin-bottom:0.5em;padding:0px; }
 #content-main .swlist tr { margin-top:-0.5em; margin-bottom:0.5em;padding:0px; }
 #content-main .swlist td { margin-top:-0.5em; margin-bottom:0.5em;padding:5px; border:1px solid #113366;}
+p.jmlr { margin-top:.5em; margin-bottom:.5em; }
+#content-main .jmlr table { margin-top:0em; margin-bottom:0.5em;padding:0px; }
+#content-main .jmlr tr { margin-top:-0.5em; margin-bottom:0.5em;padding:0px; }
+#content-main .jmlr td { margin-top:-0.5em; margin-bottom:0.5em;padding:5px; border:1px solid #FF0000; background:#FFECEC;}
 #content-main .description p { margin-top:-0.5em; margin-bottom:-0.1em;}
 #content-main .description li { font-size:90%; padding:0px; margin-bottom:-0.6ex;}
 
@@ -117,7 +123,6 @@ dd { margin-bottom:.8em; }
 /* HIGHLIGHTING */
 .error { color:#FF0000 }
 #content-main span.help { color:#333333; font-size:75%; }
-#content-main .jmlr td { padding:5px; border:1px solid #FF0000;background:#FFECEC }
 
 /* RATING FORM */
 #ratingform { width:95%; padding:3px; border:1px solid #113366; background:#FFFFFF; }

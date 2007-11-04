@@ -60,11 +60,13 @@ All entries
 {% paginator 5%} 
 
 {% for snippet in object_list %}
-<p class="swlist">
 {% if snippet.jmlr_mloss_url %}
-<div class="jmlr">
-{% endif %}
+<p class="jmlr">
+<table class="jmlr"><tr class="jmlr"><td class="jmlr">
+{% else %}
+<p class="swlist">
 <table class="swlist"><tr class="swlist"><td class="swlist">
+{% endif %}
 			<div class="rating">
 				<table><tr><td valign="top">
 							<h2>
@@ -109,10 +111,6 @@ All entries
 				</p>
 			</div>
 </td></tr></table>
-
-{% if snippet.jmlr_mloss_url %}
-</div>
-{% endif %}
 </p>
 {% endfor %}
 
@@ -128,10 +126,10 @@ All entries
 {% endblock %}
 
 {% block content-related %}
-<h2>Search<form method="POST" action="/software/search/">
+<h2>Search</h2><form method="POST" action="/software/search/">
 		<input type="text" name="searchterm" id="searchterm" size="10">
 		<button type="submit" name="post">Go</button>
-</form></h2>
+</form>
 <h2>Manage</h2>
 <ul>
 	{% if user.is_authenticated %}
