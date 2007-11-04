@@ -14,26 +14,28 @@
 
 <h2>Manage</h2>
 <dl>
-	<a href="/software">Project List</a>
+	<dd><a href="/software">Project List</a></dd>
 </dl>
 
 <dl>
+	<dd>
 	{% if user.is_authenticated %}
 	<a href="/software/submit">Submit new Project</a>
 	{% else %}
 	<a href="/software/submit">Login</a><a> to submit a new project</a>
 	{% endif %}
+	</dd>
 </dl>
 
 {% if user.is_authenticated %}
 {% if user.is_superuser %}
 <dl>
-	<a href="/software/update/{{ object.id}}">Update Project</a>
+	<dd><a href="/software/update/{{ object.id}}">Update Project</a></dd>
 </dl>
 {% else %}
 {% ifequal user.id object.user_id %} 
 <dl>
-	<a href="/software/update/{{ object.id}}">Update Project</a>
+	<dd><a href="/software/update/{{ object.id}}">Update Project</a></dd>
 </dl>
 {% endifequal %}
 {% endif %}
@@ -62,6 +64,7 @@
 
 {% block content %}
 <dl>
+	<dd>
 	<table class="swlist">
 		<tr>
 			<td>
@@ -71,32 +74,30 @@
 							<td valign="top">
 								<h2>
 									{% if object.screenshot %}
-									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="128" height='80' alt='screenshot'></img> {{ object.title }} {{ object.version }}</a>
+									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="128" height="80" alt='Screenshot'></img> {{ object.title }} {{ object.version }}</a>
 									{% else %}
-									<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align=top><a href="{{ object.get_absolute_url }}"> {{ object.title }} {{ object.version }}
-									</a></img>
+									<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo"></img><a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}
+									</a>
 									{% endif %}
 								</h2>
 								<p class="more">
-								by <a href="/software{{ object.user.get_absolute_url }}">{{ object.user.username }}</a> 
+								by <a href="/software{{ object.user.get_absolute_url|escape }}">{{ object.user.username }}</a> 
 								- {{ object.pub_date|date:"F j, Y, h:m:s" }}
 								[
-								{% if object.project_url %}<a href="{{ object.project_url }}"><img src="/media/images/homepage.png" width="14" height=14"></img></a> {% endif %}
-								<a href=/software/bib/{{ object.id }}><img src="/media/images/bib.png" width="14" height=14"></img></a>
-								{% if object.paper_bib %}<a href="/software/paperbib/{{ object.id }}"><img src="/media/images/paper.png" width="14" height=14"></img></a>{% endif %}
-								{% if object.tarball %}<a href=/media/{{ object.tarball }}><img src="/media/images/disk.png" width="14" height=14"></img></a>{% endif %}
+								{% if object.project_url|escape %}<a href="{{ object.project_url|escape }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage"></img></a> {% endif %}
+								<a href="/software/bib/{{ object.id }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX"></img></a>
+								{% if object.paper_bib %}<a href="/software/paperbib/{{ object.id }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper"></img></a>{% endif %}
+								{% if object.tarball %}<a href="/media/{{ object.tarball }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download"></img></a>{% endif %}
 								]
 								</p>
 							</td>
 							{% if object.get_num_votes %}
 							<td class="rating">
-								<font size=2>
-									<table class="starlab">
-										<tr><td class="starlab">Features</td><td class="stars">{% show_stars object.get_features_rating of 5 round to half %}</td></tr>
-										<tr><td class="starlab">Usability</td><td class="stars">{% show_stars object.get_usability_rating of 5 round to half %}</td></tr>
-										<tr><td class="starlab">Documentation</td><td class="stars">{% show_stars object.get_documentation_rating of 5 round to half %}</td></tr>
-									</table>
-								</font>
+								<table class="starlab">
+									<tr><td class="starlab">Features</td><td class="stars">{% show_stars object.get_features_rating of 5 round to half %}</td></tr>
+									<tr><td class="starlab">Usability</td><td class="stars">{% show_stars object.get_usability_rating of 5 round to half %}</td></tr>
+									<tr><td class="starlab">Documentation</td><td class="stars">{% show_stars object.get_documentation_rating of 5 round to half %}</td></tr>
+								</table>
 							</td>
 							{% endif %}
 					</tr></table>
@@ -105,37 +106,41 @@
 		</tr>
 		<tr>
 			<td>
-				<dt>Description:</dt>
-				<dd>{{ object.description_html }}</dd>
+				<dl>
+					<dt>Description:</dt>
+					<dd>{{ object.description_html }}</dd>
+				</dl>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<dt>BibTeX Entry:</dt>
-				<dd><a href="/software/bib/{{ object.id }}">Download</a></dd>
+				<dl>
+					<dt>BibTeX Entry:</dt>
+					<dd><a href="/software/bib/{{ object.id }}">Download</a></dd>
 
-				{% if object.paper_bib %}
-				<dt>Corresponding Paper BibTeX Entry:</dt>
-				<dd><a href="/software/paperbib/{{ object.id }}">Download</a></dd>
-				{% endif %}
+					{% if object.paper_bib %}
+					<dt>Corresponding Paper BibTeX Entry:</dt>
+					<dd><a href="/software/paperbib/{{ object.id }}">Download</a></dd>
+					{% endif %}
 
-				<dt>URL:</dt>
-				<dd>{{ object.project_url|urlize }}</dd>
+					<dt>URL:</dt>
+					<dd> <a href="{{ object.project_url|escape }}">Project Homepage</a></dd>
 
-				{% if object.operating_systems %}
-				<dt>Supported Operating Systems:</dt>
-				<dd>{{ object.operating_systems }}</dd>
-				{% endif %}
+					{% if object.operating_systems %}
+					<dt>Supported Operating Systems:</dt>
+					<dd>{{ object.operating_systems }}</dd>
+					{% endif %}
 
-				{% if object.tags %}
-				<dt>Tag(s):</dt>
-				<dd> {{ object.tags }} </dd>
-				{% endif %}
+					{% if object.tags %}
+					<dt>Tag(s):</dt>
+					<dd> {{ object.tags }} </dd>
+					{% endif %}
 
-				{% if object.tarball %}
-				<dt>Archive:</dt>
-				<dd><a href='/media/{{ object.tarball }}'>download here</a></dd>
-				{% endif %}
+					{% if object.tarball %}
+					<dt>Archive:</dt>
+					<dd><a href='/media/{{ object.tarball }}'>download here</a></dd>
+					{% endif %}
+				</dl>
 			</td>
 		</tr>
 		{% if ratingform %}
@@ -164,19 +169,22 @@
 
 				{% if comment_list %}
 				{% for comment in comment_list %}
-				<div id="comment">
-					<dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y, h:m:s" }})
-					, Karma
-					{% if user.is_authenticated %}
-					{% ifnotequal comment.user user %}
-					(<a href="/comments/karma/vote/{{ comment.id }}/up/">+</a>/<a href="/comments/karma/vote/{{ comment.id }}/down/">-</a>)
-					{% endifnotequal %}
-					{% endif %}
-					:{% show_stars comment.get_karma_total of 5 round to half %}
-					</dt>
-					<dd>{{ comment.comment|safe_markdown:"safe" }}</dd>
+				<dl><dd>
+				<div class="comment">
+					<dl>
+						<dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y, h:m:s" }})
+						, Karma
+						{% if user.is_authenticated %}
+						{% ifnotequal comment.user user %}
+						(<a href="/comments/karma/vote/{{ comment.id }}/up/">+</a>/<a href="/comments/karma/vote/{{ comment.id }}/down/">-</a>)
+						{% endifnotequal %}
+						{% endif %}
+						:{% show_stars comment.get_karma_total of 5 round to half %}
+						</dt>
+						<dd>{{ comment.comment|safe_markdown:"safe" }}</dd>
+					</dl>
 				</div>
-				<br></br>
+				</dd></dl>
 				{% endfor %}
 				{% else %}
 				<p>
@@ -189,5 +197,6 @@
 			</td>
 		</tr>
 	</table>
+	</dd>
 </dl>
 {% endblock %}

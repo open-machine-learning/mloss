@@ -8,80 +8,84 @@
 
 
 {% block content %}
-<br>
+<br></br>
 {% if threads %}
 <table id='djangoForumThreadList'>
 
-<tr>
-<th>Thread</th>
-<th style='width: 50px;'>Posts</th>
-<th style='width: 50px;'>Views</th>
-<th style='width: 220px;'>Last Post</th>
-</tr>
+	<tr>
+		<th>Thread</th>
+		<th style='width: 50px;'>Posts</th>
+		<th style='width: 50px;'>Views</th>
+		<th style='width: 220px;'>Last Post</th>
+	</tr>
 
-{% for t in threads %}
-<tr>
-<td>{% if t.sticky %}Sticky {% endif %}<a href='{{ t.get_absolute_url }}'>{{ t.title }}</a>{% if t.closed %} (Closed){% endif %}</td>
-<td style='width: 50px;'>{{ t.posts }}</td>
-<td style='width: 50px;'>{{ t.views }}</td>
-<td style='width: 220px;' class='djangoForumThreadLastPost'>{{ t.thread_latest_post.time|timesince }} ago by {{ t.thread_latest_post.author }} (<a href='{{ t.thread_latest_post.get_absolute_url }}'>view</a>)</td>
-</tr>
-{% endfor %}
+	{% for t in threads %}
+	<tr>
+		<td>{% if t.sticky %}Sticky {% endif %}<a href='{{ t.get_absolute_url }}'>{{ t.title }}</a>{% if t.closed %} (Closed){% endif %}</td>
+		<td style='width: 50px;'>{{ t.posts }}</td>
+		<td style='width: 50px;'>{{ t.views }}</td>
+		<td style='width: 220px;' class='djangoForumThreadLastPost'>{{ t.thread_latest_post.time|timesince }} ago by {{ t.thread_latest_post.author }} (<a href='{{ t.thread_latest_post.get_absolute_url }}'>view</a>)</td>
+	</tr>
+	{% endfor %}
 </table>
 {% endif %}
 
 {% if posting %}
 <h2>Preview</h2>
 <p><b>Thread:</b> {{thread.title|escape}}</p>
-  <div id="threadlist">
-	  <dt id="post{{ posting.id }}">{{ posting.author }} ( on {{ posting.time|date:"F j, Y, h:m:s" }} )</dt>
-	  {{ posting.body|safe_markdown:"safe" }}
-  </div>
+<div id="threadlist">
+	<dl>
+		<dt id="post{{ posting.id }}">{{ posting.author }} ( on {{ posting.time|date:"F j, Y, h:m:s" }} )</dt>
+	</dl>
+	{{ posting.body|safe_markdown:"safe" }}
+</div>
 {% endif %}
 
 <h2>Create a Thread</h2>
 <form method='post' action='{{form_action}}'>
-{% if not user.is_authenticated %}
-<h3>Please login to create a thread.</h3>
-<dt>
-<label for="id_username"><tt>Username:</tt>
-	{% if form.username.errors %}
-	<span class="error">{{ form.username.errors|join:", " }}</span>
-	{% endif %}
-</label>
-</dt>
-	{{ form.username }}
-<dt>
-<label for="id_username"><tt>Password:</tt>
-	{% if form.password.errors %}
-	<span class="error">{{ form.password.errors|join:", " }}</span>
-	{% endif %}
-</label>
-</dt>
-	{{ form.password }} (<a href="/accounts/password/reset/">
-		Forgotten your password?</a>)
-{% else %}
-	<dt><label>Posting as </label>{{ user.username }}</dt>
-{% endif %}
-<p>
-<dt><label for='title'>Title:</label>
-{% if form.title.errors %}
-<span class="error">{{ form.title.errors|join:", " }}</span>
-{% endif %}</dt>
-{{ form.title }}
-<dt><label>Posting
-{% if form.body.errors %}
-<span class="error">{{ form.body.errors|join:", " }}</span>
-{% endif %}</label></dt>
-{{ form.body }} <p>
-<p>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</p>
-<p><input type="submit" name="preview" value="Preview comment" />
-<input type="submit" name="post" value="Post Message" /></p>
+	<dl>
+		{% if not user.is_authenticated %}
+		<dd><h3>Please login to create a thread.</h3></dd>
+		<dt><label for="id_username"><tt>Username:</tt></label></dt>
+		<dt>
+		{% if form.username.errors %}
+		<span class="error">{{ form.username.errors|join:", " }}</span>
+		{% endif %}
+		{{ form.username }}
+		</dt>
+		<dt><label for="id_password"><tt>Password:</tt></label></dt>
+		<dt>
+		{% if form.password.errors %}
+		<span class="error">{{ form.password.errors|join:", " }}</span>
+		{% endif %}
+		{{ form.password }} (<a href="/accounts/password/reset/">
+			Forgotten your password?</a>)
+		</dt>
+		{% else %}
+		<dt><label>Posting as </label>{{ user.username }}</dt>
+		{% endif %}
+		<dt> <label for="id_title">Title:
+			{% if form.title.errors %}
+			<span class="error">{{ form.title.errors|join:", " }}</span>
+			{% endif %}
+		</label></dt>
+		<dt>
+		{{ form.title }}
+		</dt>
+		<dt><label>Posting
+			{% if form.body.errors %}
+			<span class="error">{{ form.body.errors|join:", " }}</span>
+			{% endif %}</label></dt>
+		<dt>{{ form.body }}</dt>
+		<dd>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</dd>
+		<dd><input type="submit" name="preview" value="Preview comment"/>
+		<input type="submit" name="post" value="Post Message"/></dd>
+	</dl>
 </form>
 {% endblock %}
 
 {% block content-related %}
-<p>
-Choose the thread thread you would like to read or contribute to. Or simply create a new one if the existing threads do not fit.
-</p>
-{% endblock %}
+<dl><dd>
+	Choose the thread thread you would like to read or contribute to. Or simply create a new one if the existing threads do not fit.
+	</dd></dl>
+	{% endblock %}

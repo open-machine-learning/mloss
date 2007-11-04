@@ -10,25 +10,24 @@
 {% else %}
     <p>
 	<label for="id_username"><tt>Username:</tt></label>
-    <input type="text" name="username" id="id_username" cols="40">
-    <br>
-	<label for="id_username"><tt>Password:</tt></label>
-    <input type="password" name="password" id="id_password">
+    <input type="text" name="username" id="id_username"/>
+	<br></br>
+	<label for="id_password"><tt>Password:</tt></label>
+    <input type="password" name="password" id="id_password"/>
     (<a href="/accounts/password/reset/">
     Forgotten your password?</a>)
     </p>
 {% endif %}
 
-<p><label for="id_comment">Comment:</label><br>
+<p><label for="id_comment">Comment:</label><br></br>
 <textarea name="comment" id="id_comment" rows="10" cols="80"></textarea></p>
 
 <p>
-<input type="hidden" name="options" value="{{ options }}">
-<input type="hidden" name="target" value="{{ target }}">
-<input type="hidden" name="gonzo" value="{{ hash }}">
+<input type="hidden" name="options" value="{{ options }}"/>
+<input type="hidden" name="target" value="{{ target }}"/>
+<input type="hidden" name="gonzo" value="{{ hash }}"/></p>
 <p>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</p>
-<p><input type="submit" name="preview" value="Preview comment" /></p>
-</p>
+<p><input type="submit" name="preview" value="Preview comment"/></p>
 </form>
 
 
