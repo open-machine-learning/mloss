@@ -78,7 +78,7 @@ def software_by_rating(request):
     # may lead to major speedups if we have many sw projects/ratings
     for s in Software.objects.all():
         s.average_rating = s.get_overall_rating()
-        s.save()
+        s.save(auto_update_date=False)
 
     softwarelist = Software.objects.all().order_by('-average_rating','-pub_date')
 

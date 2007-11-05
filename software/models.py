@@ -84,7 +84,7 @@ class Software(models.Model):
     operating_systems = models.CharField(max_length=200)
     paper_bib = models.TextField(blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
+    updated_date = models.DateTimeField()
     tarball = models.FileField(upload_to="code_archive/",blank=True,null=True)
     average_rating = models.FloatField(editable=False, blank=True, null=True)
 
@@ -100,10 +100,11 @@ class Software(models.Model):
     def get(self, a, b):
         return self.__dict__[a]
 
-    def save(self):
+    def save(self, auto_update_date=True):
         if not self.id:
             self.pub_date = datetime.datetime.now()
-        self.updated_date = datetime.datetime.now()
+        if auto_update_date:
+            self.updated_date = datetime.datetime.now()
 
         # Use safe_mode in Markdown to prevent arbitrary input
         # and strip all html tags from CharFields
