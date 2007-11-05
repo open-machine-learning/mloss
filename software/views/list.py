@@ -3,71 +3,80 @@ from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 from software.models import Software
+from software.models import Author, Tag, License, Language, OpSys
+
+
 
 def software_by_user(request, username):
     """
     List of Software submitted by a particular User.
-
-    Context::
-    Same as generic ``list_detail.object_list'' view, with
-    one extra variable:
-    
-        object
-            The User
-    
-    Template::
-        software/user_detail.html
-    
     """
     user = get_object_or_404(User, username__exact=username)
     return list_detail.object_list(request,
-                                   paginate_by=10,
+                                   paginate_by=20,
                                    queryset=Software.objects.get_by_submitter(user.username),
                                    extra_context={ 'object': user },
                                    template_name='software/software_list.html'
                                    )
-def software_by_license(request, license):
-    """
-    List of Software submitted with a particular License.
 
-    Context::
-    Same as generic ``list_detail.object_list'' view, with
-    one extra variable:
-    
-        object
-            The User
-    
-    Template::
-        software/user_detail.html
-    
+def software_by_author(request, slug):
     """
+    List of software with a particular Author
+    """
+    author = get_object_or_404(Author, slug__exact=slug)
     return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=Software.objects.get_by_license(license),
+                                   paginate_by=20,
+                                   queryset=Software.objects.get_by_author(author.slug),
+                                   extra_context={ 'object':author },
                                    template_name='software/software_list.html',
-                                   extra_context={ 'os_license': license },
                                    )
 
-def software_by_language(request, language):
+def software_by_tag(request, slug):
     """
-    List of Software submitted with a particular License.
-
-    Context::
-    Same as generic ``list_detail.object_list'' view, with
-    one extra variable:
-    
-        object
-            The User
-    
-    Template::
-        software/user_detail.html
-    
+    List of software with a particular Tag
     """
+    tag = get_object_or_404(Tag, slug__exact=slug)
     return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=Software.objects.get_by_language(language),
+                                   paginate_by=20,
+                                   queryset=Software.objects.get_by_tag(tag.slug),
+                                   extra_context={ 'object':tag },
                                    template_name='software/software_list.html',
-                                   extra_context={ 'language': language },
+                                   )
+
+def software_by_license(request, slug):
+    """
+    List of software with a particular License
+    """
+    lic = get_object_or_404(License, slug__exact=slug)
+    return list_detail.object_list(request,
+                                   paginate_by=20,
+                                   queryset=Software.objects.get_by_license(lic.slug),
+                                   extra_context={ 'object':lic },
+                                   template_name='software/software_list.html',
+                                   )
+
+def software_by_language(request, slug):
+    """
+    List of software with a particular Language
+    """
+    language = get_object_or_404(Language, slug__exact=slug)
+    return list_detail.object_list(request,
+                                   paginate_by=20,
+                                   queryset=Software.objects.get_by_language(language.slug),
+                                   extra_context={ 'object':language },
+                                   template_name='software/software_list.html',
+                                   )
+
+def software_by_opsys(request, slug):
+    """
+    List of software with a particular Operating System
+    """
+    opsys = get_object_or_404(OpSys, slug__exact=slug)
+    return list_detail.object_list(request,
+                                   paginate_by=20,
+                                   queryset=Software.objects.get_by_opsys(opsys.slug),
+                                   extra_context={ 'object':opsys },
+                                   template_name='software/software_list.html',
                                    )
 
 def software_by_rating(request):
@@ -89,20 +98,6 @@ def software_by_rating(request):
                                    )
 
 def search_description(request, q):
-    """
-    List of Software submitted with a particular License.
-
-    Context::
-    Same as generic ``list_detail.object_list'' view, with
-    one extra variable:
-    
-        object
-            The User
-    
-    Template::
-        software/user_detail.html
-    
-    """
     qs=Software.objects.get_by_searchterm(q)
     if qs.count()==0:
         return render_to_response('software/software_list.html',

@@ -2,12 +2,12 @@
 {% load paginator %}
 
 {% block content %}
-    <h2>Languages</h2>
+    <h2>Authors</h2>
     {% paginator 5 %}
     <ul>
-    {% for curlanguage in object_list %}
-        <li><a href="/software/language/{{ curlanguage.slug }}/">
-	    {{ curlanguage.name }}</a>
+    {% for curauthor in object_list %}
+        <li><a href="/software/author/{{ curauthor.slug }}/">
+	    {{ curauthor.name }}</a>
 	</li>
     {% endfor %}
     </ul>

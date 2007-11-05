@@ -2,12 +2,12 @@
 {% load paginator %}
 
 {% block content %}
-    <h2>Languages</h2>
+    <h2>Operating Systems</h2>
     {% paginator 5 %}
     <ul>
-    {% for curlanguage in object_list %}
-        <li><a href="/software/language/{{ curlanguage.slug }}/">
-	    {{ curlanguage.name }}</a>
+    {% for curopsys in object_list %}
+        <li><a href="/software/opsys/{{ curopsys.slug }}/">
+	    {{ curopsys.name }}</a>
 	</li>
     {% endfor %}
     </ul>

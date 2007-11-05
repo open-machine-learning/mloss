@@ -1,8 +1,7 @@
+{% extends "software/base_software.html" %}
 {% load safe_markup %}
 {% load paginator %}
 {% load show_stars %}
-
-{% extends "base_2col.html" %}
 
 {% block sectionid %}browse{% endblock %}
 
@@ -115,32 +114,3 @@ All entries
 {% endif %}
 {% endblock %}
 
-{% block content-related %}
-<h2>Search</h2><form method="post" action="/software/search/">
-	<input type="text" name="searchterm" id="searchterm" size="10"></input>
-		<button type="submit" name="post">Go</button>
-</form>
-<h2>Manage</h2>
-<ul>
-	{% if user.is_authenticated %}
-	<li><a href="/software/submit">Submit new Project</a></li>
-	{% else %}
-	<li><a href="/software/submit">Login</a><a> to submit a new project</a></li>
-	{% endif %}
-</ul>
-<h2>Sort by</h2>
-<ul>
-	<li><a href="/software/date/">Date</a></li>
-	<li><a href="/software/title/">Project Title</a></li>
-    <li><a href="/software/rating/">Rating</a></li>
-</ul>
-<h2>Filter by</h2>
-<ul>
-	<li><a href="/software/author/">Author</a></li>
-	<li><a href="/software/users/">Submitter</a></li>
-	<li><a href="/software/tags/">Tag</a></li>
-	<li><a href="/software/license/">License</a></li>
-	<li><a href="/software/language/">Language</a></li>
-</ul>
-<h3><a href="/software/rss/latest"><img src="/media/images/rss.png" alt="RSS Feat" border="0" width="16" height="16" align="top"></img>RSS Feed</a></h3>
-{% endblock %}

@@ -1,53 +1,16 @@
-{% extends "base_2col.html" %}
+{% extends "software/base_software.html" %}
 {% load paginator %}
-
-{% block sectionid %}browse{% endblock %}
-
-{% block title %}All entries{% endblock %}
-
-{% block billboard %}All entries{% endblock %}
 
 {% block content %}
     <h2>Software Licenses</h2>
-	{% paginator 5 %}
+    {% paginator 5 %}
     <ul>
     {% for curlicense in object_list %}
-        <li><a href="/software/license/{{ curlicense.os_license }}/">
-	    {{ curlicense.os_license }}</a>
+        <li><a href="/software/license/{{ curlicense.slug }}/">
+	    {{ curlicense.name }}</a>
 	</li>
     {% endfor %}
     </ul>
-	{% paginator 5 %}
+    {% paginator 5 %}
 {% endblock %}
-
-{% block content-related %}
-<h2>Search<form method="POST" action="/software/search/">
-	<input type="text" name="searchterm" id="searchterm" size="10">
-	<button type="submit" name="post">Go</button>
-</form></h2>
-<h2>Manage</h2>
-<ul>
-{% if user.is_authenticated %}
-  <li><a href="/software/submit">Submit new Project</a></li>
-{% else %}
-  <li><a href="/software/submit">Login</a><a> to submit a new project</a></li>
-{% endif %}
-</ul>
-<h2>Sort by</h2>
-<ul>
-    <li><a href="/software/date/">Date</a></li>
-    <li><a href="/software/title/">Project Title</a></li>
-    <li><a href="/software/rating/">Rating</a></li>
-</ul>
-<h2>Filter by</h2>
-<ul>
-	<li><a href="/software/author/">Author</a></li>
-    <li><a href="/software/users/">Submitter</a></li>
-    <li><a href="/software/tags/">Tag</a></li>
-    <li><a href="/software/license/">License</a></li>
-    <li><a href="/software/language/">Language</a></li>
-</ul>
-<h3><a href="/software/rss/latest"><img src="/media/images/rss.png" alt="RSS Feat" border="0" width="16" height="16" align="top"> RSS Feed</a></h3>
-{% endblock %}
-
 

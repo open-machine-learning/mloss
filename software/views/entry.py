@@ -10,6 +10,9 @@ from software.models import Software, SoftwareRating
 from software.forms import RatingForm
 from django.http import HttpResponse
 from django.contrib.sites.models import Site
+from django.views.generic import list_detail
+from software.models import Author, Tag, License, Language, OpSys
+
 
 def software_detail(request, software_id):
     """
@@ -99,3 +102,51 @@ def rate(request, software_id):
                             documentation = form.cleaned_data['documentation'])
                     r.save()
     return software_detail(request, software_id)
+
+
+
+def software_all_authors(request):
+    authorlist = Author.objects.filter(name__isnull=False).distinct()
+    return list_detail.object_list(request,
+                                   paginate_by=20,
+                                   queryset=authorlist,
+                                   template_name='software/author_list.html',
+                                   )
+
+
+def software_all_tags(request):
+    taglist = Tag.objects.filter(name__isnull=False).distinct()
+    return list_detail.object_list(request,
+                                   paginate_by=20,
+                                   queryset=taglist,
+                                   template_name='software/tag_list.html',
+                                   )
+
+
+def software_all_licenses(request):
+    licenselist = License.objects.filter(name__isnull=False).distinct()
+    return list_detail.object_list(request,
+                                   paginate_by=20,
+                                   queryset=licenselist,
+                                   template_name='software/license_list.html',
+                                   )
+
+
+def software_all_languages(request):
+    languagelist = Language.objects.filter(name__isnull=False).distinct()
+    return list_detail.object_list(request,
+                                   paginate_by=20,
+                                   queryset=languagelist,
+                                   template_name='software/language_list.html',
+                                   )
+
+
+def software_all_opsyss(request):
+    opsyslist = OpSys.objects.filter(name__isnull=False).distinct()
+    return list_detail.object_list(request,
+                                   paginate_by=20,
+                                   queryset=opsyslist,
+                                   template_name='software/opsys_list.html',
+                                   )
+
+

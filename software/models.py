@@ -1,10 +1,12 @@
 from django.db import models
 import datetime
+import re
 from markdown import markdown
 from django.utils.html import strip_tags
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
+from django.template.defaultfilters import slugify
 
 
 # make sure this list of variables is up-to-date (i.e. matches
@@ -16,6 +18,127 @@ editables=('version','authors',
 
 # don't change db of the following fields if they are empty
 dontupdateifempty=['tarball', 'screenshot']
+
+# not quite sure where to put this code
+def parsewords(curobj,fieldname='language'):
+    """
+    Returns a set of words contained in fieldname
+    """
+    DELIMITERS = '(,|and)'
+    STOPWORDS = set(['',',','and'])
+    
+    unique_words = list()
+    curstr = eval('curobj.'+fieldname)
+    curwords = re.split(DELIMITERS,curstr)
+    for word in curwords:
+        cleanword = word.strip().lower()
+        if (cleanword not in unique_words) and (cleanword not in STOPWORDS):
+            unique_words.append(cleanword)
+
+    unique_words.sort()
+    return unique_words
+
+
+class Author(models.Model):
+    name = models.CharField(maxlength=50, unique=True)
+    slug = models.SlugField(editable=False)
+
+    class Admin:
+        pass
+
+    def save(self):
+        if not self.id:
+            self.slug = slugify(self.name)
+        super(Author,self).save()
+
+    def get_absolute_url(self):
+        return('mloss.software.views.list.software_by_author', (), { 'slug': self.slug })
+    get_absolute_url = models.permalink(get_absolute_url)
+    
+    def __str__(self):
+        return self.name
+    
+
+class Tag(models.Model):
+    name = models.CharField(maxlength=50, unique=True)
+    slug = models.SlugField(editable=False)
+
+    class Admin:
+        pass
+
+    def save(self):
+        if not self.id:
+            self.slug = slugify(self.name)
+        super(Tag,self).save()
+
+    def get_absolute_url(self):
+        return('mloss.software.views.list.software_by_tag', (), { 'slug': self.slug })
+    get_absolute_url = models.permalink(get_absolute_url)
+    
+    def __str__(self):
+        return self.name
+    
+
+class License(models.Model):
+    name = models.CharField(maxlength=50, unique=True)
+    slug = models.SlugField(editable=False)
+
+    class Admin:
+        pass
+
+    def save(self):
+        if not self.id:
+            self.slug = slugify(self.name)
+        super(License,self).save()
+
+    def get_absolute_url(self):
+        return('mloss.software.views.list.software_by_license', (), { 'slug': self.slug })
+    get_absolute_url = models.permalink(get_absolute_url)
+    
+    def __str__(self):
+        return self.name
+    
+class Language(models.Model):
+    name = models.CharField(maxlength=50, unique=True)
+    slug = models.SlugField(editable=False)
+
+    class Admin:
+        pass
+
+    def save(self):
+        if not self.id:
+            self.slug = slugify(self.name)
+        super(Language,self).save()
+
+    def get_absolute_url(self):
+        return('mloss.software.views.list.software_by_language', (), { 'slug': self.slug })
+    get_absolute_url = models.permalink(get_absolute_url)
+    
+    def __str__(self):
+        return self.name
+    
+
+class OpSys(models.Model):
+    name = models.CharField(maxlength=50, unique=True)
+    slug = models.SlugField(editable=False)
+
+    class Admin:
+        pass
+
+    def save(self):
+        if not self.id:
+            self.slug = slugify(self.name)
+        super(OpSys,self).save()
+
+    def get_absolute_url(self):
+        return('mloss.software.views.list.software_by_opsys', (), { 'slug': self.slug })
+    get_absolute_url = models.permalink(get_absolute_url)
+    
+    def __str__(self):
+        return self.name
+    
+
+
 
 class SoftwareManager(models.Manager):
     """
@@ -32,19 +155,40 @@ class SoftwareManager(models.Manager):
         """
         return self.filter(user__username__exact=username)
 
+    def get_by_author(self, slug):
+        """
+        Returns a QuerySet of Software submitted by a particular User.
+        
+        """
+        return self.filter(authorlist__slug__exact=slug)
+
     def get_by_license(self, license):
         """
         Returns a QuerySet of Software sorted by a particular license.
         
         """
-        return self.filter(os_license__exact=license)
+        return self.filter(licenselist__slug__exact=license)
 
     def get_by_language(self, language):
         """
         Returns a QuerySet of Software sorted by a particular language.
         
         """
-        return self.filter(language__exact=language)
+        return self.filter(languagelist__slug__exact=language)
+
+    def get_by_opsys(self, opsys):
+        """
+        Returns a QuerySet of Software sorted by a particular language.
+        
+        """
+        return self.filter(opsyslist__slug__exact=opsys)
+
+    def get_by_tag(self, tag):
+        """
+        Returns a QuerySet of Software sorted by a particular language.
+        
+        """
+        return self.filter(taglist__slug__exact=tag)
 
     def get_by_searchterm(self, searchterm):
         """
@@ -73,15 +217,20 @@ class Software(models.Model):
     title = models.CharField(max_length=80)
     version = models.CharField(max_length=80)
     authors = models.CharField(max_length=200)
+    authorlist = models.ManyToManyField(Author, editable=False)
     contact = models.EmailField(max_length=80)
     description = models.TextField()
     description_html = models.TextField(editable=False)
     project_url = models.URLField(verify_exists=False)
     jmlr_mloss_url = models.URLField(verify_exists=False, blank=True)
     tags = models.CharField(max_length=200,blank=True)
+    taglist = models.ManyToManyField(Tag, editable=False)
     language = models.CharField(max_length=200,blank=True)
+    languagelist = models.ManyToManyField(Language, editable=False)
     os_license = models.CharField(max_length=200)
+    licenselist = models.ManyToManyField(License, editable=False)
     operating_systems = models.CharField(max_length=200)
+    opsyslist = models.ManyToManyField(OpSys, editable=False)
     paper_bib = models.TextField(blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField()
@@ -99,6 +248,25 @@ class Software(models.Model):
 
     def get(self, a, b):
         return self.__dict__[a]
+
+    def update_list(self,listname,objname,fieldname):
+        current = eval('self.'+listname+'.all()')
+        newlist = parsewords(self,fieldname=fieldname)
+
+        # clear out old items
+        for item in current:
+            if item.name not in newlist:
+                eval('self.'+listname+'.remove(item)')
+
+        # add new items
+        for item_name in newlist:
+            if item_name not in [item.name for item in current]:
+                try:
+                    item = eval(objname+'.objects.get(name=\''+item_name+'\')')
+                except eval(objname+'.DoesNotExist'):
+                    item = eval(objname+'(name=\''+item_name+'\')')
+                    item.save()
+                eval('self.'+listname+'.add(item)')
 
     def save(self, auto_update_date=True):
         if not self.id:
@@ -118,6 +286,13 @@ class Software(models.Model):
         self.paper_bib = strip_tags(self.paper_bib)
         self.operating_systems = strip_tags(self.operating_systems)
         super(Software, self).save()
+
+        # Update authorlist, taglist, licenselist, langaugelist, opsyslist
+        self.update_list('authorlist','Author','authors')
+        self.update_list('taglist','Tag','tags')
+        self.update_list('licenselist','License','os_license')
+        self.update_list('languagelist','Language','language')
+        self.update_list('opsyslist','OpSys','operating_systems')
 
     def get_taglist(self):
         return [x.strip().encode('utf-8') for x in self.tags.split(',')]
@@ -196,6 +371,8 @@ class Software(models.Model):
     def get_num_votes(self):
         return float(SoftwareRating.objects.filter(software=self).count())
 
+
+        
     class Meta:
         ordering = ('-pub_date',)
 
