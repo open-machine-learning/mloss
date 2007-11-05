@@ -76,6 +76,12 @@ All entries
 							{% if snippet.paper_bib %}<a href="/software/paperbib/{{ snippet.id }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper"></img></a>{% endif %}
 							{% if snippet.tarball %}<a href="/media/{{ snippet.tarball }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download"></img></a>{% endif %}
 							]
+							{% if snippet.total_number_of_views %}
+							{{ snippet.total_number_of_views }} views
+							{% endif %}
+							{% if snippet.total_number_of_downloads %}
+							, {{ snippet.total_number_of_downloads }} downloads 
+							{% endif %}
 							</p>
 						</td>
 						{% if snippet.get_num_votes %}

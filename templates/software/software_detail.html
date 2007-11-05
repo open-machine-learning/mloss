@@ -90,6 +90,10 @@
 								{% if object.tarball %}<a href="/media/{{ object.tarball }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download"></img></a>{% endif %}
 								]
 								</p>
+                                <p class="more">
+                                {{ object.total_number_of_views }} views ({{ todays_stats.number_of_views }} today) ,
+                                {{ object.total_number_of_downloads }} downloads ( {{ todays_stats.number_of_downloads }} today )
+                                </p>
 							</td>
 							{% if object.get_num_votes %}
 							<td class="rating">

@@ -1,13 +1,12 @@
 from django.db import models
 import datetime
-import re
 from markdown import markdown
 from django.utils.html import strip_tags
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
 from django.template.defaultfilters import slugify
-
+from utils import parsewords
 
 # make sure this list of variables is up-to-date (i.e. matches
 # the fields in the Software object
@@ -18,26 +17,6 @@ editables=('version','authors',
 
 # don't change db of the following fields if they are empty
 dontupdateifempty=['tarball', 'screenshot']
-
-# not quite sure where to put this code
-def parsewords(curobj,fieldname='language'):
-    """
-    Returns a set of words contained in fieldname
-    """
-    DELIMITERS = '(,|and)'
-    STOPWORDS = set(['',',','and'])
-    
-    unique_words = list()
-    curstr = eval('curobj.'+fieldname)
-    curwords = re.split(DELIMITERS,curstr)
-    for word in curwords:
-        cleanword = word.strip().lower()
-        if (cleanword not in unique_words) and (cleanword not in STOPWORDS):
-            unique_words.append(cleanword)
-
-    unique_words.sort()
-    return unique_words
-
 
 class Author(models.Model):
     name = models.CharField(maxlength=50, unique=True)
@@ -136,9 +115,6 @@ class OpSys(models.Model):
     
     def __str__(self):
         return self.name
-    
-
-
 
 class SoftwareManager(models.Manager):
     """
@@ -174,6 +150,7 @@ class SoftwareManager(models.Manager):
         Returns a QuerySet of Software sorted by a particular language.
         
         """
+        print language
         return self.filter(languagelist__slug__exact=language)
 
     def get_by_opsys(self, opsys):
@@ -206,7 +183,6 @@ class SoftwareManager(models.Manager):
                 Q(operating_systems__icontains=searchterm) |
                 Q(os_license__icontains=searchterm))
 
-    
 # Create your models here.
 class Software(models.Model):
     """
@@ -235,7 +211,14 @@ class Software(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField()
     tarball = models.FileField(upload_to="code_archive/",blank=True,null=True)
-    average_rating = models.FloatField(editable=False, blank=True, null=True)
+
+    average_features_rating = models.FloatField(editable=False, blank=True, null=True)
+    average_usability_rating = models.FloatField(editable=False, blank=True, null=True)
+    average_documentation_rating = models.FloatField(editable=False, blank=True, null=True)
+    total_number_of_votes = models.IntegerField(editable=False, blank=True, null=True)
+
+    total_number_of_views = models.IntegerField(editable=False, blank=True, null=True)
+    total_number_of_downloads = models.IntegerField(editable=False, blank=True, null=True)
 
     try:
         from PIL import Image  
@@ -273,6 +256,10 @@ class Software(models.Model):
             self.pub_date = datetime.datetime.now()
         if auto_update_date:
             self.updated_date = datetime.datetime.now()
+        if not self.total_number_of_downloads:
+            self.total_number_of_downloads=0
+        if not self.total_number_of_views:
+            self.total_number_of_views=0
 
         # Use safe_mode in Markdown to prevent arbitrary input
         # and strip all html tags from CharFields
@@ -371,7 +358,30 @@ class Software(models.Model):
     def get_num_votes(self):
         return float(SoftwareRating.objects.filter(software=self).count())
 
+    def get_stats_for_today(self):
+        t = datetime.date.today().strftime("%Y-%m-%d")
+        stats, flag = SoftwareStatistics.objects.get_or_create(software=self, date=t)
+        return stats
 
+    def update_views(self):
+        if self.total_number_of_views:
+            self.total_number_of_views += 1
+        else:
+            self.total_number_of_views = 1
+
+        self.save(auto_update_date=False)
+        e=self.get_stats_for_today()
+        e.update_views()
+
+    def update_downloads(self):
+        if self.total_number_of_downloads:
+            self.total_number_of_downloads += 1
+        else:
+            self.total_number_of_downloads = 1
+
+        self.save(auto_update_date=False)
+        e=self.get_stats_for_today()
+        e.update_downloads()
         
     class Meta:
         ordering = ('-pub_date',)
@@ -388,4 +398,26 @@ class SoftwareRating(models.Model):
     documentation = models.IntegerField()
 
     class Admin:
+        list_display = ('software', 'user', 'features', 'usability', 'documentation')
+        pass
+
+class SoftwareStatistics(models.Model):
+    """
+    Statistics about a software project
+    """
+    software = models.ForeignKey(Software)
+    date = models.DateField()
+    number_of_views = models.IntegerField(default=0)
+    number_of_downloads = models.IntegerField(default=0)
+
+    def update_views(self):
+        self.number_of_views += 1
+        self.save()
+
+    def update_downloads(self):
+        self.number_of_downloads += 1
+        self.save()
+    
+    class Admin:
+        list_display = ('date', 'number_of_views', 'number_of_downloads')
         pass

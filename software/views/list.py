@@ -79,6 +79,57 @@ def software_by_opsys(request, slug):
                                    template_name='software/software_list.html',
                                    )
 
+def software_by_date(request):
+    """
+    List of Software ranked by date
+    """
+
+    softwarelist = Software.objects.all().order_by('-pub_date')
+
+    return list_detail.object_list(request,
+                                   paginate_by=10,
+                                   queryset=softwarelist,
+                                   template_name='software/software_list.html',
+                                   )
+
+def software_by_title(request):
+    """
+    List of Software ranked by date
+    """
+
+    softwarelist = Software.objects.all().order_by('title')
+
+    return list_detail.object_list(request,
+                                   paginate_by=10,
+                                   queryset=softwarelist,
+                                   template_name='software/software_list.html',
+                                   )
+
+def software_by_views(request):
+    """
+    List of Software ranked by vies
+    """
+
+    softwarelist = Software.objects.all().order_by('-total_number_of_views')
+
+    return list_detail.object_list(request,
+                                   paginate_by=10,
+                                   queryset=softwarelist,
+                                   template_name='software/software_list.html',
+                                   )
+def software_by_downloads(request):
+    """
+    List of Software ranked by downloads
+    """
+
+    softwarelist = Software.objects.all().order_by('-total_number_of_downloads')
+
+    return list_detail.object_list(request,
+                                   paginate_by=10,
+                                   queryset=softwarelist,
+                                   template_name='software/software_list.html',
+                                   )
+
 def software_by_rating(request):
     """
     List of Software ranked by rating

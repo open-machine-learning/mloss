@@ -6,7 +6,7 @@ rated and viewed according to various criteria.
 
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from software.models import Software, SoftwareRating
+from software.models import Software, SoftwareRating, SoftwareStatistics
 from software.forms import RatingForm
 from django.http import HttpResponse
 from django.contrib.sites.models import Site
@@ -27,6 +27,9 @@ def software_detail(request, software_id):
     
     """
     entry = get_object_or_404(Software, pk=software_id)
+    entry.update_views()
+    todays_stats = entry.get_stats_for_today()
+
     ratingform = None
 
     if request.user.is_authenticated() and not request.user == entry.user:
@@ -40,8 +43,10 @@ def software_detail(request, software_id):
             ratingform = RatingForm()
     
     return render_to_response('software/software_detail.html',
-                { 'object': entry, 'ratingform': ratingform },
-                context_instance=RequestContext(request))
+            { 'object': entry,
+                'ratingform': ratingform,
+                'todays_stats' : todays_stats},
+			context_instance=RequestContext(request))
 
 def get_bibitem(request, software_id):
     entry = get_object_or_404(Software, pk=software_id)
