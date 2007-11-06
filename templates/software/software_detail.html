@@ -74,10 +74,11 @@
 							<td valign="top">
 								<h2>
 									{% if object.screenshot %}
-									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="128" height="80" alt='Screenshot'></img> {{ object.title }} {{ object.version }}</a>
+									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="128" height="80" alt='Screenshot'></img></a>
+									<a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}</a>
 									{% else %}
-									<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo"></img><a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}
-									</a>
+									<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo"></img>
+									<a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}</a>
 									{% endif %}
 								</h2>
 								<p class="more">
