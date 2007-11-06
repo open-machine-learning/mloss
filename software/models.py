@@ -212,13 +212,14 @@ class Software(models.Model):
     updated_date = models.DateTimeField()
     tarball = models.FileField(upload_to="code_archive/",blank=True,null=True)
 
-    average_features_rating = models.FloatField(editable=False, blank=True, null=True)
-    average_usability_rating = models.FloatField(editable=False, blank=True, null=True)
-    average_documentation_rating = models.FloatField(editable=False, blank=True, null=True)
-    total_number_of_votes = models.IntegerField(editable=False, blank=True, null=True)
+    average_rating = models.FloatField(editable=False, default=-1)
+    average_features_rating = models.FloatField(editable=False, default=-1)
+    average_usability_rating = models.FloatField(editable=False, default=-1)
+    average_documentation_rating = models.FloatField(editable=False, default=-1)
+    total_number_of_votes = models.IntegerField(editable=False, default=0)
 
-    total_number_of_views = models.IntegerField(editable=False, blank=True, null=True)
-    total_number_of_downloads = models.IntegerField(editable=False, blank=True, null=True)
+    total_number_of_views = models.IntegerField(editable=False, default=0)
+    total_number_of_downloads = models.IntegerField(editable=False, default=0)
 
     try:
         from PIL import Image  
@@ -310,53 +311,6 @@ class Software(models.Model):
         date_hierarchy = 'pub_date'
         search_fields = ['title']
 
-    def get_overall_rating(self):
-        """get_ratings(self) -> mean(features, usability, documentation)
-
-        return the average of all ratings or None if no ratings
-        have been given so far.""" 
-        ratings = SoftwareRating.objects.filter(software=self)
-        l = float(len(ratings))
-        if l > 0.0:
-            return sum([ r.features+r.usability+r.documentation for r in ratings])/(3*l)
-        else:
-            return -1
-
-    def get_ratings(self):
-        """get_ratings(self) -> features, usability, documentation
-
-        return the average ratings or [None, None, None] if no ratings
-        have been given so far.""" 
-        ratings = SoftwareRating.objects.filter(software=self)
-        l = float(len(ratings))
-        if l > 0.0:
-            features = sum([ r.features for r in ratings])/l
-            usability = sum([ r.usability for r in ratings])/l
-            documentation = sum([ r.documentation for r in ratings])/l
-            return features, usability, documentation
-        else:
-            return None, None, None
-
-    def get_features_rating(self):
-        ratings = SoftwareRating.objects.filter(software=self)
-        l = float(ratings.count())
-        if l > 0.0:
-            return sum([ r.features for r in ratings])/l            
-
-    def get_documentation_rating(self):
-        ratings = SoftwareRating.objects.filter(software=self)
-        l = float(ratings.count())
-        if l > 0.0:
-            return sum([ r.documentation for r in ratings])/l            
-
-    def get_usability_rating(self):
-        ratings = SoftwareRating.objects.filter(software=self)
-        l = float(ratings.count())
-        if l > 0.0:
-            return sum([ r.usability for r in ratings])/l            
-
-    def get_num_votes(self):
-        return float(SoftwareRating.objects.filter(software=self).count())
 
     def get_stats_for_today(self):
         t = datetime.date.today().strftime("%Y-%m-%d")
@@ -393,9 +347,35 @@ class SoftwareRating(models.Model):
     her rating?)"""
     user = models.ForeignKey(User, raw_id_admin=True)
     software = models.ForeignKey(Software)
-    features = models.IntegerField()
-    usability = models.IntegerField()
-    documentation = models.IntegerField()
+    features = models.IntegerField(default=0)
+    usability = models.IntegerField(default=0)
+    documentation = models.IntegerField(default=0)
+
+    def update_software_ratings(self):
+        s=self.software
+        ratings = SoftwareRating.objects.filter(software=s)
+
+        l = float(len(ratings))
+        f=u=d=0
+        for r in ratings:
+            f+= r.features
+            u+= r.usability
+            d+= r.documentation
+
+        s.average_rating = (f+u+d)/(3.0*l)
+        s.average_features_rating = float(f)/l
+        s.average_usability_rating = float(u)/l
+        s.average_documentation_rating = float(d)/l
+        s.total_number_of_votes = l
+        s.save(auto_update_date=False)
+
+    def update_rating(self, f, u, d):
+
+        self.features = f
+        self.usability = u
+        self.documentation = d
+        self.save()
+        self.update_software_ratings()
 
     class Admin:
         list_display = ('software', 'user', 'features', 'usability', 'documentation')

@@ -84,12 +84,11 @@ All entries
 							{% endif %}
 							</p>
 						</td>
-						{% if snippet.get_num_votes %}
+						{% if snippet.total_number_of_votes %}
 						<td class="rating">
 							<table class="starlab">
-								<tr><td class="starlab">Features</td><td class="stars">{% show_stars snippet.get_features_rating of 5 round to half %}</td></tr>
-								<tr><td class="starlab">Usability</td><td class="stars">{% show_stars snippet.get_usability_rating of 5 round to half %}</td></tr>
-								<tr><td class="starlab">Documentation</td><td class="stars">{% show_stars snippet.get_documentation_rating of 5 round to half %}</td></tr>
+								<tr><td class="starlab">Rating {% show_stars snippet.average_rating of 5 round to half %}</td></tr>
+								<tr><td class="starlab">( based on {{ snippet.total_number_of_votes }} vote(s) )</td></tr>
 							</table>
 						</td>
 						{% endif %}

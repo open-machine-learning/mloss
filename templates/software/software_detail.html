@@ -95,12 +95,14 @@
                                 {{ object.total_number_of_downloads }} downloads ( {{ todays_stats.number_of_downloads }} today )
                                 </p>
 							</td>
-							{% if object.get_num_votes %}
+							{% if object.total_number_of_votes %}
 							<td class="rating">
 								<table class="starlab">
-									<tr><td class="starlab">Features</td><td class="stars">{% show_stars object.get_features_rating of 5 round to half %}</td></tr>
-									<tr><td class="starlab">Usability</td><td class="stars">{% show_stars object.get_usability_rating of 5 round to half %}</td></tr>
-									<tr><td class="starlab">Documentation</td><td class="stars">{% show_stars object.get_documentation_rating of 5 round to half %}</td></tr>
+									<tr><td class="starlab">Overall</td><td class="stars">{% show_stars object.average_rating of 5 round to half %}</td></tr>
+									<tr><td class="starlab">Features</td><td class="stars">{% show_stars object.average_features_rating of 5 round to half %}</td></tr>
+									<tr><td class="starlab">Usability</td><td class="stars">{% show_stars object.average_usability_rating of 5 round to half %}</td></tr>
+									<tr><td class="starlab">Documentation</td><td class="stars">{% show_stars object.average_documentation_rating of 5 round to half %}</td></tr>
+									<tr><td colspan="2" class="starlab" align="center">( based on {{ object.total_number_of_votes }} vote(s) )</td></tr>
 								</table>
 							</td>
 							{% endif %}

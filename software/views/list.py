@@ -134,12 +134,6 @@ def software_by_rating(request):
     """
     List of Software ranked by rating
     """
-    # this may be omitted if we do these updates on any rating change
-    # may lead to major speedups if we have many sw projects/ratings
-    for s in Software.objects.all():
-        s.average_rating = s.get_overall_rating()
-        s.save(auto_update_date=False)
-
     softwarelist = Software.objects.all().order_by('-average_rating','-pub_date')
 
     return list_detail.object_list(request,

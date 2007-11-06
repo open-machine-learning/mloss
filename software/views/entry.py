@@ -95,17 +95,15 @@ def rate(request, software_id):
             if form.is_valid():
                 try:
                     r = SoftwareRating.objects.get(user=request.user, software=software)
-                    r.features = form.cleaned_data['features']
-                    r.usability = form.cleaned_data['usability']
-                    r.documentation = form.cleaned_data['documentation']
-                    r.save()
+                    r.update_rating(form.cleaned_data['features'],
+                            form.cleaned_data['usability'],
+                            form.cleaned_data['documentation'])
                 except SoftwareRating.DoesNotExist:
-                    r, fail = SoftwareRating.objects.get_or_create(user=request.user,
-                            software=software,
-                            features = form.cleaned_data['features'],
-                            usability = form.cleaned_data['usability'],
-                            documentation = form.cleaned_data['documentation'])
-                    r.save()
+                    r, fail = SoftwareRating.objects.get_or_create(user=request.user, software=software)
+                    r.update_rating(form.cleaned_data['features'],
+                            form.cleaned_data['usability'],
+                            form.cleaned_data['documentation'])
+
     return software_detail(request, software_id)
 
 
