@@ -109,7 +109,7 @@ dd { margin-bottom:.8em; }
 
 #billboard h2 { margin:0; }
 #generic #billboard { display:none; }
-#billboard { background:#F7F7F7 repeat-x; border-bottom:6px solid #113366; font-size:150%; line-height:1.2em; color:#113366; }
+#billboard { background:#F7F7F7 repeat-x; border-bottom:6px solid #113366; font-size:150%; line-height:2.4ex; text-align:center; color:#113366; }
 
 /* COMMENTS */
 

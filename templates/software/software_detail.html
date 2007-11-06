@@ -8,7 +8,7 @@
 
 {% block title %}Project details:{{ object.title }}{% endblock %}
 
-{% block billboard %}Title:{{ object.title }}{% endblock %}
+{% block billboard %}Project details for {{ object.title }}{% endblock %}
 
 {% block content-related %}
 
@@ -90,9 +90,10 @@
 								{% if object.tarball %}<a href="/media/{{ object.tarball }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download"></img></a>{% endif %}
 								]
 								</p>
+
                                 <p class="more">
-                                {{ object.total_number_of_views }} views ({{ todays_stats.number_of_views }} today) ,
-                                {{ object.total_number_of_downloads }} downloads ( {{ todays_stats.number_of_downloads }} today )
+                                {{ object.total_number_of_views }} view(s) ({{ todays_stats.number_of_views }} today) ,
+                                {{ object.total_number_of_downloads }} download(s) ( {{ todays_stats.number_of_downloads }} today )
                                 </p>
 							</td>
 							{% if object.total_number_of_votes %}
@@ -130,11 +131,11 @@
 					{% endif %}
 
 					<dt>URL:</dt>
-					<dd> <a href="{{ object.project_url|escape }}">Project Homepage</a></dd>
+					<dd> <a href="/software/homepage/{{ object.id }}">Project Homepage</a></dd>
 
 					{% if object.jmlr_mloss_url %}
 					<dt>JMLR MLOSS PaperURL:</dt>
-					<dd> <a href="{{ object.jmlr_mloss_url|escape }}">JMLR-MLOSS Paper Homepage</a></dd>
+					<dd> <a href="/software/jmlrhomepage/{{ object.id }}">JMLR-MLOSS Paper Homepage</a></dd>
 					{% endif %}
 
 					{% if object.operating_systems %}
@@ -149,7 +150,7 @@
 
 					{% if object.tarball %}
 					<dt>Archive:</dt>
-					<dd><a href='/media/{{ object.tarball }}'>download here</a></dd>
+					<dd><a href='/software/download/{{ object.id }}'>download here</a></dd>
 					{% endif %}
 				</dl>
 			</td>

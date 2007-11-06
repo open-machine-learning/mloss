@@ -8,11 +8,10 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from software.models import Software, SoftwareRating, SoftwareStatistics
 from software.forms import RatingForm
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.sites.models import Site
 from django.views.generic import list_detail
 from software.models import Author, Tag, License, Language, OpSys
-
 
 def software_detail(request, software_id):
     """
@@ -46,10 +45,26 @@ def software_detail(request, software_id):
             { 'object': entry,
                 'ratingform': ratingform,
                 'todays_stats' : todays_stats},
-			context_instance=RequestContext(request))
+            context_instance=RequestContext(request))
+
+def download_software(request, software_id):
+    entry = get_object_or_404(Software, pk=software_id)
+    entry.update_downloads()
+    return HttpResponseRedirect('/media/' + entry.tarball)
+
+def view_homepage(request, software_id):
+    entry = get_object_or_404(Software, pk=software_id)
+    entry.update_downloads()
+    return HttpResponseRedirect(entry.project_url)
+
+def view_jmlr_homepage(request, software_id):
+    entry = get_object_or_404(Software, pk=software_id)
+    entry.update_downloads()
+    return HttpResponseRedirect(entry.jmlr_mloss_url)
 
 def get_bibitem(request, software_id):
     entry = get_object_or_404(Software, pk=software_id)
+    entry.update_downloads()
     key=''
     authors=''
     author_list = entry.authors.split(',')
@@ -74,6 +89,7 @@ def get_bibitem(request, software_id):
 
 def get_paperbibitem(request, software_id):
     entry = get_object_or_404(Software, pk=software_id)
+    entry.update_downloads()
     key=''
     author_list = entry.authors.split(',')
     for i in xrange(len(author_list)):
@@ -151,5 +167,4 @@ def software_all_opsyss(request):
                                    queryset=opsyslist,
                                    template_name='software/opsys_list.html',
                                    )
-
 

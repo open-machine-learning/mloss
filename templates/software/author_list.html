@@ -1,8 +1,10 @@
 {% extends "software/base_software.html" %}
 {% load paginator %}
+{% block title %}Authors{% endblock %}
+
+{% block billboard %}Authors{% endblock %}
 
 {% block content %}
-    <h2>Authors</h2>
     {% paginator 5 %}
     <ul>
     {% for curauthor in object_list %}

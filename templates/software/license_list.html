@@ -1,8 +1,10 @@
 {% extends "software/base_software.html" %}
 {% load paginator %}
+{% block title %}Software Licenses{% endblock %}
+
+{% block billboard %}Software Licenses{% endblock %}
 
 {% block content %}
-    <h2>Software Licenses</h2>
     {% paginator 5 %}
     <ul>
     {% for curlicense in object_list %}

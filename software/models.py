@@ -5,8 +5,7 @@ from django.utils.html import strip_tags
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
-from django.template.defaultfilters import slugify
-from utils import parsewords
+from utils import parsewords, slugify
 
 # make sure this list of variables is up-to-date (i.e. matches
 # the fields in the Software object
