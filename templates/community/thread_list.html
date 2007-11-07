@@ -61,8 +61,6 @@
 		{{ form.password }} (<a href="/accounts/password/reset/">
 			Forgotten your password?</a>)
 		</dt>
-		{% else %}
-		<dt><label>Posting as </label>{{ user.username }}</dt>
 		{% endif %}
 		<dt> <label for="id_title">Title:
 			{% if form.title.errors %}
@@ -72,10 +70,15 @@
 		<dt>
 		{{ form.title }}
 		</dt>
-		<dt><label>Posting
-			{% if form.body.errors %}
-			<span class="error">{{ form.body.errors|join:", " }}</span>
-			{% endif %}</label></dt>
+
+		{% if user.is_authenticated %}
+		<dt><label>Posting as {{ user.username }}:
+		{% else %}
+		<dt><label>Posting:
+		{% endif %}
+		{% if form.body.errors %}
+		<span class="error">{{ form.body.errors|join:", " }}</span>
+		{% endif %}</label></dt>
 		<dt>{{ form.body }}</dt>
 		<dd>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</dd>
 		<dd><input type="submit" name="preview" value="Preview comment"/>

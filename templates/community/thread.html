@@ -67,10 +67,10 @@
 		{{ form.password }} (<a href="/accounts/password/reset/">
 			Forgotten your password?</a>)
 		</dt>
-		{% else %}
-		<dt><label>Posting as </label>{{ user.username }}</dt>
-		{% endif %}
 		<dt><label>Posting
+		{% else %}
+		<dt><label>Posting as {{ user.username }}:
+		{% endif %}
 			{% if form.body.errors %}
 			<span class="error">{{ form.body.errors|join:", " }}</span>
 			{% endif %}
