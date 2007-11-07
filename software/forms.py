@@ -60,7 +60,7 @@ class UpdateSoftwareForm(forms.Form):
             required=False, help_text=u'BibTeX entry of a corresponding paper.')
     operating_systems = forms.CharField(widget=forms.TextInput(attrs={'size' : '40'}),
             label=u'Operating Systems',
-            help_text=u'A comma seperated list of supported OSes')
+            help_text=u'(required) A comma seperated list of supported OSes')
 
     def clean_authors(self):
         """
