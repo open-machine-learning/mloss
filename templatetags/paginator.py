@@ -19,6 +19,9 @@ def paginator(context, adjacent_pages=2):
                         if n > 0 and n <= context['pages']]
         results_this_page = context['object_list'].count()
         range_base = ((context['page'] - 1) * context['results_per_page'])
+        if len(page_numbers)<=1:
+            page_numbers=[]
+
         return {
             'hits': context['hits'],
             'results_per_page': context['results_per_page'],

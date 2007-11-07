@@ -101,7 +101,7 @@ class Post(models.Model):
 	def get_absolute_url(self):
 		p=0
 		for t in Post.objects.filter(thread=self.thread):
-			if t.id == self.thread.id:
+			if t.id == self.id:
 				return '/community/%s/%s/?page=%d#post%s' % (self.thread.forum.slug, self.thread.id, p / 10+1, self.id)
 			p+=1
 	
