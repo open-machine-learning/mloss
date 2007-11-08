@@ -12,6 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.sites.models import Site
 from django.views.generic import list_detail
 from software.models import Author, Tag, License, Language, OpSys
+from django.contrib.auth.models import User
 
 def software_detail(request, software_id):
     """
@@ -125,7 +126,7 @@ def rate(request, software_id):
 
 
 def software_all_authors(request):
-    authorlist = Author.objects.filter(name__isnull=False).distinct()
+    authorlist = Author.objects.filter(name__isnull=False).distinct().order_by('slug')
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=authorlist,
@@ -134,7 +135,7 @@ def software_all_authors(request):
 
 
 def software_all_tags(request):
-    taglist = Tag.objects.filter(name__isnull=False).distinct()
+    taglist = Tag.objects.filter(name__isnull=False).distinct().order_by('slug')
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=taglist,
@@ -143,7 +144,7 @@ def software_all_tags(request):
 
 
 def software_all_licenses(request):
-    licenselist = License.objects.filter(name__isnull=False).distinct()
+    licenselist = License.objects.filter(name__isnull=False).distinct().order_by('slug')
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=licenselist,
@@ -152,7 +153,7 @@ def software_all_licenses(request):
 
 
 def software_all_languages(request):
-    languagelist = Language.objects.filter(name__isnull=False).distinct()
+    languagelist = Language.objects.filter(name__isnull=False).distinct().order_by('slug')
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=languagelist,
@@ -161,10 +162,17 @@ def software_all_languages(request):
 
 
 def software_all_opsyss(request):
-    opsyslist = OpSys.objects.filter(name__isnull=False).distinct()
+    opsyslist = OpSys.objects.filter(name__isnull=False).distinct().order_by('slug')
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=opsyslist,
                                    template_name='software/opsys_list.html',
                                    )
 
+def user_with_software(request):
+    userlist = User.objects.filter(software__isnull=False).distinct().order_by('username')
+    return list_detail.object_list(request,
+                                   paginate_by=20,
+                                   queryset=userlist,
+                                   template_name='software/user_list.html',
+                                   )

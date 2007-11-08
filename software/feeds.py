@@ -17,12 +17,12 @@ def RssSoftwareFeed(request):
             language=u"en")
 
     for object in object_list:
-        link = 'http://%s/%s' % (Site.objects.get_current().domain, object.get_absolute_url())
+        link = 'http://%s%s' % (Site.objects.get_current().domain, object.get_absolute_url())
         feed.add_item( object.title.encode('utf-8'),
                 link, object.get_description_page(),
                 author_name=object.authors.encode('utf-8'),
                 pubdate=object.pub_date, unique_id=link,
-                categories=object.get_taglist())
+                categories=[x.name for x in object.get_taglist()] )
     response = HttpResponse(mimetype='application/xml')
     feed.write(response, 'utf-8')
     return response

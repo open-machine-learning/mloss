@@ -98,14 +98,62 @@ All entries
 			<div class="description">
 				{{ snippet.description|safe_markdown:"safe,cut=200" }}
 				<hr></hr>
-				<ul>
-					{% if snippet.authors %}<li><b>Authors:</b> {{ snippet.authors }}</li> {% endif %}
-					{% if snippet.os_license %}<li><b>License:</b> {{ snippet.os_license }}</li> {% endif %}
-					{% if snippet.language %}<li><b>Programming Language:</b> {{ snippet.language }}</li> {% endif %}
-					{% if snippet.operating_systems %}<li><b>Operating System:</b> {{ snippet.operating_systems }}</li> {% endif %}
-					{% if snippet.jmlr_mloss_url %}<li><b>JMLR-MLOSS Publication:</b> <a href="/software/jmlrhomepage/{{ snippet.id }}">JMLR Page</a></li> {% endif %}
-					{% if snippet.tags %} <li><b>Tags:</b> {{ snippet.tags }}</li> {% endif %}
-				</ul>
+				<table class="swdetails">
+					<tr><td>
+							<ul>
+								{% if snippet.get_authorlist %}
+								<li><b>Authors:</b>
+								{% for o in snippet.get_authorlist %}
+								<a href="/software/author/{{ o.slug }}">{{ o.name }}</a>
+								{% endfor %}
+								</li> 
+								{% endif %}
+
+								{% if snippet.get_licenselist %}
+								<li><b>License:</b>
+								{% for o in snippet.get_licenselist %}
+								<a href="/software/license/{{ o.slug }}">{{ o.name }}</a>
+								{% endfor %}
+								</li>
+								{% endif %}
+
+								{% if snippet.get_languagelist %}
+								<li><b>Programming Language:</b>
+								{% for o in snippet.get_languagelist %}
+								<a href="/software/language/{{ o.slug }}">{{ o.name }}</a>
+								{% endfor %}
+								</li>
+								{% endif %}
+							</ul>
+						</td>
+						<td>
+							<ul>
+
+								{% if snippet.get_opsyslist %}
+								<li><b>Operating System:</b>
+								{% for o in snippet.get_opsyslist %}
+								<a href="/software/opsys/{{ o.slug }}">{{ o.name }}</a>
+								{% endfor %}
+								</li>
+								{% endif %}
+
+								{% if snippet.jmlr_mloss_url %}
+								<li><b>JMLR-MLOSS Publication:</b>
+								<a href="/software/jmlrhomepage/{{ snippet.id }}">JMLR Page</a>
+								</li>
+								{% endif %}
+
+								{% if snippet.get_taglist %}
+								<li><b>Tags:</b>
+								{% for o in snippet.get_taglist %}
+								<a href="/software/tags/{{ o.slug }}">{{ o.name }}</a>
+								{% endfor %}
+								</li>
+								{% endif %}
+							</ul>
+						</td>
+					</tr>
+				</table>
 			</div>
 </td></tr></table>
 {% endfor %}

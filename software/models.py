@@ -149,7 +149,6 @@ class SoftwareManager(models.Manager):
         Returns a QuerySet of Software sorted by a particular language.
         
         """
-        print language
         return self.filter(languagelist__slug__exact=language)
 
     def get_by_opsys(self, opsys):
@@ -281,8 +280,16 @@ class Software(models.Model):
         self.update_list('languagelist','Language','language')
         self.update_list('opsyslist','OpSys','operating_systems')
 
+    def get_authorlist(self):
+        return [ x for x in self.authorlist.all() ]
     def get_taglist(self):
-        return [x.strip().encode('utf-8') for x in self.tags.split(',')]
+        return [ x for x in self.taglist.all() ]
+    def get_licenselist(self):
+        return [ x for x in self.licenselist.all() ]
+    def get_languagelist(self):
+        return [ x for x in self.languagelist.all() ]
+    def get_opsyslist(self):
+        return [ x for x in self.opsyslist.all() ]
 
     def get_description_page(self):
         s="<html>" + self.description_html + "</html>"

@@ -14,7 +14,7 @@ def software_by_user(request, username):
     user = get_object_or_404(User, username__exact=username)
     return list_detail.object_list(request,
                                    paginate_by=20,
-                                   queryset=Software.objects.get_by_submitter(user.username),
+                                   queryset=Software.objects.get_by_submitter(user.username).order_by('-pub_date'),
                                    extra_context={ 'object': user },
                                    template_name='software/software_list.html'
                                    )
@@ -26,7 +26,7 @@ def software_by_author(request, slug):
     author = get_object_or_404(Author, slug__exact=slug)
     return list_detail.object_list(request,
                                    paginate_by=20,
-                                   queryset=Software.objects.get_by_author(author.slug),
+                                   queryset=Software.objects.get_by_author(author.slug).order_by('-pub_date'),
                                    extra_context={ 'object':author },
                                    template_name='software/software_list.html',
                                    )
@@ -38,7 +38,7 @@ def software_by_tag(request, slug):
     tag = get_object_or_404(Tag, slug__exact=slug)
     return list_detail.object_list(request,
                                    paginate_by=20,
-                                   queryset=Software.objects.get_by_tag(tag.slug),
+                                   queryset=Software.objects.get_by_tag(tag.slug).order_by('-pub_date'),
                                    extra_context={ 'object':tag },
                                    template_name='software/software_list.html',
                                    )
@@ -50,7 +50,7 @@ def software_by_license(request, slug):
     lic = get_object_or_404(License, slug__exact=slug)
     return list_detail.object_list(request,
                                    paginate_by=20,
-                                   queryset=Software.objects.get_by_license(lic.slug),
+                                   queryset=Software.objects.get_by_license(lic.slug).order_by('-pub_date'),
                                    extra_context={ 'object':lic },
                                    template_name='software/software_list.html',
                                    )
@@ -62,7 +62,7 @@ def software_by_language(request, slug):
     language = get_object_or_404(Language, slug__exact=slug)
     return list_detail.object_list(request,
                                    paginate_by=20,
-                                   queryset=Software.objects.get_by_language(language.slug),
+                                   queryset=Software.objects.get_by_language(language.slug).order_by('-pub_date'),
                                    extra_context={ 'object':language },
                                    template_name='software/software_list.html',
                                    )
@@ -74,7 +74,7 @@ def software_by_opsys(request, slug):
     opsys = get_object_or_404(OpSys, slug__exact=slug)
     return list_detail.object_list(request,
                                    paginate_by=20,
-                                   queryset=Software.objects.get_by_opsys(opsys.slug),
+                                   queryset=Software.objects.get_by_opsys(opsys.slug).order_by('-pub_date'),
                                    extra_context={ 'object':opsys },
                                    template_name='software/software_list.html',
                                    )
@@ -97,7 +97,7 @@ def software_by_title(request):
     List of Software ranked by date
     """
 
-    softwarelist = Software.objects.all().order_by('title')
+    softwarelist = Software.objects.all().order_by('title','-pub_date')
 
     return list_detail.object_list(request,
                                    paginate_by=10,
@@ -110,7 +110,7 @@ def software_by_views(request):
     List of Software ranked by vies
     """
 
-    softwarelist = Software.objects.all().order_by('-total_number_of_views')
+    softwarelist = Software.objects.all().order_by('-total_number_of_views','-pub_date')
 
     return list_detail.object_list(request,
                                    paginate_by=10,
@@ -122,7 +122,7 @@ def software_by_downloads(request):
     List of Software ranked by downloads
     """
 
-    softwarelist = Software.objects.all().order_by('-total_number_of_downloads')
+    softwarelist = Software.objects.all().order_by('-total_number_of_downloads','-pub_date')
 
     return list_detail.object_list(request,
                                    paginate_by=10,
