@@ -93,8 +93,8 @@
 								</p>
 
                                 <p class="more">
-                                {{ object.total_number_of_views }} view(s) ({{ todays_stats.number_of_views }} today) ,
-                                {{ object.total_number_of_downloads }} download(s) ( {{ todays_stats.number_of_downloads }} today )
+								{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize}} ({{ todays_stats.number_of_views }} today) ,
+								{{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize}} ( {{ todays_stats.number_of_downloads }} today )
                                 </p>
 							</td>
 							{% if object.total_number_of_votes %}
@@ -139,14 +139,22 @@
 					<dd> <a href="/software/jmlrhomepage/{{ object.id }}">JMLR-MLOSS Paper Homepage</a></dd>
 					{% endif %}
 
-					{% if object.operating_systems %}
-					<dt>Supported Operating Systems:</dt>
-					<dd>{{ object.operating_systems }}</dd>
+					{% if object.get_opsyslist %}
+					<dt>Supported Operating Systems:</dt><dd>
+					{% for o in object.get_opsyslist %}
+					<a href="/software/opsys/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
+					{% endif %}
+					{% endfor %}
+					</dd>
 					{% endif %}
 
-					{% if object.tags %}
-					<dt>Tag(s):</dt>
-					<dd> {{ object.tags }} </dd>
+					{% if object.get_taglist %}
+					<dt>Tags:</dt><dd>
+					{% for o in object.get_taglist %}
+					<a href="/software/tags/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
+					{% endif %}
+					{% endfor %}
+					</dd>
 					{% endif %}
 
 					{% if object.tarball %}

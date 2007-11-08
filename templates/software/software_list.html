@@ -78,10 +78,10 @@ All entries
 							]
 
 							{% if snippet.total_number_of_views %}
-							{{ snippet.total_number_of_views }} view(s)
+							{{ snippet.total_number_of_views }} view{{ snippet.total_number_of_views|pluralize }}
 							{% endif %}
 							{% if snippet.total_number_of_downloads %}
-							, {{ snippet.total_number_of_downloads }} download(s)
+							, {{ snippet.total_number_of_downloads }} download{{ snippet.total_number_of_downloads|pluralize }}
 							{% endif %}
 							</p>
 						</td>
@@ -104,7 +104,8 @@ All entries
 								{% if snippet.get_authorlist %}
 								<li><b>Authors:</b>
 								{% for o in snippet.get_authorlist %}
-								<a href="/software/author/{{ o.slug }}">{{ o.name }}</a>
+								<a href="/software/author/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
+								{% endif %}
 								{% endfor %}
 								</li> 
 								{% endif %}
@@ -112,7 +113,8 @@ All entries
 								{% if snippet.get_licenselist %}
 								<li><b>License:</b>
 								{% for o in snippet.get_licenselist %}
-								<a href="/software/license/{{ o.slug }}">{{ o.name }}</a>
+								<a href="/software/license/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
+								{% endif %}
 								{% endfor %}
 								</li>
 								{% endif %}
@@ -120,7 +122,8 @@ All entries
 								{% if snippet.get_languagelist %}
 								<li><b>Programming Language:</b>
 								{% for o in snippet.get_languagelist %}
-								<a href="/software/language/{{ o.slug }}">{{ o.name }}</a>
+								<a href="/software/language/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
+								{% endif %}
 								{% endfor %}
 								</li>
 								{% endif %}
@@ -132,7 +135,8 @@ All entries
 								{% if snippet.get_opsyslist %}
 								<li><b>Operating System:</b>
 								{% for o in snippet.get_opsyslist %}
-								<a href="/software/opsys/{{ o.slug }}">{{ o.name }}</a>
+								<a href="/software/opsys/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
+								{% endif %}
 								{% endfor %}
 								</li>
 								{% endif %}
@@ -146,7 +150,8 @@ All entries
 								{% if snippet.get_taglist %}
 								<li><b>Tags:</b>
 								{% for o in snippet.get_taglist %}
-								<a href="/software/tags/{{ o.slug }}">{{ o.name }}</a>
+								<a href="/software/tags/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
+								{% endif %}
 								{% endfor %}
 								</li>
 								{% endif %}
