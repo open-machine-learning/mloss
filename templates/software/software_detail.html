@@ -83,7 +83,7 @@
 								</h2>
 								<p class="more">
 								by <a href="/software{{ object.user.get_absolute_url|escape }}">{{ object.user.username }}</a> 
-								- {{ object.pub_date|date:"F j, Y, h:m:s" }}
+								- {{ object.pub_date|date:"F j, Y, H:i:s" }}
 								[
 								{% if object.project_url|escape %}<a href="{{ object.project_url|escape }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage"></img></a> {% endif %}
 								<a href="/software/bib/{{ object.id }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX"></img></a>
@@ -193,7 +193,7 @@
 				<dl><dd>
 				<div class="comment">
 					<dl>
-						<dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y, h:m:s" }})
+						<dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y, H:i:s" }})
 						, Karma
 						{% if user.is_authenticated %}
 						{% ifnotequal comment.user user %}

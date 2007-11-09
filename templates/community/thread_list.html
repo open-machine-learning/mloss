@@ -35,7 +35,7 @@
 <p><b>Thread:</b> {{thread.title|escape}}</p>
 <div id="threadlist">
 	<dl>
-		<dt id="post{{ posting.id }}">{{ posting.author }} ( on {{ posting.time|date:"F j, Y, h:m:s" }} )</dt>
+		<dt id="post{{ posting.id }}">{{ posting.author }} ( on {{ posting.time|date:"F j, Y, H:i:s" }} )</dt>
 	</dl>
 	{{ posting.body|safe_markdown:"safe" }}
 </div>

@@ -21,7 +21,7 @@
 			<tr>
 				<td>
 					<dl>
-						<dt id="post{{ post.id }}">{{ post.author }} ( on {{ post.time|date:"F j, Y, h:m:s" }} )</dt>
+						<dt id="post{{ post.id }}">{{ post.author }} ( on {{ post.time|date:"F j, Y, H:i:s" }} )</dt>
 						<dd>{{ post.body|safe_markdown:"safe" }}</dd>
 					</dl>
 				</td>
@@ -38,7 +38,7 @@
 {% if posting %}
 <h2>Preview</h2>
 <div id="threadlist">
-	<dt id="post{{ posting.id }}">{{ posting.author }} ( on {{ posting.time|date:"F j, Y, h:m:s" }} )</dt>
+	<dt id="post{{ posting.id }}">{{ posting.author }} ( on {{ posting.time|date:"F j, Y, H:i:s" }} )</dt>
 	{{ posting.body|safe_markdown:"safe" }}
 </div>
 {% endif %}
