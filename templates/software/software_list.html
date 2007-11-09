@@ -58,70 +58,74 @@ All entries
 
 {% paginator 5%} 
 
-{% for snippet in object_list %}
-<table {% if snippet.jmlr_mloss_url|escape %} class="jmlr" {% else %} class="swlist"{% endif %}>
+{% for object in object_list %}
+<table {% if object.jmlr_mloss_url|escape %} class="jmlr" {% else %} class="swlist"{% endif %}>
 	<tr><td>
 			<div class="rating">
 				<table><tr><td valign="top">
 							<h2>
+								{% if object.screenshot %}
+									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="30" height="32" align="top" alt="Logo"></img></a>
+								{% else %}
 								<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo"></img>
-								<a href="{{ snippet.get_absolute_url|escape }}"> {{ snippet.title }} {{ snippet.version }}</a>
+								{% endif %}
+								<a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}</a>
 							</h2>
 							<p class="more">
-							by <a href="/software{{ snippet.user.get_absolute_url|escape }}">{{ snippet.user.username }}</a> 
-							- {{ snippet.pub_date|date:"F j, Y, h:m:s" }}
+							by <a href="/software{{ object.user.get_absolute_url|escape }}">{{ object.user.username }}</a> 
+							- {{ object.pub_date|date:"F j, Y, h:m:s" }}
 							[
-							{% if snippet.project_url %}<a href="/software/homepage/{{ snippet.id }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage"></img></a> {% endif %}
-							<a href="/software/bib/{{ snippet.id }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX"></img></a>
-							{% if snippet.paper_bib %}<a href="/software/paperbib/{{ snippet.id }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper"></img></a>{% endif %}
-							{% if snippet.tarball %}<a href="/software/download/{{ snippet.id }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download"></img></a>{% endif %}
+							{% if object.project_url %}<a href="/software/homepage/{{ object.id }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage"></img></a> {% endif %}
+							<a href="/software/bib/{{ object.id }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX"></img></a>
+							{% if object.paper_bib %}<a href="/software/paperbib/{{ object.id }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper"></img></a>{% endif %}
+							{% if object.tarball %}<a href="/software/download/{{ object.id }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download"></img></a>{% endif %}
 							]
 
-							{% if snippet.total_number_of_views %}
-							{{ snippet.total_number_of_views }} view{{ snippet.total_number_of_views|pluralize }}
+							{% if object.total_number_of_views %}
+							{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize }}
 							{% endif %}
-							{% if snippet.total_number_of_downloads %}
-							, {{ snippet.total_number_of_downloads }} download{{ snippet.total_number_of_downloads|pluralize }}
+							{% if object.total_number_of_downloads %}
+							, {{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize }}
 							{% endif %}
 							</p>
 						</td>
-						{% if snippet.total_number_of_votes %}
+						{% if object.total_number_of_votes %}
 						<td class="rating">
 							<table class="starlab">
-								<tr><td class="starlab">Rating {% show_stars snippet.average_rating of 5 round to half %}</td></tr>
-								<tr><td class="starlab">( based on {{ snippet.total_number_of_votes }} vote(s) )</td></tr>
+								<tr><td class="starlab">Rating {% show_stars object.average_rating of 5 round to half %}</td></tr>
+								<tr><td class="starlab">( based on {{ object.total_number_of_votes }} vote(s) )</td></tr>
 							</table>
 						</td>
 						{% endif %}
 				</tr></table>
 			</div>
 			<div class="description">
-				{{ snippet.description|safe_markdown:"safe,cut=200" }}
+				{{ object.description|safe_markdown:"safe,cut=200" }}
 				<hr></hr>
 				<table class="swdetails">
 					<tr><td>
 							<ul>
-								{% if snippet.get_authorlist %}
+								{% if object.get_authorlist %}
 								<li><b>Authors:</b>
-								{% for o in snippet.get_authorlist %}
+								{% for o in object.get_authorlist %}
 								<a href="/software/author/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
 								{% endif %}
 								{% endfor %}
 								</li> 
 								{% endif %}
 
-								{% if snippet.get_licenselist %}
+								{% if object.get_licenselist %}
 								<li><b>License:</b>
-								{% for o in snippet.get_licenselist %}
+								{% for o in object.get_licenselist %}
 								<a href="/software/license/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
 								{% endif %}
 								{% endfor %}
 								</li>
 								{% endif %}
 
-								{% if snippet.get_languagelist %}
+								{% if object.get_languagelist %}
 								<li><b>Programming Language:</b>
-								{% for o in snippet.get_languagelist %}
+								{% for o in object.get_languagelist %}
 								<a href="/software/language/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
 								{% endif %}
 								{% endfor %}
@@ -131,25 +135,24 @@ All entries
 						</td>
 						<td>
 							<ul>
-
-								{% if snippet.get_opsyslist %}
+								{% if object.get_opsyslist %}
 								<li><b>Operating System:</b>
-								{% for o in snippet.get_opsyslist %}
+								{% for o in object.get_opsyslist %}
 								<a href="/software/opsys/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
 								{% endif %}
 								{% endfor %}
 								</li>
 								{% endif %}
 
-								{% if snippet.jmlr_mloss_url %}
+								{% if object.jmlr_mloss_url %}
 								<li><b>JMLR-MLOSS Publication:</b>
-								<a href="/software/jmlrhomepage/{{ snippet.id }}">JMLR Page</a>
+								<a href="/software/jmlrhomepage/{{ object.id }}">JMLR Page</a>
 								</li>
 								{% endif %}
 
-								{% if snippet.get_taglist %}
+								{% if object.get_taglist %}
 								<li><b>Tags:</b>
-								{% for o in snippet.get_taglist %}
+								{% for o in object.get_taglist %}
 								<a href="/software/tags/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
 								{% endif %}
 								{% endfor %}
