@@ -9,7 +9,7 @@
     <ul>
     {% for curlanguage in object_list %}
         <li><a href="/software/language/{{ curlanguage.slug }}/">
-	    {{ curlanguage.name }}</a>
+	    {{ curlanguage.name|title }}</a>
 	</li>
     {% endfor %}
     </ul>

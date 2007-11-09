@@ -6,13 +6,16 @@
 {% block billboard %}Users who have software projects{% endblock %}
 
 {% block content %}
-	{% paginator 5 %}
-    <ul>
-    {% for curuser in object_list %}
-        <li><a href="/software/users/{{ curuser.username }}/">
-	    {{ curuser.username }}</a>
+{% paginator 5 %}
+<ul>
+	{% for curuser in object_list %}
+	<li><a href="/software/users/{{ curuser.username }}/">
+		{{ curuser.username }}</a>
+	{% if curuser.get_full_name %}
+	({{ curuser.get_full_name }})
+	{% endif %}
 	</li>
-    {% endfor %}
-    </ul>
-	{% paginator 5 %}
+	{% endfor %}
+</ul>
+{% paginator 5 %}
 {% endblock %}

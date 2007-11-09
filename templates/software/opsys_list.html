@@ -10,7 +10,7 @@
     <ul>
     {% for curopsys in object_list %}
         <li><a href="/software/opsys/{{ curopsys.slug }}/">
-	    {{ curopsys.name }}</a>
+	    {{ curopsys.name|title }}</a>
 	</li>
     {% endfor %}
     </ul>

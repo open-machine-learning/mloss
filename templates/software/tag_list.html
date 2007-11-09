@@ -9,7 +9,7 @@
     <ul>
     {% for curtag in object_list %}
         <li><a href="/software/tags/{{ curtag.slug }}/">
-	    {{ curtag.name }}</a>
+	    {{ curtag.name|title }}</a>
 	</li>
     {% endfor %}
     </ul>

@@ -9,7 +9,7 @@
     <ul>
     {% for curlicense in object_list %}
         <li><a href="/software/license/{{ curlicense.slug }}/">
-	    {{ curlicense.name }}</a>
+	    {{ curlicense.name|title }}</a>
 	</li>
     {% endfor %}
     </ul>
