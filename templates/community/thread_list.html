@@ -2,6 +2,7 @@
 
 {% extends "community/forum_base.html" %}
 {% block title %}{{ forum.title }}{% endblock %}
+{% block billboard %}Forum: {{ forum.title }}{% endblock %}
 {% block pagetitle %}{{ forum.title }}{% endblock %}
 
 {% block breadcrumbs %} &raquo; <a href='{{ forum.get_absolute_url }}'>{{ forum.title }}</a> ({{ forum.threads }} thread{{ forum.threads|pluralize }}, {{ forum.posts }} post{{ forum.posts|pluralize }}){% endblock %}
@@ -11,22 +12,21 @@
 <br></br>
 {% if threads %}
 <table id='djangoForumThreadList'>
+    <tr>
+        <th>Thread</th>
+        <th style='width: 50px;'>Posts</th>
+        <th style='width: 50px;'>Views</th>
+        <th style='width: 220px;'>Last Post</th>
+    </tr>
 
-	<tr>
-		<th>Thread</th>
-		<th style='width: 50px;'>Posts</th>
-		<th style='width: 50px;'>Views</th>
-		<th style='width: 220px;'>Last Post</th>
-	</tr>
-
-	{% for t in threads %}
-	<tr>
-		<td>{% if t.sticky %}Sticky {% endif %}<a href='{{ t.get_absolute_url }}'>{{ t.title }}</a>{% if t.closed %} (Closed){% endif %}</td>
-		<td style='width: 50px;'>{{ t.posts }}</td>
-		<td style='width: 50px;'>{{ t.views }}</td>
-		<td style='width: 220px;' class='djangoForumThreadLastPost'>{{ t.thread_latest_post.time|timesince }} ago by {{ t.thread_latest_post.author }} (<a href='{{ t.thread_latest_post.get_absolute_url }}'>view</a>)</td>
-	</tr>
-	{% endfor %}
+    {% for t in threads %}
+    <tr>
+        <td>{% if t.sticky %}Sticky {% endif %}<a href='{{ t.get_absolute_url }}'>{{ t.title }}</a>{% if t.closed %} (Closed){% endif %}</td>
+        <td style='width: 50px;'>{{ t.posts }}</td>
+        <td style='width: 50px;'>{{ t.views }}</td>
+        <td style='width: 220px;' class='djangoForumThreadLastPost'>{{ t.thread_latest_post.time|timesince }} ago by {{ t.thread_latest_post.author }} (<a href='{{ t.thread_latest_post.get_absolute_url }}'>view</a>)</td>
+    </tr>
+    {% endfor %}
 </table>
 {% endif %}
 
@@ -34,61 +34,68 @@
 <h2>Preview</h2>
 <p><b>Thread:</b> {{thread.title|escape}}</p>
 <div id="threadlist">
-	<dl>
-		<dt id="post{{ posting.id }}">{{ posting.author }} ( on {{ posting.time|date:"F j, Y, H:i:s" }} )</dt>
-	</dl>
-	{{ posting.body|safe_markdown:"safe" }}
+    <dl>
+        <dt id="post{{ posting.id }}">{{ posting.author }} ( on {{ posting.time|date:"F j, Y, H:i:s" }} )</dt>
+    </dl>
+    {{ posting.body|safe_markdown:"safe" }}
 </div>
 {% endif %}
 
 <h2>Create a Thread</h2>
 <form method='post' action='{{form_action}}'>
-	<dl>
-		{% if not user.is_authenticated %}
-		<dd><h3>Please login to create a thread.</h3></dd>
-		<dt><label for="id_username"><tt>Username:</tt></label></dt>
-		<dt>
-		{% if form.username.errors %}
-		<span class="error">{{ form.username.errors|join:", " }}</span>
-		{% endif %}
-		{{ form.username }}
-		</dt>
-		<dt><label for="id_password"><tt>Password:</tt></label></dt>
-		<dt>
-		{% if form.password.errors %}
-		<span class="error">{{ form.password.errors|join:", " }}</span>
-		{% endif %}
-		{{ form.password }} (<a href="/accounts/password/reset/">
-			Forgotten your password?</a>)
-		</dt>
-		{% endif %}
-		<dt> <label for="id_title">Title:
-			{% if form.title.errors %}
-			<span class="error">{{ form.title.errors|join:", " }}</span>
-			{% endif %}
-		</label></dt>
-		<dt>
-		{{ form.title }}
-		</dt>
-
-		{% if user.is_authenticated %}
-		<dt><label>Posting as {{ user.username }}:
-		{% else %}
-		<dt><label>Posting:
-		{% endif %}
-		{% if form.body.errors %}
-		<span class="error">{{ form.body.errors|join:", " }}</span>
-		{% endif %}</label></dt>
-		<dt>{{ form.body }}</dt>
-		<dd>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</dd>
-		<dd><input type="submit" name="preview" value="Preview comment"/>
-		<input type="submit" name="post" value="Post Message"/></dd>
-	</dl>
+    <dl>
+        {% if not user.is_authenticated %}
+        <dd><h3>Please login to create a thread.</h3></dd>
+        <dt><label for="id_username"><tt>Username:</tt></label></dt>
+        <dt>
+        {% if form.username.errors %}
+        <span class="error">{{ form.username.errors|join:", " }}</span>
+        {% endif %}
+        {{ form.username }}
+        </dt>
+        <dt><label for="id_password"><tt>Password:</tt></label></dt>
+        <dt>
+        {% if form.password.errors %}
+        <span class="error">{{ form.password.errors|join:", " }}</span>
+        {% endif %}
+        {{ form.password }} (<a href="/accounts/password/reset/">
+            Forgotten your password?</a>)
+        </dt>
+        {% endif %}
+        <dt> <label for="id_title">Title:
+            {% if form.title.errors %}
+            <span class="error">{{ form.title.errors|join:", " }}</span>
+            {% endif %}
+        </label></dt>
+        <dt>
+        {{ form.title }}
+        </dt>
+        <dt><label>
+            {% if user.is_authenticated %}
+            Posting as {{ user.username }}:
+            {% else %}
+            Posting:
+            {% endif %}
+            {% if form.body.errors %}
+            <span class="error">{{ form.body.errors|join:", " }}</span>
+            {% endif %}</label></dt>
+        <dt>{{ form.body }}</dt>
+        <dd>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</dd>
+        <dd><input type="submit" name="preview" value="Preview comment"/>
+        <input type="submit" name="post" value="Post Message"/></dd>
+    </dl>
 </form>
 {% endblock %}
 
 {% block content-related %}
 <dl><dd>
-	Choose the thread thread you would like to read or contribute to. Or simply create a new one if the existing threads do not fit.
-	</dd></dl>
-	{% endblock %}
+    You are in Forum <a href='{{ forum.get_absolute_url }}'><b>{{ forum.title }}</b></a>.
+    Choose the thread thread you would like to read or contribute to. Or simply create a new one if the existing threads do not fit.
+    </dd>
+</dl>
+<dl>
+    <dd>
+    <h3><a href="/community/rss/{{forum.slug}}/"><img src="/media/images/rss.png" alt="RSS Feat" border="0" width="16" height="16" align="top"> RSS Feed</a></h3>
+    </dd>
+</dl>
+{% endblock %}

@@ -3,6 +3,7 @@
 
 {% extends "community/forum_base.html" %}
 {% block title %}{{ thread.title }} ({{ forum.title }}){% endblock %}
+{% block billboard %}Thread: {{ thread.title }} ({{ forum.title }}){% endblock %}
 
 {% block pagetitle %}{{ forum.title }} &raquo; {{ thread.title }}{% endblock %}
 
@@ -88,4 +89,9 @@
 {% block content-related %}
 <dl><dd>You are in Forum <a href='{{ forum.get_absolute_url }}'><b>{{ forum.title }}</b></a> looking at thread <a href='{{thread.get_absolute_url}}'><b>{{ thread.title }}</b></a>.
 </dd></dl>
+<dl>
+    <dd>
+    <h3><a href="/community/rss/{{forum.slug}}/{{thread.id}}/"><img src="/media/images/rss.png" alt="RSS Feat" border="0" width="16" height="16" align="top"> RSS Feed</a></h3>
+    </dd>
+</dl>
 {% endblock %}
