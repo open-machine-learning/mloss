@@ -78,7 +78,7 @@ All entries
 							{% if object.project_url %}<a href="/software/homepage/{{ object.id }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage"></img></a> {% endif %}
 							<a href="/software/bib/{{ object.id }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX"></img></a>
 							{% if object.paper_bib %}<a href="/software/paperbib/{{ object.id }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper"></img></a>{% endif %}
-							{% if object.tarball %}<a href="/software/download/{{ object.id }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download"></img></a>{% endif %}
+							{% if object.is_downloadable %}<a href="/software/download/{{ object.id }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download"></img></a>{% endif %}
 							]
 
 							{% if object.total_number_of_views %}

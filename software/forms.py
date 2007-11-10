@@ -15,17 +15,19 @@ from StringIO import StringIO
 import software.views.list
 import re
 
-#title_re = re.compile(r'^\w+$')
-title_re = re.compile(r'^[a-zA-Z0-9 ,\.]+$')
+version_re = re.compile(r'^[a-zA-Z0-9\.\- ]+$')
 authors_re = re.compile(r'^[a-zA-Z ,\.]+$')
+title_re = re.compile(r'^[a-zA-Z0-9 ,\.]+$')
 tags_re = re.compile(r'^[a-z0-9 ,]+$')
 os_license_re = re.compile(r'^[a-zA-Z0-9\. ,]+$')
 language_re = re.compile(r'^[a-zA-Z\+ ,]+$')
+os_re = re.compile(r'^[a-zA-Z ,]+$')
 bib_re = re.compile(r'^[a-zA-Z{}@, \+ ,]+$')
 
 from models import Software, editables, dontupdateifempty
 
 class UpdateSoftwareForm(forms.Form):
+    title = forms.CharField(widget=forms.HiddenInput(), label=u'')
     version = forms.CharField(max_length=80,
             widget=forms.TextInput(attrs={'size' : '30'}), label=u'Version',
             help_text=u'(required)')
@@ -52,6 +54,10 @@ class UpdateSoftwareForm(forms.Form):
             help_text=u'(required) A comma seperated list, up to 200 characters long')
     tarball = forms.FileField(widget=forms.FileInput(attrs={'size' : '30'}),
             label=u'Project Archive', required=False)
+    download_url = forms.URLField(
+            widget=forms.TextInput(attrs={'size' : '60'}),
+            label=u'Download URL', required=False,
+            help_text=u'(required) Archive or direct download link')
     screenshot = forms.ImageField(widget=forms.FileInput(attrs={'size' : '30'}),
             label=u'Screenshot', required=False,
             help_text=u'Limited to 1280x1024 pixels and less than 200K; .png, .jpg or .gif only.')
@@ -61,6 +67,16 @@ class UpdateSoftwareForm(forms.Form):
     operating_systems = forms.CharField(widget=forms.TextInput(attrs={'size' : '40'}),
             label=u'Operating Systems',
             help_text=u'(required) A comma seperated list of supported OSes')
+
+    def clean_version(self):
+        """
+        Validates that version is alphanumeric
+        """
+        if 'version' in self.cleaned_data:
+            if not version_re.search(self.cleaned_data['version']):
+                raise forms.ValidationError(u'Version may only contain letters, numbers, minus, dots and spaces.')
+            else:
+                return self.cleaned_data['version']
 
     def clean_authors(self):
         """
@@ -144,6 +160,45 @@ class UpdateSoftwareForm(forms.Form):
 
         return self.cleaned_data['screenshot']
 
+    def clean_operating_systems(self):
+        """
+        Validates that operating system is alphanumeric, comma, whitespace
+        """
+        if 'operating_systems' in self.cleaned_data:
+            if not os_re.search(self.cleaned_data['operating_systems']):
+                raise forms.ValidationError(u'Operating system must be comma separated names and may only contain letters and spaces.')
+        return self.cleaned_data['operating_systems']
+
+    def clean(self):
+        """
+        Make sure that download url or tarball are given
+        """
+        err_msg=u'Either Project Archive or Download URL Required.'
+
+        # when both items are given raise an error
+        if ('tarball' in self.data and self.data['tarball']) and ('download_url' in self.data and self.data['download_url']):
+            self._errors['tarball'] = [err_msg]
+            self._errors['download_url'] = [err_msg]
+            raise forms.ValidationError(err_msg)
+
+        # check whether a tarball is already stored
+        has_tarball = False
+        if 'title' in self.data:
+            try:
+                sw = Software.objects.get(title__exact=self.cleaned_data['title'])
+                has_tarball = sw.tarball and not ('download_url' in self.data and self.data['download_url'])
+            except Software.DoesNotExist:
+                pass
+
+        # if neither current software has a tarball nor has a tarball in the form nor has a 
+        # download url raise an error
+        if not ( has_tarball or ('tarball' in self.data and self.data['tarball']) or ('download_url' in self.data and self.data['download_url'])):
+            self._errors['tarball'] = [err_msg]
+            self._errors['download_url'] = [err_msg]
+            raise forms.ValidationError(err_msg)
+
+        return self.cleaned_data
+
 class SoftwareForm(UpdateSoftwareForm):
     title = forms.CharField(max_length=80,
             widget=forms.TextInput(attrs={'size' : '30'}),
@@ -211,6 +266,7 @@ def add_software(request):
                                     language=form.cleaned_data['language'],
                                     os_license=form.cleaned_data['os_license'],
                                     tarball=form.cleaned_data['tarball'],
+                                    download_url=form.cleaned_data['download_url'],
                                     screenshot=form.cleaned_data['screenshot'],
                                     )
             if original_id:
@@ -266,7 +322,10 @@ def edit_software(request, software_id):
                 if not field in dontupdateifempty or form.cleaned_data[field]:
                     setattr(software, field, form.cleaned_data[field])
 
-            save_tarball(request, software)
+            if form.cleaned_data['download_url'] and len(form.cleaned_data['download_url'])>0:
+                software.tarball = None
+            else:
+                save_tarball(request, software)
             save_screenshot(request, software)
             software.save()
             return HttpResponseRedirect(software.get_absolute_url())

@@ -133,7 +133,16 @@
       </span>
       {% endif %}
     </dt>
-    <dd>{{ form.tarball }}{{ form.tarball_file }}</dd>
+    <dd>{{ form.tarball }} {{ form.tarball_file }}</dd>
+    <dt>
+      {{ form.download_url.label }} <span class="help">{{ form.download_url.help_text }}</span>
+      {% if form.download_url.errors %}
+      <span class="error">
+        {{ form.download_url.errors|join:", " }}
+      </span>
+      {% endif %}
+    </dt>
+    <dd>{{ form.download_url }}</dd>
     <dt>
       {{ form.screenshot.label }} <span class="help">{{ form.screenshot.help_text }}</span>
       {% if form.screenshot.errors %}

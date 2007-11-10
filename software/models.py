@@ -11,7 +11,7 @@ from utils import parsewords, slugify
 # the fields in the Software object
 editables=('version','authors',
         'contact', 'description', 'project_url', 'tags', 'language',
-        'os_license', 'tarball', 'screenshot', 'operating_systems',
+        'os_license', 'tarball', 'download_url', 'screenshot', 'operating_systems',
         'paper_bib')
 
 # don't change db of the following fields if they are empty
@@ -208,6 +208,8 @@ class Software(models.Model):
     paper_bib = models.TextField(blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField()
+
+    download_url = models.URLField(verify_exists=False, blank=True, null=True)
     tarball = models.FileField(upload_to="code_archive/",blank=True,null=True)
 
     average_rating = models.FloatField(editable=False, default=-1)
@@ -227,6 +229,9 @@ class Software(models.Model):
        
 
     objects = SoftwareManager()
+
+    def is_downloadable(self):
+        return self.tarball or self.download_url
 
     def get(self, a, b):
         return self.__dict__[a]

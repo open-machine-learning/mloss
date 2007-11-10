@@ -6,13 +6,14 @@ rated and viewed according to various criteria.
 
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from software.models import Software, SoftwareRating, SoftwareStatistics
-from software.forms import RatingForm
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.sites.models import Site
 from django.views.generic import list_detail
-from software.models import Author, Tag, License, Language, OpSys
 from django.contrib.auth.models import User
+
+from software.models import Software, SoftwareRating, SoftwareStatistics
+from software.models import Author, Tag, License, Language, OpSys
+from software.forms import RatingForm
 
 def software_detail(request, software_id):
     """
@@ -51,21 +52,27 @@ def software_detail(request, software_id):
 def download_software(request, software_id):
     entry = get_object_or_404(Software, pk=software_id)
     entry.update_downloads()
-    return HttpResponseRedirect('/media/' + entry.tarball)
+
+    if entry.download_url:
+        return HttpResponseRedirect(entry.download_url)
+    elif entry.tarball:
+        return HttpResponseRedirect('/media/' + entry.tarball)
+    else:
+        raise Http404
 
 def view_homepage(request, software_id):
     entry = get_object_or_404(Software, pk=software_id)
-    entry.update_downloads()
+    entry.update_views()
     return HttpResponseRedirect(entry.project_url)
 
 def view_jmlr_homepage(request, software_id):
     entry = get_object_or_404(Software, pk=software_id)
-    entry.update_downloads()
+    entry.update_views()
     return HttpResponseRedirect(entry.jmlr_mloss_url)
 
 def get_bibitem(request, software_id):
     entry = get_object_or_404(Software, pk=software_id)
-    entry.update_downloads()
+    entry.update_views()
     key=''
     authors=''
     author_list = entry.authors.split(',')
@@ -90,7 +97,7 @@ def get_bibitem(request, software_id):
 
 def get_paperbibitem(request, software_id):
     entry = get_object_or_404(Software, pk=software_id)
-    entry.update_downloads()
+    entry.update_views()
     key=''
     author_list = entry.authors.split(',')
     for i in xrange(len(author_list)):
