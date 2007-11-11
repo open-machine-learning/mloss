@@ -234,7 +234,8 @@ class Software(models.Model):
         return self.tarball or self.download_url
 
     def get(self, a, b):
-        return self.__dict__[a]
+        if a in self.__dict__:
+            return self.__dict__[a]
 
     def update_list(self,listname,objname,fieldname):
         current = eval('self.'+listname+'.all()')

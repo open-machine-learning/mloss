@@ -25,135 +25,155 @@
 {% else %}
 <form method="POST" action="">
 {% endif %}
-  <dl>
-    <dt>
-      {{ form.title.label }} <span class="help">{{ form.title.help_text }}</span>
-      {% if form.title.errors %}
-      <span class="error">
-        {{ form.title.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.title }}</dd>
-    <dt>
-      {{ form.version.label }} <span class="help">{{ form.version.help_text }}</span>
-      {% if form.version.errors %}
-      <span class="error">
-        {{ form.version.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.version }}</dd>
-    <dt>
-      {{ form.authors.label }} <span class="help">{{ form.authors.help_text }}</span>
-      {% if form.authors.errors %}
-      <span class="error">
-        {{ form.authors.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.authors }}</dd>
-    <dt>
-      {{ form.contact.label }} <span class="help">{{ form.contact.help_text }}</span>
-      {% if form.contact.errors %}
-      <span class="error">
-        {{ form.contact.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.contact }}</dd>
-    <dt>
-      {{ form.description.label }} <span class="help">{{ form.description.help_text }}</span>
-      {% if form.description.errors %}
-      <span class="error">
-        {{ form.description.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.description }}</dd>
-    <dt>
-      {{ form.project_url.label }} <span class="help">{{ form.project_url.help_text }}</span>
-      {% if form.project_url.errors %}
-      <span class="error">
-        {{ form.project_url.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.project_url }}</dd>
-    <dt>
-      {{ form.tags.label }} <span class="help">{{ form.tags.help_text }}</span>
-      {% if form.tags.errors %}
-      <span class="error">
-        {{ form.tags.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.tags }}</dd>
-    <dt>
-      {{ form.language.label }} <span class="help">{{ form.language.help_text }}</span>
-      {% if form.language.errors %}
-      <span class="error">
-        {{ form.language.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.language }}</dd>
-    <dt>
-      {{ form.paper_bib.label }} <span class="help">{{ form.paper_bib.help_text }}</span>
-      {% if form.paper_bib.errors %}
-      <span class="error">
-        {{ form.paper_bib.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.paper_bib }}</dd>
-    <dt>
-      {{ form.operating_systems.label }} <span class="help">{{ form.operating_systems.help_text }}</span>
-      {% if form.operating_systems.errors %}
-      <span class="error">
-        {{ form.operating_systems.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.operating_systems }}</dd>
-    <dt>
-      {{ form.os_license.label }} <span class="help">{{ form.os_license.help_text }}</span>
-      {% if form.os_license.errors %}
-      <span class="error">
-        {{ form.os_license.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.os_license }}</dd>
-    <dt>
-      {{ form.tarball.label }} <span class="help">{{ form.tarball.help_text }}</span>
-      {% if form.tarball.errors %}
-      <span class="error">
-        {{ form.tarball.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.tarball }} {{ form.tarball_file }}</dd>
-    <dt>
-      {{ form.download_url.label }} <span class="help">{{ form.download_url.help_text }}</span>
-      {% if form.download_url.errors %}
-      <span class="error">
-        {{ form.download_url.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.download_url }}</dd>
-    <dt>
-      {{ form.screenshot.label }} <span class="help">{{ form.screenshot.help_text }}</span>
-      {% if form.screenshot.errors %}
-      <span class="error">
-        {{ form.screenshot.errors|join:", " }}
-      </span>
-      {% endif %}
-    </dt>
-    <dd>{{ form.screenshot }} {{ form.screenshot_file }}</dd>
-    <dt><input type="submit" value="Save" /></dt>
-  </dl>
+<dl>
+	<dd>
+	<table width="100%">
+		<tr>
+			<td>
+				<b>{{ form.title.label }}</b><br></br> <span class="help">{{ form.title.help_text }}</span>
+				{% if form.title.errors %}<br></br>
+				<span class="error">
+					{{ form.title.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.title }}</dd>
+			</td>
+			<td>
+				<b>{{ form.version.label }}</b><br></br> <span class="help">{{ form.version.help_text }}</span>
+				{% if form.version.errors %}<br></br>
+				<span class="error">
+					{{ form.version.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.version }}</dd>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>{{ form.authors.label }}</b><br></br> <span class="help">{{ form.authors.help_text }}</span>
+				{% if form.authors.errors %}<br></br>
+				<span class="error">
+					{{ form.authors.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.authors_choice }}{{ form.authors }}</dd>
+			</td>
+			<td>
+				<b>{{ form.contact.label }}</b><br></br> <span class="help">{{ form.contact.help_text }}</span>
+				{% if form.contact.errors %}<br></br>
+				<span class="error">
+					{{ form.contact.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.contact }}</dd>
+			</td> 
+		</tr>
+
+		<tr>
+			<td colspan="2">
+				<b>{{ form.description.label }}</b><br></br> <span class="help">{{ form.description.help_text }}</span>
+				{% if form.description.errors %}<br></br>
+				<span class="error">
+					{{ form.description.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.description }}</dd>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				{{ form.paper_bib.label }}<br></br> <span class="help">{{ form.paper_bib.help_text }}</span>
+				{% if form.paper_bib.errors %}<br></br>
+				<span class="error">
+					{{ form.paper_bib.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.paper_bib }}</dd>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				{{ form.tags.label }}<br></br> <span class="help">{{ form.tags.help_text }}</span>
+				{% if form.tags.errors %}<br></br>
+				<span class="error">
+					{{ form.tags.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.tags_choice }}{{ form.tags }}</dd>
+			</td>
+			<td>
+				<b>{{ form.language.label }}</b><br></br> <span class="help">{{ form.language.help_text }}</span>
+				{% if form.language.errors %}<br></br>
+				<span class="error">
+					{{ form.language.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.language_choice }}{{ form.language }}</dd>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>{{ form.operating_systems.label }}</b><br></br> <span class="help">{{ form.operating_systems.help_text }}</span>
+				{% if form.operating_systems.errors %}<br></br>
+				<span class="error">
+					{{ form.operating_systems.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.operating_systems_choice }}{{ form.operating_systems }}</dd>
+			</td>
+			<td>
+				<b>{{ form.os_license.label }}</b><br></br> <span class="help">{{ form.os_license.help_text }}</span>
+				{% if form.os_license.errors %}<br></br>
+				<span class="error">
+					{{ form.os_license.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.os_license_choice }}{{ form.os_license }}</dd>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				{{ form.project_url.label }}<br></br> <span class="help">{{ form.project_url.help_text }}</span>
+				{% if form.project_url.errors %}<br></br>
+				<span class="error">
+					{{ form.project_url.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.project_url }}</dd>
+			</td>
+			<td>
+				{{ form.screenshot.label }}<br></br> <span class="help">{{ form.screenshot.help_text }}</span>
+				{% if form.screenshot.errors %}<br></br>
+				<span class="error">
+					{{ form.screenshot.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.screenshot }} {{ form.screenshot_file }}</dd>
+			</tr>
+			<tr>
+				<td>
+					{{ form.tarball.label }}<br></br> <span class="help">{{ form.tarball.help_text }}</span>
+					{% if form.tarball.errors %}<br></br>
+					<span class="error">
+						{{ form.tarball.errors|join:", " }}
+					</span>
+					{% endif %}
+					<dd>{{ form.tarball }} {{ form.tarball_file }}</dd>
+				</td>
+				<td>
+					{{ form.download_url.label }}<br></br> <span class="help">{{ form.download_url.help_text }}</span>
+					{% if form.download_url.errors %}<br></br>
+					<span class="error">
+						{{ form.download_url.errors|join:", " }}
+					</span>
+					{% endif %}
+					<dd>{{ form.download_url }}</dd>
+				</td>
+			</tr>
+		</table>
+		</dd>
+		<dt><input type="submit" value="Save" /></dt>
+	</dl>
 </form>
 {% endblock %}
 

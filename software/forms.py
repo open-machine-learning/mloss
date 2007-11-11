@@ -10,8 +10,8 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.views.generic.create_update import update_object
 from django.newforms.widgets import RadioSelect
 from django.utils.html import strip_tags
-from software.models import Software
 from StringIO import StringIO  
+from software.models import Software, Language, License, Tag, Author, OpSys
 import software.views.list
 import re
 
@@ -27,46 +27,71 @@ bib_re = re.compile(r'^[a-zA-Z{}@, \+ ,]+$')
 from models import Software, editables, dontupdateifempty
 
 class UpdateSoftwareForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(UpdateSoftwareForm, self).__init__(*args, **kwargs)
+        self.fields['authors_choice'].choices = [('', '')] + [
+                (x.id, x.name) for x in Author.objects.all()]
+        self.fields['language_choice'].choices = [('', '')] + [
+                (x.id, x.name) for x in Language.objects.all()]
+        self.fields['tags_choice'].choices = [('', '')] + [
+                (x.id, x.name) for x in Tag.objects.all()]
+        self.fields['os_license_choice'].choices = [('', '')] + [
+                (x.id, x.name) for x in License.objects.all()]
+        self.fields['operating_systems_choice'].choices = [('', '')] + [
+                (x.id, x.name) for x in OpSys.objects.all()]
+
     title = forms.CharField(widget=forms.HiddenInput(), label=u'')
     version = forms.CharField(max_length=80,
-            widget=forms.TextInput(attrs={'size' : '30'}), label=u'Version',
+            widget=forms.TextInput(attrs={'size' : '20'}), label=u'Version',
             help_text=u'(required)')
     authors = forms.CharField(max_length=200, 
-            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Authors',
+            widget=forms.TextInput(attrs={'size' : '20'}), label=u'Authors',
             help_text=u'(required) A comma seperated list, up to 200 characters long')
+    authors_choice = forms.ChoiceField(widget=forms.Select(attrs={'size' : 1}), required=False)
+    
     contact = forms.EmailField(max_length=80, 
-            widget=forms.TextInput(attrs={'size' : '60'}), label=u"Main Author's Email Address",
+            widget=forms.TextInput(attrs={'size' : '30'}), label=u"Main Author's Email Address",
             help_text=u'(required)')
     description = forms.CharField(
             widget=forms.Textarea(attrs={"rows":20, "cols":70}), label=u'Description',
-            help_text=u'(required) The first paragraph, truncated at 500 characters, is displayed as the summary')
+            help_text=u'(required) The first paragraph, truncated at 200 characters, is displayed as the summary')
     project_url = forms.URLField(
-            widget=forms.TextInput(attrs={'size' : '60'}),
-            label=u'Project Homepage', required=False)
-    tags = forms.CharField(widget=forms.TextInput(attrs={'size' : '60'}),
+            widget=forms.TextInput(attrs={'size' : '30'}),
+            label=u'Project Homepage', required=False,
+            help_text=u'Project Homepage URL')
+    tags = forms.CharField(widget=forms.TextInput(attrs={'size' : '20'}),
             label=u'Tags', required=False,
             help_text=u'A comma seperated list of keywords')
+    tags_choice = forms.ChoiceField(widget=forms.Select(attrs={'size' : 1}), required=False)
+
     language = forms.CharField(max_length=200,
-            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Programming Language(s)',
+            widget=forms.TextInput(attrs={'size' : '20'}), label=u'Programming Language(s)',
             help_text=u'(required) A comma seperated list, up to 200 characters long')
+    language_choice = forms.ChoiceField(widget=forms.Select(attrs={'size' : 1}), required=False)
+
     os_license = forms.CharField(max_length=200,
-            widget=forms.TextInput(attrs={'size' : '60'}), label=u'Open Source License',
+            widget=forms.TextInput(attrs={'size' : '20'}), label=u'Open Source License',
             help_text=u'(required) A comma seperated list, up to 200 characters long')
-    tarball = forms.FileField(widget=forms.FileInput(attrs={'size' : '30'}),
-            label=u'Project Archive', required=False)
+    os_license_choice = forms.ChoiceField(widget=forms.Select(attrs={'size' : 1}), required=False)
+
+    tarball = forms.FileField(widget=forms.FileInput(attrs={'size' : '20'}),
+            label=u'Project Archive', required=False,
+            help_text=u'(required) Archive or direct download link')
     download_url = forms.URLField(
-            widget=forms.TextInput(attrs={'size' : '60'}),
+            widget=forms.TextInput(attrs={'size' : '30'}),
             label=u'Download URL', required=False,
             help_text=u'(required) Archive or direct download link')
-    screenshot = forms.ImageField(widget=forms.FileInput(attrs={'size' : '30'}),
+    screenshot = forms.ImageField(widget=forms.FileInput(attrs={'size' : '20'}),
             label=u'Screenshot', required=False,
             help_text=u'Limited to 1280x1024 pixels and less than 200K; .png, .jpg or .gif only.')
     paper_bib = forms.CharField(
-            widget=forms.Textarea(attrs={"rows":5, "cols":30}), label=u'Corresponding paper',
+            widget=forms.Textarea(attrs={"rows":8, "cols":70}), label=u'Corresponding paper',
             required=False, help_text=u'BibTeX entry of a corresponding paper.')
-    operating_systems = forms.CharField(widget=forms.TextInput(attrs={'size' : '40'}),
+
+    operating_systems = forms.CharField(widget=forms.TextInput(attrs={'size' : '20'}),
             label=u'Operating Systems',
             help_text=u'(required) A comma seperated list of supported OSes')
+    operating_systems_choice = forms.ChoiceField(widget=forms.Select(attrs={'size' : 1}), required=False)
 
     def clean_version(self):
         """
@@ -185,7 +210,7 @@ class UpdateSoftwareForm(forms.Form):
         has_tarball = False
         if 'title' in self.data:
             try:
-                sw = Software.objects.get(title__exact=self.cleaned_data['title'])
+                sw = Software.objects.get(title__exact=self.data['title'])
                 has_tarball = sw.tarball and not ('download_url' in self.data and self.data['download_url'])
             except Software.DoesNotExist:
                 pass
@@ -203,7 +228,7 @@ class SoftwareForm(UpdateSoftwareForm):
     title = forms.CharField(max_length=80,
             widget=forms.TextInput(attrs={'size' : '30'}),
             label=u'Title', required=True, help_text=u'(required) Up to 80 characters long')
-    
+
     def clean_title(self):
         """
         Validates that title is alphanumeric
@@ -232,13 +257,6 @@ def save_screenshot(request, object):
     if request.FILES.has_key('screenshot'):
         filename = request.FILES['screenshot']['filename']
         object.save_screenshot_file(filename, request.FILES['screenshot']['content'])
-
-def form_callback(f, **kw):
-    if f.name == 'description':
-        return forms.CharField(widget=forms.Textarea(attrs={"rows":30, "cols":80}))
-    elif f.name in ('tags', 'authors', 'contact', 'project_url'):
-        return forms.CharField(widget=forms.TextInput(attrs={'size':'60'}), required=not f.blank)
-    return f.formfield(**kw)
 
 def add_software(request):
     """
