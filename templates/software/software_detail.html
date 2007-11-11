@@ -100,10 +100,10 @@
 							{% if object.total_number_of_votes %}
 							<td class="rating">
 								<table class="starlab">
-									<tr><td class="starlab">Overall</td><td class="stars">{% show_stars object.average_rating of 5 round to half %}</td></tr>
-									<tr><td class="starlab">Features</td><td class="stars">{% show_stars object.average_features_rating of 5 round to half %}</td></tr>
-									<tr><td class="starlab">Usability</td><td class="stars">{% show_stars object.average_usability_rating of 5 round to half %}</td></tr>
-									<tr><td class="starlab">Documentation</td><td class="stars">{% show_stars object.average_documentation_rating of 5 round to half %}</td></tr>
+									<tr><td class="starlab">Overall</td><td class="stars"><nobr>{% show_stars object.average_rating of 5 round to half %}</nobr></td></tr>
+									<tr><td class="starlab">Features</td><td class="stars"><nobr>{% show_stars object.average_features_rating of 5 round to half %}</nobr></td></tr>
+									<tr><td class="starlab">Usability</td><td class="stars"><nobr>{% show_stars object.average_usability_rating of 5 round to half %}</nobr></td></tr>
+									<tr><td class="starlab">Documentation</td><td class="stars"><nobr>{% show_stars object.average_documentation_rating of 5 round to half %}</nobr></td></tr>
 									<tr><td colspan="2" class="starlab" align="center">(based on {{ object.total_number_of_votes }} vote{{ object.total_number_of_votes|pluralize }})</td></tr>
 								</table>
 							</td>

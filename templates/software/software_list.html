@@ -92,7 +92,7 @@ All entries
 						{% if object.total_number_of_votes %}
 						<td class="rating">
 							<table class="starlab">
-								<tr><td class="starlab">Rating {% show_stars object.average_rating of 5 round to half %}</td></tr>
+								<tr><td class="starlab">Rating <nobr>{% show_stars object.average_rating of 5 round to half %}</nobr></td></tr>
 								<tr><td class="starlab">(based on {{ object.total_number_of_votes }} vote{{ object.total_number_of_votes|pluralize }})</td></tr>
 							</table>
 						</td>
