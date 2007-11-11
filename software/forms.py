@@ -40,7 +40,10 @@ class UpdateSoftwareForm(forms.Form):
         self.fields['operating_systems_choice'].choices = [('', '')] + [
                 (x.id, x.name) for x in OpSys.objects.all().order_by('name')]
 
-    title = forms.CharField(widget=forms.HiddenInput(), label=u'')
+    #title = forms.CharField(widget=forms.HiddenInput(), label=u'')
+    title = forms.CharField(max_length=80,
+            widget=forms.TextInput(attrs={'size' : '30', 'readonly' : 'readonly'}),
+            label=u'Title', required=True, help_text=u'(read only)')
     version = forms.CharField(max_length=80,
             widget=forms.TextInput(attrs={'size' : '20'}), label=u'Version',
             help_text=u'(required)')
