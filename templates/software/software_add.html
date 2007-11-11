@@ -1,5 +1,48 @@
 {% extends "base_2col.html" %}
 
+{% block extrahead %}
+<script type="text/javascript">
+<!--
+function addStringToElement(element_id, combo_id)
+{
+	var out_field = document.getElementById(element_id);
+	var in_field = document.getElementById(combo_id);
+	var istr = in_field.options[in_field.selectedIndex].text.toLowerCase();
+	var ostr = out_field.value;
+
+	if (istr.length > 0)
+	{
+		if (ostr.length > 0)
+		{
+			ostr = ostr.split(',');
+			var found = false;
+
+			for (var i = 0; i < ostr.length; i++)
+			{
+				var s = ostr[i].replace(/^ */g, "");
+				s = s.replace(/ *$/g, "");
+				if (s == istr)
+				{
+					found = true;
+					alert("Item already in List!");
+					break;
+				}
+			}
+
+			if (!found)
+			{
+				out_field.value += ", ";
+				out_field.value += istr;
+			}
+		}
+		else
+			out_field.value += istr;
+	}
+};
+//-->
+</script>
+{% endblock %}
+
 {% block sectionid %}submit{% endblock %}
 
 {% block title %}Submit a software project{% endblock %}
@@ -10,8 +53,17 @@
 <dl>
     <dt>
     Submitting/Updating software project as user
-    {{ user.username }}
+	<a href="/software{{ user.get_absolute_url|escape }}">{{ user.username }}</a>.
     </dt>
+</dl>
+<dl>
+	<dt>
+	<h2>Hint</h2>
+	</dt>
+</dl>
+<dl>
+	<dd>For the fields <b>Authors, Tags, Programming Languages, Operating System, Open Source License</b>, select items from the drop down list or manually add new items. Separated items by a comma.
+	</dd>
 </dl>
 {% endblock %}
 
@@ -24,39 +76,44 @@
 <form enctype="multipart/form-data" method="POST" action="">
 {% else %}
 <form method="POST" action="">
-{% endif %}
-<dl>
-	<dd>
-	<table width="100%">
-		<tr>
-			<td>
-				<b>{{ form.title.label }}</b><br></br> <span class="help">{{ form.title.help_text }}</span>
-				{% if form.title.errors %}<br></br>
-				<span class="error">
-					{{ form.title.errors|join:", " }}
-				</span>
-				{% endif %}
-				<dd>{{ form.title }}</dd>
-			</td>
-			<td>
-				<b>{{ form.version.label }}</b><br></br> <span class="help">{{ form.version.help_text }}</span>
-				{% if form.version.errors %}<br></br>
-				<span class="error">
-					{{ form.version.errors|join:", " }}
-				</span>
-				{% endif %}
-				<dd>{{ form.version }}</dd>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<b>{{ form.authors.label }}</b><br></br> <span class="help">{{ form.authors.help_text }}</span>
-				{% if form.authors.errors %}<br></br>
-				<span class="error">
-					{{ form.authors.errors|join:", " }}
-				</span>
-				{% endif %}
-				<dd>{{ form.authors_choice }}{{ form.authors }}</dd>
+	{% endif %}
+	<dl>
+		<dd>
+		<table width="100%">
+			<tr>
+				<td>
+					<b>{{ form.title.label }}</b><br></br> <span class="help">{{ form.title.help_text }}</span>
+					{% if form.title.errors %}<br></br>
+					<span class="error">
+						{{ form.title.errors|join:", " }}
+					</span>
+					{% endif %}
+					<dd>{{ form.title }}</dd>
+				</td>
+				<td>
+					<b>{{ form.version.label }}</b><br></br> <span class="help">{{ form.version.help_text }}</span>
+					{% if form.version.errors %}<br></br>
+					<span class="error">
+						{{ form.version.errors|join:", " }}
+					</span>
+					{% endif %}
+					<dd>{{ form.version }}</dd>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<b>{{ form.authors.label }}</b><br></br> <span class="help">{{ form.authors.help_text }}</span>
+					{% if form.authors.errors %}<br></br>
+					<span class="error">
+						{{ form.authors.errors|join:", " }}
+					</span>
+					{% endif %}
+					<dd>{{ form.authors_choice }}{{ form.authors }}</dd>
+					<script type="text/javascript">
+						<!--
+						document.getElementById('{{ form.authors_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.authors.auto_id }}', '{{ form.authors_choice.auto_id }}');};
+//-->
+</script>
 			</td>
 			<td>
 				<b>{{ form.contact.label }}</b><br></br> <span class="help">{{ form.contact.help_text }}</span>
@@ -68,29 +125,6 @@
 				<dd>{{ form.contact }}</dd>
 			</td> 
 		</tr>
-
-		<tr>
-			<td colspan="2">
-				<b>{{ form.description.label }}</b><br></br> <span class="help">{{ form.description.help_text }}</span>
-				{% if form.description.errors %}<br></br>
-				<span class="error">
-					{{ form.description.errors|join:", " }}
-				</span>
-				{% endif %}
-				<dd>{{ form.description }}</dd>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				{{ form.paper_bib.label }}<br></br> <span class="help">{{ form.paper_bib.help_text }}</span>
-				{% if form.paper_bib.errors %}<br></br>
-				<span class="error">
-					{{ form.paper_bib.errors|join:", " }}
-				</span>
-				{% endif %}
-				<dd>{{ form.paper_bib }}</dd>
-			</td>
-		</tr>
 		<tr>
 			<td>
 				{{ form.tags.label }}<br></br> <span class="help">{{ form.tags.help_text }}</span>
@@ -100,6 +134,11 @@
 				</span>
 				{% endif %}
 				<dd>{{ form.tags_choice }}{{ form.tags }}</dd>
+				<script type="text/javascript">
+					<!--
+					document.getElementById('{{ form.tags_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.tags.auto_id }}', '{{ form.tags_choice.auto_id }}');};
+//-->
+</script>
 			</td>
 			<td>
 				<b>{{ form.language.label }}</b><br></br> <span class="help">{{ form.language.help_text }}</span>
@@ -109,6 +148,11 @@
 				</span>
 				{% endif %}
 				<dd>{{ form.language_choice }}{{ form.language }}</dd>
+				<script type="text/javascript">
+					<!--
+					document.getElementById('{{ form.language_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.language.auto_id }}', '{{ form.language_choice.auto_id }}');};
+//-->
+</script>
 			</td>
 		</tr>
 		<tr>
@@ -120,6 +164,11 @@
 				</span>
 				{% endif %}
 				<dd>{{ form.operating_systems_choice }}{{ form.operating_systems }}</dd>
+				<script type="text/javascript">
+					<!--
+					document.getElementById('{{ form.operating_systems_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.operating_systems.auto_id }}', '{{ form.operating_systems_choice.auto_id }}');};
+//-->
+</script>
 			</td>
 			<td>
 				<b>{{ form.os_license.label }}</b><br></br> <span class="help">{{ form.os_license.help_text }}</span>
@@ -129,6 +178,11 @@
 				</span>
 				{% endif %}
 				<dd>{{ form.os_license_choice }}{{ form.os_license }}</dd>
+				<script type="text/javascript">
+					<!--
+					document.getElementById('{{ form.os_license_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.os_license.auto_id }}', '{{ form.os_license_choice.auto_id }}');};
+//-->
+</script>
 			</td>
 		</tr>
 		<tr>
@@ -170,10 +224,31 @@
 					<dd>{{ form.download_url }}</dd>
 				</td>
 			</tr>
+			<tr>
+				<td colspan="2">
+					{{ form.paper_bib.label }}<br></br> <span class="help">{{ form.paper_bib.help_text }}</span>
+					{% if form.paper_bib.errors %}<br></br>
+					<span class="error">
+						{{ form.paper_bib.errors|join:", " }}
+					</span>
+					{% endif %}
+					<dd>{{ form.paper_bib }}</dd>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<b>{{ form.description.label }}</b><br></br> <span class="help">{{ form.description.help_text }}</span>
+					{% if form.description.errors %}<br></br>
+					<span class="error">
+						{{ form.description.errors|join:", " }}
+					</span>
+					{% endif %}
+					<dd>{{ form.description }}</dd>
+				</td>
+			</tr>
 		</table>
 		</dd>
 		<dt><input type="submit" value="Save" /></dt>
 	</dl>
 </form>
 {% endblock %}
-

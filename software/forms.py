@@ -30,15 +30,15 @@ class UpdateSoftwareForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(UpdateSoftwareForm, self).__init__(*args, **kwargs)
         self.fields['authors_choice'].choices = [('', '')] + [
-                (x.id, x.name) for x in Author.objects.all()]
+                (x.id, x.name) for x in Author.objects.all().order_by('name')]
         self.fields['language_choice'].choices = [('', '')] + [
-                (x.id, x.name) for x in Language.objects.all()]
+                (x.id, x.name) for x in Language.objects.all().order_by('name')]
         self.fields['tags_choice'].choices = [('', '')] + [
-                (x.id, x.name) for x in Tag.objects.all()]
+                (x.id, x.name) for x in Tag.objects.all().order_by('name')]
         self.fields['os_license_choice'].choices = [('', '')] + [
-                (x.id, x.name) for x in License.objects.all()]
+                (x.id, x.name) for x in License.objects.all().order_by('name')]
         self.fields['operating_systems_choice'].choices = [('', '')] + [
-                (x.id, x.name) for x in OpSys.objects.all()]
+                (x.id, x.name) for x in OpSys.objects.all().order_by('name')]
 
     title = forms.CharField(widget=forms.HiddenInput(), label=u'')
     version = forms.CharField(max_length=80,
@@ -53,7 +53,7 @@ class UpdateSoftwareForm(forms.Form):
             widget=forms.TextInput(attrs={'size' : '30'}), label=u"Main Author's Email Address",
             help_text=u'(required)')
     description = forms.CharField(
-            widget=forms.Textarea(attrs={"rows":20, "cols":70}), label=u'Description',
+            widget=forms.Textarea(attrs={"rows":15, "cols":70}), label=u'Description',
             help_text=u'(required) The first paragraph, truncated at 200 characters, is displayed as the summary')
     project_url = forms.URLField(
             widget=forms.TextInput(attrs={'size' : '30'}),
@@ -85,7 +85,7 @@ class UpdateSoftwareForm(forms.Form):
             label=u'Screenshot', required=False,
             help_text=u'Limited to 1280x1024 pixels and less than 200K; .png, .jpg or .gif only.')
     paper_bib = forms.CharField(
-            widget=forms.Textarea(attrs={"rows":8, "cols":70}), label=u'Corresponding paper',
+            widget=forms.Textarea(attrs={"rows":5, "cols":70}), label=u'Corresponding paper',
             required=False, help_text=u'BibTeX entry of a corresponding paper.')
 
     operating_systems = forms.CharField(widget=forms.TextInput(attrs={'size' : '20'}),

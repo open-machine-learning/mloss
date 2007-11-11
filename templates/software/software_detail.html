@@ -74,10 +74,10 @@
 							<td valign="top">
 								<h2>
 									{% if object.screenshot %}
-									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="128" height="80" alt='Screenshot'></img></a>
+									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="128" height="80" alt='Screenshot' title='Screenshot'></img></a>
 									<a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}</a>
 									{% else %}
-									<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo"></img>
+									<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
 									<a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}</a>
 									{% endif %}
 								</h2>
@@ -85,10 +85,10 @@
 								by <a href="/software{{ object.user.get_absolute_url|escape }}">{{ object.user.username }}</a> 
 								- {{ object.pub_date|date:"F j, Y, H:i:s" }}
 								[
-								{% if object.project_url|escape %}<a href="{{ object.project_url|escape }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage"></img></a> {% endif %}
-								<a href="/software/bib/{{ object.id }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX"></img></a>
-								{% if object.paper_bib %}<a href="/software/paperbib/{{ object.id }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper"></img></a>{% endif %}
-								{% if object.is_downloadable %}<a href="/software/download/{{ object.id }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download"></img></a>{% endif %}
+								{% if object.project_url|escape %}<a href="{{ object.project_url|escape }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage" title="Project Homepage"></img></a> {% endif %}
+								<a href="/software/bib/{{ object.id }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX" title="BibTeX"></img></a>
+								{% if object.paper_bib %}<a href="/software/paperbib/{{ object.id }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper" title="BibTeX for corresponding Paper"></img></a>{% endif %}
+								{% if object.is_downloadable %}<a href="/software/download/{{ object.id }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download" title="Download"></img></a>{% endif %}
 								]
 								</p>
 
