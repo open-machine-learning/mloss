@@ -11,10 +11,14 @@
 {% endblock %}
 
 {% block content-related %}
-<h2>Search<form method="POST" action="/software/search/">
-	<input type="text" name="searchterm" id="searchterm" size="10">
-	<button type="submit" name="post">Go</button>
-</form></h2>
+<h2>Search</h2>
+<dl><dd>
+	<form method="post" action="/software/search/">
+		<input type="text" name="searchterm" id="searchterm" size="10"></input>
+		<button type="submit" name="post">Go</button>
+	</form>
+	</dd>
+</dl>
 <h2>Manage</h2>
 <ul>
 {% if user.is_authenticated %}
@@ -40,7 +44,7 @@
     <li><a href="/software/language/">Programming Language</a></li>
     <li><a href="/software/opsys/">Operating System</a></li>
 </ul>
-<h3><a href="/software/rss/latest"><img src="/media/images/rss.png" alt="RSS Feat" border="0" width="16" height="16" align="top"> RSS Feed</a></h3>
+<h3><a href="/software/rss/latest"><img src="/media/images/rss.png" alt="RSS Feat" border="0" width="16" height="16" align="top"></img> RSS Feed</a></h3>
 {% endblock %}
 
 
