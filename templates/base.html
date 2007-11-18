@@ -28,22 +28,9 @@
 		<div id="container">
 			<div id="header">
 				<div id="name">Machine Learning Open Source Software</div>
-				<div id="accounts">
-					{% if user.is_authenticated %} Welcome
-					{% if user.first_name %}
-					<a href="/user/view/{{user.pk}}">{{user.first_name}}</a>
-					|
-					{% else %}
-					<a href="/user/view/{{user.pk}}">{{user}}</a>|
-					{% endif %}
-					<a href="/accounts/logout">Logout</a>
-					{% else %}
-					<a href="/accounts/login">Login</a>
-					{% endif %}
-				</div>
 				<div id="logo">
 					<a href="/">
-						<img id="logo" src="/media/images/mloss_flat_small.png" alt="mloss" width="165" height="64"></img>
+						<img id="logo" src="/media/images/temp-logo.jpg" alt="mloss.org" width="207" height="45"></img>
 					</a>
 				</div>
 				<ul id="nav-global">
@@ -58,14 +45,29 @@
 				</ul>
 			</div>
 			<!-- END Header -->
-			<div id="billboard">{% block billboard %}{% endblock %}</div>
+			<span id="billboard">
+			  {% block billboard %}{% endblock %}
+			</span>
+			<span id="accounts">&nbsp;&nbsp;
+			  {% if user.is_authenticated %} Welcome
+			  {% if user.first_name %}
+			  <a href="/user/view/{{user.pk}}">{{user.first_name}}</a>
+			  |
+			  {% else %}
+			  <a href="/user/view/{{user.pk}}">{{user}}</a>|
+			  {% endif %}
+			  <a href="/accounts/logout">Logout</a>
+			  {% else %}
+			  <a href="/accounts/login">Login</a>
+			  {% endif %}
+			</span>
 			<div id="columnwrap">
-				{% block columnwrap %}
-				<div id="content-main">
-					{% block content %}{% endblock %}
-				</div>
-				<!-- END #content-main -->
-				{% endblock %}
+			  {% block columnwrap %}
+			  <div id="content-main">
+			    {% block content %}{% endblock %}
+			  </div>
+			  <!-- END #content-main -->
+			  {% endblock %}
 			</div>
 			<!-- END #content -->
 			<div id="footer">
