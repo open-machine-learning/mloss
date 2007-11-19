@@ -17,6 +17,28 @@ editables=('version','authors',
 # don't change db of the following fields if they are empty
 dontupdateifempty=['tarball', 'screenshot']
 
+def clean_list(objname,fieldname):
+    curlist = []
+    allsoft = Software.objects.all()
+    for cursoft in allsoft:
+        tlist = parsewords(cursoft,fieldname)
+        for item in tlist:
+            curlist.append(item)
+
+    oldlist = eval(objname+'.objects.all()')
+    for item in oldlist:
+        if item.name not in curlist:
+            print 'deleting '+objname+' ' +str(item)
+            item.delete()
+
+def clean_all():
+    clean_list('Author','authors')
+    clean_list('Tag','tags')
+    clean_list('License','os_license')
+    clean_list('Language','language')
+    clean_list('OpSys','operating_systems')
+
+
 class Author(models.Model):
     name = models.CharField(maxlength=50, unique=True)
     slug = models.SlugField(editable=False)
