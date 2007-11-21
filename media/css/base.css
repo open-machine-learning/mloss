@@ -24,52 +24,39 @@ a:link, a:visited { color:#ffc757; }
 #pagination a:hover { color:#113366; background:#f7f7f7; }
 
 /* HEADER */
-#header { position:relative; height:70px; background:#336699; }
-#header #logo { position:absolute; width:207px; height=45px; left:10px; top:9px; padding:0;}
-#name { display:inline; text-align:left; padding-right: 20px; color:white;}
+#header #logo { position:absolute; width:315px; height:89px; left:20%; top:4px; display:inline; margin-left:-30px; text-align:left; padding-bottom:5px; }
+#header { position:relative; height:105px; background:#336699; }
+#accounts { position:absolute: width:10%; display:inline; text-align:right; background:#113366; color:#ffffff; padding:5em 5px 12px 7px}
+#accounts a { display:inline; text-align:right;color:#ffc757; background:#113366; padding:5em 1px 1px 1px }
 
 
 /* NAV */
 
 #nav-global { position:absolute; margin:0; bottom:0; right:0; font-family:"Trebuchet MS",sans-serif; white-space:nowrap; }
 #nav-global li { display:block; float:left; list-style-type:none; margin:0; padding:0; }
-/* #nav-global a { display:block; float:left; padding:5em 16px 10px 16px; background:#336699; } */
-#nav-global a {
-        float: left;
-        width: 90px;
-        height: 25px;
-        margin: 0 2px 0 2px;
-        padding: 9px 0 0 0;
-        background: #999999;
-        text-decoration: none;
-        text-align: center;
-        font-size: 1.1em;
-        font-weight: bold;
-        color: #113366;
-}
-#nav-global a:hover { color:#f7f7f7; background:#224477; }
-#news #nav-news a, #browse #nav-browse a, #submit #nav-submit a, #community #nav-community a, #Workshop #nav-workshop a, #links #nav-links a, #faq #nav-faq a, #About #nav-about a { 
-      color:#f7f7f7;
-      background:#113366;
-      bottom repeat-x;
-}
+#nav-global a { display:block; float:left; padding:1em 10px 10px 10px; background:#336699; }
+#nav-global a:hover { color:#f7f7f7; background:#113366; }
+#news #nav-news a, #browse #nav-browse a, #submit #nav-submit a, #community #nav-community a, #Workshop #nav-workshop a, #links #nav-links a, #faq #nav-faq a, #About #nav-about a { color:#113366; background:#f7f7f7; bottom repeat-x; }
 #nav-global h1,h2,h3 { margin-top:.8em; font-family:"Trebuchet MS",sans-serif; font-weight:normal; }
 #nav-global h1 { font-size:158%; margin-top:.6em; margin-bottom:.6em; color:#FFFFFF; line-height:1.1em; }
 #nav-global h2 { font-size:110%; margin-top:1em; margin-bottom:.2em; line-height:1.2em; color:#FFFFFF; }
 
 /* COLUMNS */
-
-#columnwrap { background:#336699; padding-bottom:10px; }
-#content-main { float:right; width:80%; background:white; color:black; padding-bottom:10px; }
-#generic #content-main, #code #content-main { width:100%; }
-#content-main * { margin-left:22px; margin-right:24px; }
-#content-main * * { margin-left:0; margin-right:0; }
+#columnwrap { background:#336699; padding-bottom:10px;}
+#subwrap { background:#000000; float:left; width:70%; padding-bottom:10px; }
 .sidebar { font-size:92%; }
 .sidebar * { margin-left:14px; margin-right:14px; }
 .sidebar * * { margin-left:0; margin-right:0; }
+#content-extra { float:left; width:20%; }
 #content-related { float:left; width:20%;}
 #content-related h2 { font-weight:normal; font-size:150%; margin-bottom:0em;}
 #content-related ul,form { margin-top:0.5ex; margin-bottom:0.5ex;}
+.subcol-primary, .subcol-secondary { width:40%; float:left; padding-bottom:1.2em; }
+.subcol-primary { margin-right:1%; }
+#content-main { float:left; width:80%; background:white; color:black; padding-bottom:10px; }
+#generic #content-main, #code #content-main { width:100%; }
+#content-main * { margin-left:22px; margin-right:24px; }
+#content-main * * { margin-left:0; margin-right:0; }
 
 /* CONTENT */
 
@@ -122,12 +109,9 @@ dd { margin-bottom:.8em; }
 
 /* BILLBOARDS */
 
-#generic #billboard { display:none; }
-#billboard { float:right; width:80%; background:#113366; font-size:150%; line-height:2.4ex; text-align:center; color:#f7f7f7; padding-bottom:4px; padding-top:2px; border-bottom:5px solid #336699; }
 #billboard h2 { margin:0; }
-
-#accounts { float:left; width:20%; background:#113366; text-align:left; color:#f7f7f7; padding-top:6px; padding-bottom:7px; border-bottom:5px solid #336699; }
-#accounts a { color:#ffc757; }
+#generic #billboard { display:none; }
+#billboard { background:#F7F7F7 repeat-x; border-bottom:6px solid #113366; font-size:150%; line-height:2.4ex; padding-left:1em; text-align:left; color:#113366; }
 
 /* COMMENTS */
 
