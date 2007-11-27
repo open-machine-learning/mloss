@@ -6,7 +6,7 @@ def parsewords(curobj,fieldname='language'):
     """
     Returns a set of words contained in fieldname
     """
-    DELIMITERS = ','
+    DELIMITERS = '(,| and )'
     STOPWORDS = set(['',',','and','et.al.','et.al','etal','others'])
     
     unique_words = list()
