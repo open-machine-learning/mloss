@@ -6,14 +6,15 @@ def parsewords(curobj,fieldname='language'):
     """
     Returns a set of words contained in fieldname
     """
-    DELIMITERS = '(,| and )'
+    DELIMITERS = '(,| and |et\.?al\.?)'
     STOPWORDS = set(['',',','and','et.al.','et.al','etal','others'])
     
     unique_words = list()
     curstr = eval('curobj.'+fieldname)
+    curstr = curstr.lower()
     curwords = re.split(DELIMITERS,curstr)
     for word in curwords:
-        cleanword = word.strip().lower()
+        cleanword = word.strip()
         if (cleanword not in unique_words) and (cleanword not in STOPWORDS):
             unique_words.append(cleanword)
 
