@@ -20,18 +20,19 @@ MANAGERS = ADMINS
 if PRODUCTION:
     SERVER_EMAIL = 'admin@mloss.org'
     
-DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
 if PRODUCTION:
-    DATABASE_NAME = '/home/mloss/media/db/mloss.db'             # Or path to database file if using sqlite3.
+    DATABASE_USER = 'mloss'             # Not used with sqlite3.
+    DATABASE_PASSWORD = 'XXXXXXXXX'     # Not used with sqlite3.
+    DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
+    DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+    DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
+    DATABASE_NAME = 'mloss'             # Or path to database file if using sqlite3.
     EMAIL_HOST='mailhost.tuebingen.mpg.de'
 else:
+    DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
     DATABASE_NAME = 'mloss.db'             # Or path to database file if using sqlite3.
     EMAIL_HOST='localhost'
 
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 
 LOGIN_REDIRECT_URL='/'
