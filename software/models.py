@@ -360,6 +360,7 @@ class Software(models.Model):
         self.save(auto_update_date=False)
         e=self.get_stats_for_today()
         e.update_views()
+        return e
 
     def update_downloads(self):
         if self.total_number_of_downloads:

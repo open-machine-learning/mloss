@@ -28,8 +28,7 @@ def software_detail(request, software_id):
     
     """
     entry = get_object_or_404(Software, pk=software_id)
-    entry.update_views()
-    todays_stats = entry.get_stats_for_today()
+    todays_stats = entry.update_views()
 
     ratingform = None
 
