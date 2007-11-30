@@ -8,6 +8,7 @@ def parsewords(curobj,fieldname='language'):
     """
     DELIMITERS = '(,| and |et\.?al\.?)'
     STOPWORDS = set(['',',','and','et.al.','et.al','etal','others'])
+    STRIPLIST = ('.',',')
     
     unique_words = list()
     curstr = eval('curobj.'+fieldname)
@@ -15,6 +16,9 @@ def parsewords(curobj,fieldname='language'):
     curwords = re.split(DELIMITERS,curstr)
     for word in curwords:
         cleanword = word.strip()
+        while cleanword.startswith(STRIPLIST) or cleanword.endswith(STRIPLIST):
+            for stripchar in STRIPLIST:
+                cleanword = cleanword.strip(stripchar)
         if (cleanword not in unique_words) and (cleanword not in STOPWORDS):
             unique_words.append(cleanword)
 
