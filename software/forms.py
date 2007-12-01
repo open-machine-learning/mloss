@@ -169,7 +169,7 @@ class UpdateSoftwareForm(forms.Form):
         if 'screenshot' in self.data:
             screenshot = self.data['screenshot']
             if screenshot and screenshot.get('content-type') not in ('image/jpeg',
-                    'image/gif', 'image/png'):
+                    'image/gif', 'image/png', 'image/x-png', 'image/pjpeg'):
                 raise forms.ValidationError(u'Only images of type png, gif or jpeg allowed.')
 
             if len(screenshot['content']) > settings.MAX_IMAGE_UPLOAD_SIZE * 1024:
@@ -285,9 +285,11 @@ def add_software(request):
                                     project_url=form.cleaned_data['project_url'],
                                     tags=form.cleaned_data['tags'],
                                     language=form.cleaned_data['language'],
+                                    operating_systems = form.cleaned_data['operating_systems'],
                                     os_license=form.cleaned_data['os_license'],
-                                    tarball=form.cleaned_data['tarball'],
+                                    paper_bib = form.cleaned_data['paper_bib'],
                                     download_url=form.cleaned_data['download_url'],
+                                    tarball=form.cleaned_data['tarball'],
                                     screenshot=form.cleaned_data['screenshot'],
                                     )
             if original_id:
