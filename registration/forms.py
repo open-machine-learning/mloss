@@ -19,6 +19,7 @@ attrs_dict = { 'class': 'required' }
 
 
 username_re = re.compile(r'^\w+$')
+name_re = re.compile(r'^[a-zA-Z0-9_\-\' ]+$')
 
 
 class RegistrationForm(forms.Form):
@@ -53,7 +54,7 @@ class RegistrationForm(forms.Form):
         Validates that the first is alphanumeric
         """
         if 'firstname' in self.cleaned_data:
-            if self.cleaned_data['firstname'] and not username_re.search(self.cleaned_data['firstname']):
+            if self.cleaned_data['firstname'] and not name_re.search(self.cleaned_data['firstname']):
                 raise forms.ValidationError(u'First name can only contain letters, numbers and underscores')
         return self.cleaned_data['firstname']
 
@@ -62,7 +63,7 @@ class RegistrationForm(forms.Form):
         Validates that the lastname is alphanumeric
         """
         if 'firstname' in self.cleaned_data:
-            if self.cleaned_data['lastname'] and not username_re.search(self.cleaned_data['lastname']):
+            if self.cleaned_data['lastname'] and not name_re.search(self.cleaned_data['lastname']):
                 raise forms.ValidationError(u'Last name can only contain letters, numbers and underscores')
         return self.cleaned_data['lastname']
     
