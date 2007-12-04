@@ -19,3 +19,7 @@ class Faq(models.Model):
 
     class Admin:
         list_display = ('question', 'answer')
+        fields = (
+            (None, {'fields': ('question','answer')}),
+            )
+        
