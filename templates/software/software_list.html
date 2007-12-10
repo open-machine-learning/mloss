@@ -2,6 +2,7 @@
 {% load safe_markup %}
 {% load paginator %}
 {% load show_stars %}
+{% load comments %}
 
 {% block sectionid %}browse{% endblock %}
 
@@ -81,12 +82,7 @@ All entries
 							{% if object.is_downloadable %}<a href="/software/download/{{ object.id }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download" title="Download"></img></a>{% endif %}
 							]
 
-							{% if object.total_number_of_views %}
-							{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize }}
-							{% endif %}
-							{% if object.total_number_of_downloads %}
-							, {{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize }}
-							{% endif %}
+							{% if object.total_number_of_views %}{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize }}{% endif %}{% if object.total_number_of_downloads %}, {{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize }}{% endif %}{% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, {{ comment_list.count }} comment{{ comment_list.count|pluralize }}{% endif %}
 							</p>
 						</td>
 						{% if object.total_number_of_votes %}

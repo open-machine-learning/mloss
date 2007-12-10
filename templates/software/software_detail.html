@@ -93,8 +93,9 @@
 								</p>
 
                                 <p class="more">
-								{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize}} ({{ todays_stats.number_of_views }} today) ,
-								{{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize}} ( {{ todays_stats.number_of_downloads }} today )
+								{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize}} ({{ todays_stats.number_of_views }} today),
+								{{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize}} ( {{ todays_stats.number_of_downloads }} today ){% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, {{ comment_list.count }} comment{{ comment_list.count|pluralize }}{% endif %}
+
                                 </p>
 							</td>
 							{% if object.total_number_of_votes %}
