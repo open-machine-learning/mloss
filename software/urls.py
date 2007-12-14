@@ -12,8 +12,9 @@ from django.conf.urls.defaults import *
 # General softwares views.
 urlpatterns = patterns('',
     (r'^view/(?P<software_id>\d+)/$', 'software.views.entry.software_detail'),
-    (r'^$', 'software.views.list.software_by_date'),
-    (r'^date/$', 'software.views.list.software_by_date'),
+    (r'^$', 'software.views.list.software_by_updated_date'),
+    (r'^date/$', 'software.views.list.software_by_updated_date'),
+    (r'^pubdate/$', 'software.views.list.software_by_pub_date'),
     (r'^title/$', 'software.views.list.software_by_title'),
     (r'^views/$', 'software.views.list.software_by_views'),
     (r'^downloads/$', 'software.views.list.software_by_downloads'),
