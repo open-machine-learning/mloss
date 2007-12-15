@@ -182,3 +182,70 @@ def user_with_software(request):
                                    queryset=userlist,
                                    template_name='software/user_list.html',
                                    )
+
+def stats_helper(request, software_id, type, dpi):
+    import matplotlib
+    import datetime
+    matplotlib.use('Cairo')
+    from matplotlib.figure import Figure
+    from matplotlib.backends.backend_cairo import FigureCanvasCairo as FigureCanvas
+    from matplotlib.dates import DayLocator, WeekdayLocator, HourLocator, DateFormatter, date2num
+    from StringIO import StringIO
+    fig = Figure(figsize=(8,5), dpi=dpi)
+    canvas = FigureCanvas(fig)
+    ax = fig.add_subplot(111)
+
+    stat = SoftwareStatistics.objects.filter(software=software_id).distinct().order_by('date')
+
+    x=list()
+    y=list()
+    for entry in stat:
+        x.append(date2num(entry.date))
+        if type=='downloads':
+            y.append(entry.number_of_downloads)
+        elif type=='views':
+            y.append(entry.number_of_views)
+
+    ax.bar(x,y)
+
+    days = DayLocator()
+    weeks= WeekdayLocator()
+    dateFmt = DateFormatter("%Y-%m-%d")
+    ax.xaxis.set_major_formatter(dateFmt)
+
+    if len(x)<=14:
+        ax.xaxis.set_major_locator(days)
+    elif len:
+        ax.xaxis.set_major_locator(weeks)
+        ax.xaxis.set_minor_locator(days)
+    if dpi>40:
+        if type=='downloads':
+            ax.set_title('Number of Downloads')
+            ax.set_ylabel('Downloads per Day')
+        elif type=='views':
+            ax.set_title('Number of Views')
+            ax.set_ylabel('Views per Day')
+
+        ax.grid(True)
+        fig.autofmt_xdate()
+    else:
+        ax.axis("tight")
+        fig.autofmt_xdate()
+
+    canvas.draw()
+    imdata=StringIO()
+    fig.savefig(imdata,format='png', dpi=dpi)
+    return HttpResponse(imdata.getvalue(), mimetype='image/png')
+
+def downloadstats(request, software_id):
+    return stats_helper(request, software_id, 'downloads', 80)
+
+def viewstats(request, software_id):
+    return stats_helper(request, software_id, 'views', 80)
+
+def downloadstatspreview(request, software_id):
+    return stats_helper(request, software_id, 'downloads', 17)
+
+def viewstatspreview(request, software_id):
+    return stats_helper(request, software_id, 'views', 17)
+

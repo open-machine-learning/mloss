@@ -93,9 +93,13 @@
 								</p>
 
                                 <p class="more">
-								{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize}} ({{ todays_stats.number_of_views }} today),
-								{{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize}} ( {{ todays_stats.number_of_downloads }} today ){% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, {{ comment_list.count }} comment{{ comment_list.count|pluralize }}{% endif %}
+								<a href="/software/viewstats/{{ object.id }}">{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize}}</a> ({{ todays_stats.number_of_views }} today),
+								<a href="/software/downloadstats/{{ object.id }}">{{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize}}</a> ( {{ todays_stats.number_of_downloads }} today ){% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, {{ comment_list.count }} comment{{ comment_list.count|pluralize }}{% endif %}
 
+                                </p>
+                                <p class="more">
+								<a href="/software/viewstats/{{ object.id }}"><img src="/software/viewstatspreview/{{object.id}}/"></img></a>
+								<a href="/software/downloadstats/{{ object.id }}"><img src="/software/downloadstatspreview/{{object.id}}/"></img></a>
                                 </p>
 							</td>
 							{% if object.total_number_of_votes %}
@@ -109,7 +113,8 @@
 								</table>
 							</td>
 							{% endif %}
-					</tr></table>
+						</tr>
+					</table>
 				</div>
 			</td>
 		</tr>
