@@ -191,7 +191,12 @@ def stats_helper(request, software_id, type, dpi):
     from matplotlib.backends.backend_cairo import FigureCanvasCairo as FigureCanvas
     from matplotlib.dates import DayLocator, WeekdayLocator, HourLocator, DateFormatter, date2num
     from StringIO import StringIO
-    fig = Figure(figsize=(8,5), dpi=dpi)
+
+    if dpi<=40:
+        bgcol='#f7f7f7'
+    else:
+        bgcol='#ffffff'
+    fig = Figure(figsize=(8,5), dpi=dpi, facecolor=bgcol)
     canvas = FigureCanvas(fig)
     ax = fig.add_subplot(111)
 
@@ -218,7 +223,10 @@ def stats_helper(request, software_id, type, dpi):
     elif len:
         ax.xaxis.set_major_locator(weeks)
         ax.xaxis.set_minor_locator(days)
-    if dpi>40:
+    if dpi<=40:
+        ax.axis("tight")
+        fig.autofmt_xdate()
+    else:
         if type=='downloads':
             ax.set_title('Number of Downloads')
             ax.set_ylabel('Downloads per Day')
@@ -227,14 +235,12 @@ def stats_helper(request, software_id, type, dpi):
             ax.set_ylabel('Views per Day')
 
         ax.grid(True)
-        fig.autofmt_xdate()
-    else:
         ax.axis("tight")
         fig.autofmt_xdate()
 
     canvas.draw()
     imdata=StringIO()
-    fig.savefig(imdata,format='png', dpi=dpi)
+    fig.savefig(imdata,format='png', dpi=dpi, facecolor=bgcol)
     return HttpResponse(imdata.getvalue(), mimetype='image/png')
 
 def downloadstats(request, software_id):
