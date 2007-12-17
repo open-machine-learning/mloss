@@ -15,6 +15,8 @@ from software.models import Software, SoftwareRating, SoftwareStatistics
 from software.models import Author, Tag, License, Language, OpSys
 from software.forms import RatingForm
 
+import settings
+
 def software_detail(request, software_id):
     """
     Detail view of a Software.
@@ -184,6 +186,11 @@ def user_with_software(request):
                                    )
 
 def stats_helper(request, software_id, type, dpi):
+    # matplotlib needs a writable home directory
+    if settings.PRODUCTION:
+        import os
+        os.environ['HOME']='/home/mloss/tmp'
+
     import matplotlib
     import datetime
     matplotlib.use('Cairo')
@@ -223,10 +230,8 @@ def stats_helper(request, software_id, type, dpi):
     elif len:
         ax.xaxis.set_major_locator(weeks)
         ax.xaxis.set_minor_locator(days)
-    if dpi<=40:
-        ax.axis("tight")
-        fig.autofmt_xdate()
-    else:
+
+    if dpi>40:
         if type=='downloads':
             ax.set_title('Number of Downloads')
             ax.set_ylabel('Downloads per Day')
@@ -235,8 +240,11 @@ def stats_helper(request, software_id, type, dpi):
             ax.set_ylabel('Views per Day')
 
         ax.grid(True)
-        ax.axis("tight")
-        fig.autofmt_xdate()
+
+    ax.axis("tight")
+    for label in ax.get_xticklabels():
+        label.set_ha('right')
+        label.set_rotation(30)
 
     canvas.draw()
     imdata=StringIO()
