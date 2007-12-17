@@ -1,4 +1,3 @@
-from django.db import models
 import datetime
 from markdown import markdown
 from django.utils.html import strip_tags
