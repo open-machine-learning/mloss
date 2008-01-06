@@ -83,7 +83,7 @@
 								</h2>
 								<p class="more">
 								by <a href="/software{{ object.user.get_absolute_url|escape }}">{{ object.user.username }}</a> 
-								- {{ object.pub_date|date:"F j, Y, H:i:s" }}
+								- {{ object.updated_date|date:"F j, Y, H:i:s" }} CET
 								[
 								{% if object.project_url|escape %}<a href="{{ object.project_url|escape }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage" title="Project Homepage"></img></a> {% endif %}
 								<a href="/software/bib/{{ object.id }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX" title="BibTeX"></img></a>
