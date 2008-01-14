@@ -137,8 +137,10 @@
 					<dd><a href="/software/paperbib/{{ object.id }}">Download</a></dd>
 					{% endif %}
 
+					{% if object.project_url %}
 					<dt>URL:</dt>
-					<dd> <a href="/software/homepage/{{ object.id }}">Project Homepage</a></dd>
+					<dd> <a href="{{ object.project_url|escape }}">Project Homepage</a></dd>
+					{% endif %}
 
 					{% if object.jmlr_mloss_url %}
 					<dt>JMLR MLOSS PaperURL:</dt>
