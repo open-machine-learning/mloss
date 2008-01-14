@@ -239,8 +239,8 @@ class Software(models.Model):
     average_documentation_rating = models.FloatField(editable=False, default=-1)
     total_number_of_votes = models.IntegerField(editable=False, default=0)
 
-    total_number_of_views = models.IntegerField(editable=False, default=0)
-    total_number_of_downloads = models.IntegerField(editable=False, default=0)
+    total_number_of_views = models.IntegerField(editable=True, default=0)
+    total_number_of_downloads = models.IntegerField(editable=True, default=0)
 
     try:
         from PIL import Image  
