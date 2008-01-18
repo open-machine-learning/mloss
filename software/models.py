@@ -1,6 +1,7 @@
 import datetime
 from markdown import markdown
 from django.utils.html import strip_tags
+from django.contrib.comments.models import Comment
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
@@ -317,6 +318,12 @@ class Software(models.Model):
         return [ x for x in self.languagelist.all() ]
     def get_opsyslist(self):
         return [ x for x in self.opsyslist.all() ]
+    def get_num_comments(self):
+        return Comment.objects.filter(object_id=self.id).count()
+    def get_last_comments_url(self):
+        u=Comment.objects.filter(object_id=self.id).order_by('-submit_date')
+        if u.count():
+            return u[0].get_absolute_url()
 
     def get_description_page(self):
         s="<html>" + self.description_html + "</html>"

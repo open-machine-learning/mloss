@@ -60,6 +60,7 @@ All entries
 {% paginator 5%} 
 
 {% for object in object_list %}
+
 <table {% if object.jmlr_mloss_url|escape %} class="jmlr" {% else %} class="swlist"{% endif %}>
 	<tr><td>
 			<div class="rating">
@@ -82,7 +83,7 @@ All entries
 							{% if object.is_downloadable %}<a href="/software/download/{{ object.id }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download" title="Download"></img></a>{% endif %}
 							]
 
-							{% if object.total_number_of_views %}<a href="/software/viewstats/{{ object.id }}">{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize }}</a>{% endif %}{% if object.total_number_of_downloads %}, <a href="/software/downloadstats/{{ object.id }}">{{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize }}</a>{% endif %}{% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, {{ comment_list.count }} comment{{ comment_list.count|pluralize }}{% endif %}
+                            {% if object.total_number_of_views %}<a href="/software/viewstats/{{ object.id }}">{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize }}</a>{% endif %}{% if object.total_number_of_downloads %}, <a href="/software/downloadstats/{{ object.id }}">{{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize }}</a>{% endif %}{% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, <a href="{{ object.get_last_comments_url }}">{{ comment_list.count }} comment{{ comment_list.count|pluralize }}</a>{% endif %}
 							</p>
 						</td>
 						{% if object.total_number_of_votes %}

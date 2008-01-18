@@ -22,7 +22,7 @@
   {% load aggregator %}
   {% get_feed_list as feed_list %}
   {% for feed in feed_list %}
-  <li><a href="{{ feed.public_url }}">{{ feed }}</a> <a class="rss" href="{{ feed.feed_url }}">RSS</a></li>
+  <li><a href="{{ feed.public_url }}">{{ feed }}</a> <a class="rss" href="{{ feed.feed_url }}">RSS - Forums</a></li>
   {% endfor %}
 </ul>
 <p>Do you write about machine learning? <a href="mailto:admin-web@mloss.org">Let

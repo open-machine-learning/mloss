@@ -30,6 +30,34 @@ def RssSoftwareFeed(request):
     feed.write(response, 'utf-8')
     return response
 
+def RssSoftwareAndCommentsFeed(request, software_id):
+    sw = get_object_or_404(Software, pk=software_id)
+    object_list = Comment.objects.filter(object_id=software_id).order_by('submit_date')
+
+    feed = WellFormedWebRss( sw.title.encode('utf-8'),
+            "http://mloss.org",
+            u'Updates and additions to ' + sw.title.encode('utf-8'),
+            language=u"en")
+
+    link = 'http://%s%s' % (Site.objects.get_current().domain, sw.get_absolute_url())
+    commentlink=u'http://%s/software/rss/comments/%i' % (Site.objects.get_current().domain, sw.id)
+    feed.add_item( sw.title.encode('utf-8') + u' ' + sw.version.encode('utf-8'),
+        link, sw.get_description_page(),
+        author_name=sw.authors.encode('utf-8'),
+        comments=commentlink,
+        pubdate=sw.pub_date, unique_id=link,
+        categories=[x.name for x in sw.get_taglist()] )
+
+    for object in object_list:
+        link = 'http://%s%s' % (Site.objects.get_current().domain, object.get_absolute_url())
+        feed.add_item(u'<b>Comment by %s on %s</b>' % (object.user.username, object.submit_date.strftime("%Y-%m-%d %H:%M")),
+                link, markdown(object.comment),
+                author_name=object.user,
+                pubdate=object.submit_date, unique_id=link,)
+    response = HttpResponse(mimetype='application/xml')
+    feed.write(response, 'utf-8')
+    return response
+
 def RssCommentsFeed(request, software_id):
     sw = get_object_or_404(Software, pk=software_id)
     object_list = Comment.objects.filter(object_id=software_id).order_by('submit_date')
@@ -42,8 +70,7 @@ def RssCommentsFeed(request, software_id):
     for object in object_list:
         link = 'http://%s%s' % (Site.objects.get_current().domain, object.get_absolute_url())
         feed.add_item(u'<b>By: %s on: %s</b>' % (object.user.username, object.submit_date.strftime("%Y-%m-%d %H:%M")),
-                sw.title.encode('utf-8'),
-                link, object.comment,
+                link, markdown(object.comment),
                 author_name=object.user,
                 pubdate=object.submit_date, unique_id=link,)
     response = HttpResponse(mimetype='application/xml')
