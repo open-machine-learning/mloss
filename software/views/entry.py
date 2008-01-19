@@ -58,7 +58,7 @@ def subscribe_software(request, software_id):
     entry = get_object_or_404(Software, pk=software_id)
 
     ctype = ContentType.objects.get_for_model(entry)
-    Subscriptions.objects.get_or_create(title="Software" + entry.title,
+    Subscriptions.objects.get_or_create(title="Software " + entry.title,
             content_type=ctype, object_id=entry.id, user=request.user,
             url=entry.get_absolute_url())
 
