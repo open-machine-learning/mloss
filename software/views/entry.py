@@ -52,7 +52,8 @@ def software_detail(request, software_id):
                 'todays_stats' : todays_stats},
             context_instance=RequestContext(request))
 
-def subscribe_software(request, software_id):
+
+def subscribe_software(request, software_id, bookmark=False):
     if not request.user.is_authenticated():
        return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
     entry = get_object_or_404(Software, pk=software_id)
@@ -60,20 +61,27 @@ def subscribe_software(request, software_id):
     ctype = ContentType.objects.get_for_model(entry)
     Subscriptions.objects.get_or_create(title="Software " + entry.title,
             content_type=ctype, object_id=entry.id, user=request.user,
-            url=entry.get_absolute_url())
+            url=entry.get_absolute_url(), bookmark=bookmark)
 
     return HttpResponseRedirect("/user/view/" + str(request.user.id) + "/")
 
-def unsubscribe_software(request, software_id):
+def bookmark_software(request, software_id):
+    return subscribe_software(request, software_id, bookmark=True)
+
+def unsubscribe_software(request, software_id, bookmark=False):
     if not request.user.is_authenticated():
        return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
     entry = get_object_or_404(Software, pk=software_id)
 
     ctype = ContentType.objects.get_for_model(entry)
-    object=get_object_or_404(Subscriptions, content_type=ctype, object_id=entry.id, user=request.user)
+    object=get_object_or_404(Subscriptions, content_type=ctype, object_id=entry.id,
+            user=request.user, bookmark=bookmark)
     object.delete()
 
     return HttpResponseRedirect("/user/view/" + str(request.user.id) + "/")
+
+def remove_bookmark(request, software_id):
+    return unsubscribe_software(request, software_id, bookmark=True)
 
 def download_software(request, software_id):
     entry = get_object_or_404(Software, pk=software_id)

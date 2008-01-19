@@ -82,6 +82,7 @@ All entries
 							{% if object.paper_bib %}<a href="/software/paperbib/{{ object.id }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper" title="Paper BibTeX for corresponding Paper"></img></a>{% endif %}
 							{% if object.is_downloadable %}<a href="/software/download/{{ object.id }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download" title="Download"></img></a>{% endif %}
                             {% if user.is_authenticated %}<a href="/software/subscribe/{{ object.id }}"><img src="/media/images/subscribe.png" width="14" height="14" alt="Subscribe" title="Subscribe"></img></a>{% endif %}
+							{% if user.is_authenticated %}<a href="/software/bookmark/{{ object.id }}"><img src="/media/images/bookmark.png" width="14" height="14" alt="Bookmark" title="Bookmark"></img></a>{% endif %}
 							]
 
                             {% if object.total_number_of_views %}<a href="/software/viewstats/{{ object.id }}">{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize }}</a>{% endif %}{% if object.total_number_of_downloads %}, <a href="/software/downloadstats/{{ object.id }}">{{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize }}</a>{% endif %}{% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, <a href="{{ object.get_last_comments_url }}">{{ comment_list.count }} comment{{ comment_list.count|pluralize }}</a>{% endif %}

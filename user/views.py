@@ -106,12 +106,16 @@ def show_user(request, user_id):
             'password1' : entry.password,
             'password2' : entry.password })
 
-        subscr = Subscriptions.objects.filter(user=request.user)
+        subscriptions = Subscriptions.objects.filter(user=request.user,
+                bookmark=False)
+        bookmarks = Subscriptions.objects.filter(user=request.user,
+                bookmark=True)
 
         return render_to_response('users/user_detail.html',
                 { 'object': entry,
                     'softwares' : Software.objects.get_by_submitter(entry.username),
-                    'subscriptions' : subscr,
+                    'subscriptions' : subscriptions,
+                    'bookmarks' : bookmarks,
                     'form' : form },
                 context_instance=RequestContext(request))
 

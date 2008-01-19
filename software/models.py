@@ -345,6 +345,8 @@ Friendly,
         for s in subscribers:
             if not s.bookmark:
                 send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [ s.user.email ])
+                s.last_updated=datetime.datetime.now()
+                s.save()
 
     def get_authorlist(self):
         return [ x for x in self.authorlist.all() ]
