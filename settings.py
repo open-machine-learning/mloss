@@ -131,4 +131,5 @@ INSTALLED_APPS = (
     'mloss.community',
     'mloss.forshow',
     'mloss.user',
+    'mloss.subscriptions',
 )
