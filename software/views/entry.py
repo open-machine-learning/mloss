@@ -62,7 +62,7 @@ def subscribe_software(request, software_id):
             content_type=ctype, object_id=entry.id, user=request.user,
             url=entry.get_absolute_url())
 
-    return HttpResponseRedirect("/user/view/" + `request.user.id` + "/")
+    return HttpResponseRedirect("/user/view/" + str(request.user.id) + "/")
 
 def unsubscribe_software(request, software_id):
     if not request.user.is_authenticated():
@@ -73,7 +73,7 @@ def unsubscribe_software(request, software_id):
     object=get_object_or_404(Subscriptions, content_type=ctype, object_id=entry.id, user=request.user)
     object.delete()
 
-    return HttpResponseRedirect("/user/view/" + `request.user.id` + "/")
+    return HttpResponseRedirect("/user/view/" + str(request.user.id) + "/")
 
 def download_software(request, software_id):
     entry = get_object_or_404(Software, pk=software_id)
