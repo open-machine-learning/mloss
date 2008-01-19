@@ -2,10 +2,12 @@ from django.contrib.auth.models import User
 from django.views.generic.list_detail import object_list
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from software.models import Software
 from django import newforms as forms
 from django.contrib.auth import authenticate, login
 from django.http import Http404
+
+from software.models import Software
+from subscriptions.models import Subscriptions
 import re
 
 attrs_dict = { 'class': 'required' }
@@ -32,6 +34,7 @@ class ChangeUserDetailsForm(forms.Form):
             label=u'Password')
     password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict),
             label=u'Password (again, to catch typos)')
+
     def clean_firstname(self):
         """
         Validates that the first is alphanumeric
@@ -102,9 +105,13 @@ def show_user(request, user_id):
             'email' : entry.email,
             'password1' : entry.password,
             'password2' : entry.password })
+
+        subscr = Subscriptions.objects.filter(user=request.user)
+
         return render_to_response('users/user_detail.html',
                 { 'object': entry,
                     'softwares' : Software.objects.get_by_submitter(entry.username),
+                    'subscriptions' : subscr,
                     'form' : form },
                 context_instance=RequestContext(request))
 

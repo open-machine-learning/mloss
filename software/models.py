@@ -1,11 +1,17 @@
 import datetime
-from markdown import markdown
 from django.utils.html import strip_tags
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
+from django.core.mail import send_mail
 from django.db import models
 from django.db.models import Q
+
+import settings
+from markdown import markdown
 from utils import parsewords, slugify
+from subscriptions.models import Subscriptions
 
 # make sure this list of variables is up-to-date (i.e. matches
 # the fields in the Software object
@@ -307,6 +313,38 @@ class Software(models.Model):
         self.update_list('licenselist','License','os_license')
         self.update_list('languagelist','Language','language')
         self.update_list('opsyslist','OpSys','operating_systems')
+
+        # do not send out notifications for number of views/download updates
+        if auto_update_date:
+            self.notify_update()
+
+    def notify_update(self):
+        ctype = ContentType.objects.get_for_model(self)
+        subscribers=Subscriptions.objects.filter(content_type=ctype, object_id=self.id)
+
+        subject='Updates on mloss.org software project ' + self.title
+        message='''Dear mloss.org user,
+
+you are receiving this email as you have subscribed to the "'''
+
+        message+=self.title
+        message+='''" software project,
+which has just been updated.
+
+Feel free to visit mloss.org to see what has changed.
+    
+        '''
+        message+='http://%s%s' % (Site.objects.get_current().domain, self.get_absolute_url())
+        message+='''
+
+Friendly,
+   your mloss.org team.
+        '''
+
+        # we don't use send_mass_mail as we don't want to leak other users email addresses
+        for s in subscribers:
+            if not s.bookmark:
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [ s.user.email ])
 
     def get_authorlist(self):
         return [ x for x in self.authorlist.all() ]

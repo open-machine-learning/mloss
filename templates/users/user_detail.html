@@ -31,6 +31,25 @@
 		{% endfor %}
 	</table>
 	{% endif %}
+	{% if subscriptions %}
+	<h2> Current Subscriptions</h2>
+	<table>
+        <tr>
+            <th> <b>Title</b> </th>
+            <th> <b>Last Updated</b> </th>
+            <th> <b>Date of Subscription</b> </th>
+            <th> <b>Unsubscribe</b> </th>
+        </tr>
+		{% for subsc in subscriptions %}
+		<tr>
+			<td> <a href="{{ subsc.url }}">{{ subsc.title }}</a></td>
+            <td> {{ subsc.last_updated|date:"j F Y" }} </td>
+            <td> {{ subsc.subscribed_date|date:"j F Y" }} </td>
+            <td> <a href="/software/unsubscribe/{{ subsc.object_id }}/">Unsubscribe</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+	{% endif %}
 	<h2> Change User Details</h3>
 {% if form.errors %}
 <p class="error">Please correct the errors below:</p>

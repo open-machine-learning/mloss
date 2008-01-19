@@ -7,13 +7,15 @@ rated and viewed according to various criteria.
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
-from django.views.generic import list_detail
 from django.contrib.auth.models import User
+from django.views.generic import list_detail
 
 from software.models import Software, SoftwareRating, SoftwareStatistics
 from software.models import Author, Tag, License, Language, OpSys
 from software.forms import RatingForm
+from subscriptions.models import Subscriptions
 
 import settings
 
@@ -49,6 +51,29 @@ def software_detail(request, software_id):
                 'ratingform': ratingform,
                 'todays_stats' : todays_stats},
             context_instance=RequestContext(request))
+
+def subscribe_software(request, software_id):
+    if not request.user.is_authenticated():
+       return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
+    entry = get_object_or_404(Software, pk=software_id)
+
+    ctype = ContentType.objects.get_for_model(entry)
+    Subscriptions.objects.get_or_create(title="Software" + entry.title,
+            content_type=ctype, object_id=entry.id, user=request.user,
+            url=entry.get_absolute_url())
+
+    return HttpResponseRedirect("/user/view/" + `request.user.id` + "/")
+
+def unsubscribe_software(request, software_id):
+    if not request.user.is_authenticated():
+       return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
+    entry = get_object_or_404(Software, pk=software_id)
+
+    ctype = ContentType.objects.get_for_model(entry)
+    object=get_object_or_404(Subscriptions, content_type=ctype, object_id=entry.id, user=request.user)
+    object.delete()
+
+    return HttpResponseRedirect("/user/view/" + `request.user.id` + "/")
 
 def download_software(request, software_id):
     entry = get_object_or_404(Software, pk=software_id)
