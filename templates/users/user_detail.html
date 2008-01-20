@@ -20,9 +20,10 @@
 			<td>Email Address:</td>
 			<td>{{object.email}}</td>
 		</tr>
-	</table><br></br>
+	</table>
 	{% if softwares %}
-	<h2> Currently listed Software</h2>
+    <br></br>
+	<h3> Currently listed Software</h3>
 	<table>
 		{% for sw in softwares %}
 		<tr>
@@ -31,38 +32,109 @@
 		{% endfor %}
 	</table>
 	{% endif %}
-	{% if subscriptions %}
-	<h2> Current Subscriptions</h2>
+	{% if swsubscriptions %}
+    <br></br>
+	<h3> Current Software Subscriptions</h3>
 	<table>
         <tr>
             <th> <b>Title</b> </th>
             <th> <b>Last Notified</b> </th>
             <th> <b>Action</b> </th>
         </tr>
-		{% for subsc in subscriptions %}
+		{% for subsc in swsubscriptions %}
 		<tr>
 			<td> <a href="{{ subsc.url }}">{{ subsc.title }}</a></td>
-            <td> {{ subsc.last_updated|date:"j F Y" }}</td>
-            <td> <a href="/software/unsubscribe/{{ subsc.object_id }}/">Unsubscribe</a></td>
+            <td> {{ subsc.last_updated|date:"j F Y H:i:s" }}</td>
+            <td> <a href="{{ subsc.get_unsubscribe_url }}/">Unsubscribe</a></td>
 		</tr>
 		{% endfor %}
 	</table>
     {% endif %}
-	{% if bookmarks %}
-	<h2> Current Bookmarks</h2>
+	{% if forumsubscriptions %}
+    <br></br>
+	<h3> Current Forum Subscriptions</h3>
+	<table>
+        <tr>
+            <th> <b>Title</b> </th>
+            <th> <b>Last Notified</b> </th>
+            <th> <b>Action</b> </th>
+        </tr>
+		{% for subsc in forumsubscriptions %}
+		<tr>
+			<td> <a href="{{ subsc.url }}">{{ subsc.title }}</a></td>
+            <td> {{ subsc.last_updated|date:"j F Y H:i:s" }}</td>
+            <td> <a href="{{ subsc.get_unsubscribe_url }}">Unsubscribe</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+    {% endif %}
+	{% if threadsubscriptions %}
+    <br></br>
+	<h3> Current Thread Subscriptions</h3>
+	<table>
+        <tr>
+            <th> <b>Title</b> </th>
+            <th> <b>Last Notified</b> </th>
+            <th> <b>Action</b> </th>
+        </tr>
+		{% for subsc in threadsubscriptions %}
+		<tr>
+			<td> <a href="{{ subsc.url }}">{{ subsc.title }}</a></td>
+            <td> {{ subsc.last_updated|date:"j F Y H:i:s" }}</td>
+            <td> <a href="{{ subsc.get_unsubscribe_url }}">Unsubscribe</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+    {% endif %}
+	{% if swbookmarks %}
+    <br></br>
+	<h3> Current Software Bookmarks</h3>
 	<table>
         <tr>
             <th> <b>Title</b> </th>
             <th> <b>Action</b> </th>
         </tr>
-		{% for subsc in bookmarks %}
+		{% for subsc in swbookmarks %}
 		<tr>
 			<td> <a href="{{ subsc.url }}">{{ subsc.title }}</a></td>
-            <td> <a href="/software/rmbookmark/{{ subsc.object_id }}/">Remove</a></td>
+            <td> <a href="{{ subsc.get_rmbookmark_url }}">Remove</a></td>
 		</tr>
 		{% endfor %}
 	</table>
 	{% endif %}
+	{% if forumbookmarks %}
+    <br></br>
+	<h3> Current Forum Bookmarks</h3>
+	<table>
+        <tr>
+            <th> <b>Title</b> </th>
+            <th> <b>Action</b> </th>
+        </tr>
+		{% for subsc in forumbookmarks %}
+		<tr>
+			<td> <a href="{{ subsc.url }}">{{ subsc.title }}</a></td>
+            <td> <a href="{{ subsc.get_rmbookmark_url }}">Remove</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+	{% endif %}
+	{% if threadbookmarks %}
+    <br></br>
+	<h3> Current Thread Bookmarks</h3>
+	<table>
+        <tr>
+            <th> <b>Title</b> </th>
+            <th> <b>Action</b> </th>
+        </tr>
+		{% for subsc in threadbookmarks %}
+		<tr>
+			<td> <a href="{{ subsc.url }}">{{ subsc.title }}</a></td>
+            <td> <a href="{{ subsc.get_rmbookmark_url }}">Remove</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+	{% endif %}
+    <br></br>
 	<h2> Change User Details</h3>
 {% if form.errors %}
 <p class="error">Please correct the errors below:</p>

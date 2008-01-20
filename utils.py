@@ -1,5 +1,8 @@
 import re
 from django.template.defaultfilters import stringfilter
+from django.core.mail import send_mail
+import settings
+import datetime
 
 # not quite sure where to put this code
 def parsewords(curobj,fieldname='language'):
@@ -36,3 +39,17 @@ def slugify(value):
     return re.sub('[\-\+\s]+', '-', value)
 slugify = stringfilter(slugify)
 
+
+def send_mails(subscribers, subject, message):
+    # we don't use send_mass_mail as we don't want to leak other users email addresses
+    for s in subscribers:
+        if not s.bookmark:
+            now=datetime.datetime.now()
+            # only send out things once every 60 seconds 
+            if now-s.last_updated > datetime.timedelta(0, 60):
+                #print subject
+                #print s.user.email
+                #print message
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [ s.user.email ])
+                s.last_updated=now
+                s.save()

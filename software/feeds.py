@@ -34,7 +34,7 @@ def RssSoftwareAndCommentsFeed(request, software_id):
     sw = get_object_or_404(Software, pk=software_id)
     object_list = Comment.objects.filter(object_id=software_id).order_by('submit_date')
 
-    feed = WellFormedWebRss( sw.title.encode('utf-8'),
+    feed = WellFormedWebRss( u'mloss.org ' + sw.title.encode('utf-8'),
             "http://mloss.org",
             u'Updates and additions to ' + sw.title.encode('utf-8'),
             language=u"en")
@@ -62,7 +62,7 @@ def RssCommentsFeed(request, software_id):
     sw = get_object_or_404(Software, pk=software_id)
     object_list = Comment.objects.filter(object_id=software_id).order_by('submit_date')
 
-    feed = WellFormedWebRss( sw.title.encode('utf-8'),
+    feed = WellFormedWebRss( u'mloss.org ' + sw.title.encode('utf-8'),
             "http://mloss.org",
             u'Updates and additions to ' + sw.title.encode('utf-8'),
             language=u"en")

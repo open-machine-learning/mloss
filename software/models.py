@@ -4,13 +4,15 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.core.mail import send_mail
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, signals
+from django.dispatch import dispatcher
+from django.contrib.comments.models import Comment, FreeComment
+from django.shortcuts import get_object_or_404
 
-import settings
 from markdown import markdown
-from utils import parsewords, slugify
+from utils import parsewords, slugify, send_mails
 from subscriptions.models import Subscriptions
 
 # make sure this list of variables is up-to-date (i.e. matches
@@ -285,7 +287,8 @@ class Software(models.Model):
                 eval('self.'+listname+'.add(item)')
 
     def save(self, auto_update_date=True):
-        if not self.id:
+        new_software = not self.id
+        if new_software:
             self.pub_date = datetime.datetime.now()
         if auto_update_date:
             self.updated_date = datetime.datetime.now()
@@ -315,8 +318,23 @@ class Software(models.Model):
         self.update_list('opsyslist','OpSys','operating_systems')
 
         # do not send out notifications for number of views/download updates
-        if auto_update_date:
-            self.notify_update()
+        if new_software:
+            self.subscribe(self.user, bookmark=False)
+        else:
+            if auto_update_date:
+                self.notify_update()
+
+    def subscribe(self, user, bookmark):
+        ctype = ContentType.objects.get_for_model(self)
+        Subscriptions.objects.get_or_create(title="Software " + self.title,
+                content_type=ctype, object_id=self.id, user=user,
+                url=self.get_absolute_url(), bookmark=bookmark)
+
+    def unsubscribe(self, user, bookmark):
+        ctype = ContentType.objects.get_for_model(self)
+        object=get_object_or_404(Subscriptions, content_type=ctype, object_id=self.id,
+                user=user, bookmark=bookmark)
+        object.delete()
 
     def notify_update(self):
         ctype = ContentType.objects.get_for_model(self)
@@ -341,12 +359,7 @@ Friendly,
    your mloss.org team.
         '''
 
-        # we don't use send_mass_mail as we don't want to leak other users email addresses
-        for s in subscribers:
-            if not s.bookmark:
-                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [ s.user.email ])
-                s.last_updated=datetime.datetime.now()
-                s.save()
+        send_mails(subscribers, subject, message)
 
     def get_authorlist(self):
         return [ x for x in self.authorlist.all() ]
@@ -482,3 +495,39 @@ class SoftwareStatistics(models.Model):
     class Admin:
         list_display = ('date', 'number_of_views', 'number_of_downloads')
         pass
+
+def comment_notification(sender, instance):
+    """
+         instance is the comment object
+    """
+
+    try:
+        sw=Software.objects.get(id=instance.object_id)
+        ctype = ContentType.objects.get_for_model(sw)
+        subscribers=Subscriptions.objects.filter(content_type=ctype, object_id=sw.id)
+
+        subject='New comment on mloss.org software project ' + sw.title
+        message='''Dear mloss.org user,
+
+you are receiving this email as you have subscribed to the "'''
+
+        message+=sw.title
+        message+='''" software project,
+for which a new comment has just been posted.
+
+Feel free to visit mloss.org to see what has changed.
+
+'''
+        message+='http://%s%s' % (Site.objects.get_current().domain, instance.get_absolute_url())
+        message+='''
+
+Friendly,
+   your mloss.org team.
+        '''
+
+        send_mails(subscribers, subject, message)
+    except ObjectDoesNotExist:
+        pass
+
+dispatcher.connect(comment_notification, sender=FreeComment, signal=signals.post_save)
+dispatcher.connect(comment_notification, sender=Comment, signal=signals.post_save)

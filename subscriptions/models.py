@@ -30,8 +30,27 @@ class Subscriptions(models.Model):
     last_updated = models.DateTimeField(auto_now_add=True)
     subscribed_date = models.DateTimeField(auto_now_add=True)
 
+    def get_unsubscribe_url(self):
+        if self.title.startswith("Software"):
+            return "/software/unsubscribe/%d" % self.object_id
+        elif self.title.startswith("Forum"):
+            c=self.content_type.get_object_for_this_type(id=self.object_id)
+            return "/community/unsubscribe/%s" % c.slug
+        elif self.title.startswith("Thread"):
+            c=self.content_type.get_object_for_this_type(id=self.object_id)
+            return "/community/unsubscribe/%s/%d" % (c.forum.slug, self.object_id)
+
+    def get_rmbookmark_url(self):
+        if self.title.startswith("Software"):
+            return "/software/rmbookmark/%d" % self.object_id
+        elif self.title.startswith("Forum"):
+            c=self.content_type.get_object_for_this_type(id=self.object_id)
+            return "/community/rmbookmark/%s" % c.slug
+        elif self.title.startswith("Thread"):
+            c=self.content_type.get_object_for_this_type(id=self.object_id)
+            return "/community/rmbookmark/%s/%d" % (c.forum.slug, self.object_id)
 
     class Admin:
         list_display = ('user', 'title', 'last_updated', 'subscribed_date', 'url',
-                'object_id', 'content_type')
+                'object_id', 'content_type', 'bookmark')
         pass

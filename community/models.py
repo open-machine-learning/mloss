@@ -7,7 +7,12 @@ methods. A little extra logic is in views.py.
 
 from django.db import models
 import datetime
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.sites.models import Site
+from mloss.subscriptions.models import Subscriptions
+from utils import send_mails
 
 class Forum(models.Model):
 	"""
@@ -30,6 +35,48 @@ class Forum(models.Model):
 
 	def __str__(self):
 		return self.title
+
+	def subscribe(self, user, bookmark):
+		ctype = ContentType.objects.get_for_model(self)
+		Subscriptions.objects.get_or_create(title="Forum " + self.title,
+				content_type=ctype, object_id=self.id, user=user,
+				url=self.get_absolute_url(), bookmark=bookmark)
+
+	def unsubscribe(self, user, bookmark):
+		ctype = ContentType.objects.get_for_model(self)
+		object=get_object_or_404(Subscriptions, content_type=ctype, object_id=self.id,
+				user=user, bookmark=bookmark)
+		object.delete()
+
+	def save(self):
+		super(Forum, self).save()
+		self.notify_update()
+
+	def notify_update(self):
+		ctype = ContentType.objects.get_for_model(self)
+		subscribers=Subscriptions.objects.filter(content_type=ctype, object_id=self.id)
+
+		subject='Updates on mloss.org community forum ' + self.title
+		message='''Dear mloss.org user,
+
+you are receiving this email as you have subscribed to the "'''
+
+		message+=self.title
+		message+='''" community forum,
+which has just been updated.
+
+Feel free to visit mloss.org to see what has changed.
+
+		'''
+		message+='http://%s%s' % (Site.objects.get_current().domain, self.get_absolute_url())
+		message+='''
+
+Friendly,
+   your mloss.org team.
+        '''
+
+		send_mails(subscribers, subject, message)
+
 
 class Thread(models.Model):
 	"""
@@ -56,6 +103,7 @@ class Thread(models.Model):
 			f.threads += 1
 			f.save()
 		super(Thread, self).save()
+		self.notify_update()
 	
 	def get_absolute_url(self):
 		return '/community/%s/%s/' % (self.forum.slug, self.id)
@@ -65,6 +113,43 @@ class Thread(models.Model):
 
 	def __str__(self):
 		return self.title
+
+	def subscribe(self, user, bookmark):
+		ctype = ContentType.objects.get_for_model(self)
+		Subscriptions.objects.get_or_create(title="Thread " + self.title,
+				content_type=ctype, object_id=self.id, user=user,
+				url=self.get_absolute_url(), bookmark=bookmark)
+
+	def unsubscribe(self, user, bookmark):
+		ctype = ContentType.objects.get_for_model(self)
+		object=get_object_or_404(Subscriptions, content_type=ctype, object_id=self.id,
+				user=user, bookmark=bookmark)
+		object.delete()
+
+	def notify_update(self):
+		ctype = ContentType.objects.get_for_model(self)
+		subscribers=Subscriptions.objects.filter(content_type=ctype, object_id=self.id)
+
+		subject='Updates on mloss.org community thread ' + self.title
+		message='''Dear mloss.org user,
+
+you are receiving this email as you have subscribed to the "'''
+
+		message+=self.title
+		message+='''" community thread,
+which has just been updated.
+
+Feel free to visit mloss.org to see what has changed.
+    
+        '''
+		message+='http://%s%s' % (Site.objects.get_current().domain, self.get_absolute_url())
+		message+='''
+
+Friendly,
+   your mloss.org team.
+        '''
+
+		send_mails(subscribers, subject, message)
 
 class Post(models.Model):
 	""" 

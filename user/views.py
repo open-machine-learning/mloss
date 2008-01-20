@@ -1,9 +1,10 @@
-from django.contrib.auth.models import User
 from django.views.generic.list_detail import object_list
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django import newforms as forms
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 
 from software.models import Software
@@ -106,16 +107,31 @@ def show_user(request, user_id):
             'password1' : entry.password,
             'password2' : entry.password })
 
-        subscriptions = Subscriptions.objects.filter(user=request.user,
-                bookmark=False)
-        bookmarks = Subscriptions.objects.filter(user=request.user,
-                bookmark=True)
+        t = ContentType.objects.get(app_label="software", model="software")
+        swsubscriptions = Subscriptions.objects.filter(user=request.user,
+                bookmark=False, content_type=t)
+        swbookmarks = Subscriptions.objects.filter(user=request.user,
+                bookmark=True, content_type=t)
+        t = ContentType.objects.get(app_label="community", model="forum")
+        forumsubscriptions = Subscriptions.objects.filter(user=request.user,
+                bookmark=False, content_type=t)
+        forumbookmarks = Subscriptions.objects.filter(user=request.user,
+                bookmark=True, content_type=t)
+        t = ContentType.objects.get(app_label="community", model="thread")
+        threadsubscriptions = Subscriptions.objects.filter(user=request.user,
+                bookmark=False, content_type=t)
+        threadbookmarks = Subscriptions.objects.filter(user=request.user,
+                bookmark=True, content_type=t)
 
         return render_to_response('users/user_detail.html',
                 { 'object': entry,
                     'softwares' : Software.objects.get_by_submitter(entry.username),
-                    'subscriptions' : subscriptions,
-                    'bookmarks' : bookmarks,
+                    'swsubscriptions' : swsubscriptions,
+                    'swbookmarks' : swbookmarks,
+                    'forumsubscriptions' : forumsubscriptions,
+                    'forumbookmarks' : forumbookmarks,
+                    'threadsubscriptions' : threadsubscriptions,
+                    'threadbookmarks' : threadbookmarks,
                     'form' : form },
                 context_instance=RequestContext(request))
 
