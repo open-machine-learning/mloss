@@ -132,4 +132,6 @@ INSTALLED_APPS = (
     'mloss.forshow',
     'mloss.user',
     'mloss.subscriptions',
+    'mloss.aggregator',
+    'mloss.blog',
 )

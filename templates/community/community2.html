@@ -1,0 +1,48 @@
+{% extends "base_2col.html" %}
+
+{% block sectionid %}community{% endblock %}
+
+{% block title %}Community{% endblock %}
+
+{% block billboard %}Community{% endblock %}
+
+{% block content-related %}
+
+<h2>Recent forum posts</h2>
+
+
+<h2>Related external sites</h2>
+<p>updated daily</p>
+
+<ul>
+  {% load aggregator %}
+  {% get_feed_list as feed_list %}
+  {% for feed in feed_list %}
+  <li><a href="{{ feed.public_url }}">{{ feed }}</a></li>
+  {% endfor %}
+</ul>
+
+
+{% endblock %}
+
+{% block content %}
+
+<h2>Related external sites</h2>
+<p>updated daily</p>
+
+{% for item in object_list %}
+<h2><a href="{{ item.link }}">{{ item.title }}</a></h2>
+<p class='date'>
+  Posted on {{ item.date_modified|date:"F j, Y" }} 
+  at {{ item.date_modified|date:"g:i A" }} 
+  by <a href="{{ item.feed.public_url }}">{{ item.feed.title }}</a>
+  <a class="rss" href="{{ item.feed.feed_url }}">RSS</a></p>
+<div>
+  {{ item.summary }}
+</div>
+<p class="small"><a href="{{ item.link }}">Read this post in context &raquo;</a></p>
+{% endfor %}
+
+
+
+{% endblock %}

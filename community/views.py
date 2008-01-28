@@ -238,3 +238,8 @@ def reply(request, forum, thread):
 			'thread': t,
 			'form_action' : ''})
 
+
+
+def community_base(request):
+    return list_detail.object_list(request,
+                                   template_name='community_base.html',)

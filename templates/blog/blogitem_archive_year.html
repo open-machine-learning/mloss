@@ -1,0 +1,15 @@
+{% extends "community/community3.html" %}
+
+{% block title %}Weblog | {{ year }}{% endblock %}
+
+{% block content %}
+
+<h1>{{ year }} archive</h1>
+
+<ul class="linklist">
+{% for date in date_list %}
+<li><a href="{{ date|date:"M"|lower }}/">{{ date|date:"F" }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

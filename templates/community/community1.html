@@ -1,0 +1,38 @@
+{% extends "base_2col.html" %}
+
+{% block sectionid %}community{% endblock %}
+
+{% block title %}Community{% endblock %}
+
+{% block billboard %}Community{% endblock %}
+
+{% block content-related %}
+
+<h2>Recent forum posts</h2>
+
+{% if object_list %}
+    <ul>
+    {% for forum in object_list %}
+        <li>{{ forum.description }}
+	  <br></br>
+	  <a href='{{ forum.forum_latest_post.get_absolute_url }}'>
+	    {{ forum.forum_latest_post.body }}
+	  </a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No forum yet.</p>
+{% endif %}
+
+<h2>Related external sites</h2>
+<p>updated daily</p>
+
+
+{% endblock %}
+
+{% block content %}
+
+<h2>From the editors</h2>
+
+
+{% endblock %}
