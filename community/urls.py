@@ -30,10 +30,9 @@ comm2_dict = {
 
 
 urlpatterns = patterns('',
-	(r'^$', 'django.views.generic.list_detail.object_list', forum_dict),
-	(r'^test/comm1/$', 'django.views.generic.list_detail.object_list', comm1_dict),
-	(r'^test/comm2/$', 'django.views.generic.list_detail.object_list', comm2_dict),
-	(r'^test/comm3/', include('blog.urls')),
+	(r'^$', 'community.views.get_summary_page'),
+	(r'^forum/$', 'django.views.generic.list_detail.object_list', forum_dict),
+	(r'^blog/', include('blog.urls')),
 	(r'^(?P<slug>[A-Za-z0-9-_]+)/$', 'community.views.forum'),
 	(r'^rss/(?P<forum>[A-Za-z0-9-_]+)/$', 'community.feeds.ForumFeed'),
 	(r'^rss/(?P<forum>[A-Za-z0-9-_]+)/(?P<thread>[0-9]+)/$', 'community.feeds.ThreadFeed'),
@@ -49,3 +48,5 @@ urlpatterns = patterns('',
 	(r'^(?P<forum>[A-Za-z0-9-_]+)/new/$', 'community.views.newthread'),
 	(r'^(?P<forum>[A-Za-z0-9-_]+)/(?P<thread>[0-9]+)/reply/$', 'community.views.reply'),
 )
+
+

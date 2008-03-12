@@ -1,12 +1,12 @@
-{% extends "community/community3.html" %}
+{% extends "community/blog_list.html" %}
 
 {% block title %}Weblog | {{ object.headline|escape }}{% endblock %}
 
 {% block content %}
 
 <h1>{{ object.headline }}</h1>
-{{ object.body }}
 <p class="date small">Posted by <strong>{{ object.author }}</strong> on {{ object.pub_date|date:"F j, Y" }}</p>
+<p>{{ object.body }}</p>
 
 {% load comments %}
 {% get_free_comment_list for blog.blogitem object.id as comment_list %}

@@ -2,30 +2,27 @@
 
 {% block sectionid %}community{% endblock %}
 
-{% block title %}Community{% endblock %}
+{% block title %}Community | Open Thoughts{% endblock %}
 
-{% block billboard %}Community{% endblock %}
+{% block billboard %}Community | Open Thoughts{% endblock %}
 
 {% block content-related %}
 
-<h2>Recent forum posts</h2>
-
-<h2>Related external sites</h2>
+.
 
 {% endblock %}
 
 {% block content %}
 
-<h2>Editors' blog</h2>
 
 {% if latest %}
     {% for object in latest %}
         <h2><a href="{{ object.get_absolute_url }}">{{ object.headline }}</a></h2>
-        {{ object.body }}
         <p class="date small">Posted by 
 	  <strong>{{ object.author }}</strong> 
 	  on {{ object.pub_date|date:"F j, Y" }} 
 	</p>
+	<p>{{ object.body }}</p>
     {% endfor %}
 {% else %}
     <p>No blogs yet</p>

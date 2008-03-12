@@ -3,7 +3,7 @@ All forum logic is kept here - displaying lists of forums, threads
 and posts, adding new threads, and adding replies.
 """
 
-from community.models import Forum,Thread,Post
+from community.models import Forum,Thread,Post,ForumSummary,FeedSummary
 from datetime import datetime
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -11,6 +11,8 @@ from django.template import RequestContext
 from django import newforms as forms
 from django.contrib.auth import authenticate, login
 from django.views.generic import list_detail
+from aggregator.models import Feed, FeedItem
+from blog.models import BlogItem
 
 class NewPostForm(forms.Form):
 	body = forms.CharField(widget=forms.Textarea(attrs={"rows":10, "cols":80}))
@@ -243,3 +245,59 @@ def reply(request, forum, thread):
 def community_base(request):
     return list_detail.object_list(request,
                                    template_name='community_base.html',)
+
+
+def get_latest_posts(request):
+    """For each Forum, get the latest post"""
+    latest_posts = []
+    all_forums = Forum.objects.all()
+    for forum in all_forums:
+        summary = ForumSummary()
+        summary.title = forum.title
+        post = forum.forum_latest_post
+        if post is None:
+            summary.body = ''
+            summary.url = ''
+        else:
+            summary.body = post.body
+            summary.url = post.get_absolute_url()
+        latest_posts.append(summary)
+    return latest_posts
+
+def get_latest_feeds(request):
+    """For each feed from an external site, get the latest post title"""
+    all_feeds = Feed.objects.all()
+
+    latest_feeds = []
+    for feed in all_feeds:
+        cur_feed = FeedSummary()
+        cur_feed.title = feed.title
+        cur_feed.url = feed.public_url
+        items = FeedItem.objects.filter(feed__title=feed.title).order_by('date_modified')
+        cur_feed.items = items[:3]
+            
+        latest_feeds.append(cur_feed)
+
+    return latest_feeds
+
+def get_latest_blog(request):
+    """Return the latest editorial"""
+    all_blog_items = BlogItem.objects.order_by('pub_date')
+
+    return all_blog_items[0]
+
+def get_summary_page(request):
+    """Get a summary of:
+    - Latest forum posts
+    - Latest feeds from external sites
+    """
+    latest_posts = get_latest_posts(request)
+    latest_feeds = get_latest_feeds(request)
+    latest_blog = get_latest_blog(request)
+
+    return render_to_response('community/summary.html',
+			RequestContext(request, {
+			'latest_posts': latest_posts,
+			'latest_feeds': latest_feeds,
+                        'latest_blog' : latest_blog,
+			}))

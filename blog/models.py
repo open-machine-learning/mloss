@@ -19,4 +19,4 @@ class BlogItem(models.Model):
         return self.headline
 
     def get_absolute_url(self):
-        return "/community/test/comm3/%s/%s/" % (self.pub_date.strftime("%Y/%b/%d").lower(), self.slug)
+        return "/community/blog/%s/%s/" % (self.pub_date.strftime("%Y/%b/%d").lower(), self.slug)

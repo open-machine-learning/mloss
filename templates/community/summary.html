@@ -1,0 +1,84 @@
+{% extends "base_2col.html" %}
+
+{% block sectionid %}community{% endblock %}
+
+{% block title %}Community{% endblock %}
+
+{% block billboard %}Community{% endblock %}
+
+{% block content-related %}
+
+<h2>Recent <a href="forum/">forum</a> posts</h2>
+
+{% if latest_posts %}
+    <ul>
+    {% for post in latest_posts %}
+        <li>{{ post.title }}
+	  <br></br>
+	  <a href='{{ post.url }}'>
+	    {{ post.body }}
+	  </a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No forum yet.</p>
+{% endif %}
+
+<h2>Recent posts from external sites</h2>
+
+{% if latest_feeds %}
+    <ul>
+    {% for feed in latest_feeds %}
+        <li><h3><a href='{{ feed.url }}'>{{ feed.title }}</a></h3>
+	  <ul>
+	  {% for item in feed.items %}
+	    <li><a href='{{ item.link }}'>{{ item.title }}</a></li>
+	  {% endfor %}
+	  </ul>
+	  </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No forum yet.</p>
+{% endif %}
+
+
+
+{% endblock %}
+
+{% block content %}
+
+{% if latest_blog %}
+  <h2><a href="{{ latest_blog.get_absolute_url }}">{{ latest_blog.headline }}</a></h2>
+  <p class="date small">by 
+    <strong>{{ latest_blog.author }}</strong>
+    on {{ latest_blog.pub_date|date:"F j, Y" }}
+  </p>
+  <p>
+  {{ latest_blog.body }}
+  </p>
+
+  {% load comments %}
+  {% get_free_comment_list for blog.blogitem latest_blog.id as comment_list %}
+
+  <div id="content-secondary">
+  <h2 id="comments">Comments</h2>
+
+  {% for comment in comment_list %}
+  <div class="comment" id="c{{ comment.id }}">
+      <h3>{{ comment.person_name|escape }} <span class="small quiet">{{ comment.submit_date|date:"F j, Y" }} at {{ comment.submit_date|date:"P" }}</span></h3>
+      {{ comment.comment|escape|urlizetrunc:"40"|linebreaks }}
+  </div>
+  {% endfor %}
+
+<h2>Post a comment</h2>
+
+{% free_comment_form for blog.blogitem latest_blog.id %}
+</div>
+
+
+{% else %}
+  <p>No thoughts yet</p>
+{% endif %}
+
+{% endblock %}
