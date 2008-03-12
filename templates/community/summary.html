@@ -48,14 +48,17 @@
 
 {% block content %}
 
+
 {% if latest_blog %}
+  {% load safe_markup %}
   <h2><a href="{{ latest_blog.get_absolute_url }}">{{ latest_blog.headline }}</a></h2>
   <p class="date small">by 
     <strong>{{ latest_blog.author }}</strong>
     on {{ latest_blog.pub_date|date:"F j, Y" }}
   </p>
+
   <p>
-  {{ latest_blog.body }}
+  {{ latest_blog.body|safe_markdown:"safe" }}
   </p>
 
   {% load comments %}

@@ -273,7 +273,7 @@ def get_latest_feeds(request):
         cur_feed = FeedSummary()
         cur_feed.title = feed.title
         cur_feed.url = feed.public_url
-        items = FeedItem.objects.filter(feed__title=feed.title).order_by('date_modified')
+        items = FeedItem.objects.filter(feed__title=feed.title).order_by('-date_modified')
         cur_feed.items = items[:3]
             
         latest_feeds.append(cur_feed)
@@ -282,7 +282,7 @@ def get_latest_feeds(request):
 
 def get_latest_blog(request):
     """Return the latest editorial"""
-    all_blog_items = BlogItem.objects.order_by('pub_date')
+    all_blog_items = BlogItem.objects.order_by('-pub_date')
 
     return all_blog_items[0]
 
