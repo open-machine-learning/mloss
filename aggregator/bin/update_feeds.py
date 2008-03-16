@@ -15,6 +15,7 @@ def update_feeds():
         parsed_feed = feedparser.parse(feed.feed_url)
         for entry in parsed_feed.entries:
             title = entry.title.encode(parsed_feed.encoding, "xmlcharrefreplace")
+            print 'Updating ' + title
             guid = entry.get("id", entry.link).encode(parsed_feed.encoding, "xmlcharrefreplace")
             link = entry.link.encode(parsed_feed.encoding, "xmlcharrefreplace")
 
