@@ -20,7 +20,7 @@ def RssSoftwareFeed(request):
     for object in object_list:
         link = 'http://%s%s' % (Site.objects.get_current().domain, object.get_absolute_url())
         commentlink=u'http://%s/software/rss/comments/%i' % (Site.objects.get_current().domain, object.id)
-        feed.add_item( object.title.encode('utf-8'),
+        feed.add_item( object.title.encode('utf-8') + u' ' + object.version.encode('utf-8'),
                 link, object.get_description_page(),
                 author_name=object.authors.encode('utf-8'),
                 comments=commentlink,
