@@ -18,7 +18,7 @@ def RssSoftwareFeed(request):
             language=u"en")
 
     for object in object_list:
-        link = 'http://%s%s' % (Site.objects.get_current().domain, object.get_absolute_url())
+        link = 'http://%s%s/%s' % (Site.objects.get_current().domain, object.get_absolute_url(), object.version)
         commentlink=u'http://%s/software/rss/comments/%i' % (Site.objects.get_current().domain, object.id)
         feed.add_item( object.title.encode('utf-8') + u' ' + object.version.encode('utf-8'),
                 link, object.get_description_page(),
@@ -39,7 +39,7 @@ def RssSoftwareAndCommentsFeed(request, software_id):
             u'Updates and additions to ' + sw.title.encode('utf-8'),
             language=u"en")
 
-    link = 'http://%s%s' % (Site.objects.get_current().domain, sw.get_absolute_url())
+    link = 'http://%s%s/%s' % (Site.objects.get_current().domain, sw.get_absolute_url(), object.version)
     commentlink=u'http://%s/software/rss/comments/%i' % (Site.objects.get_current().domain, sw.id)
     feed.add_item( sw.title.encode('utf-8') + u' ' + sw.version.encode('utf-8'),
         link, sw.get_description_page(),
