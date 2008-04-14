@@ -9,7 +9,7 @@ from markdown import markdown
 
 def RssSoftwareFeed(request):
     try:
-        object_list = Software.objects.all().order_by('-pub_date')[:10]
+        object_list = Software.objects.all().order_by('-updated_date')[:10]
     except documents.DocumentDoesNotExist:
         raise Http404
     feed = WellFormedWebRss( u"mloss.org new software",
@@ -18,13 +18,13 @@ def RssSoftwareFeed(request):
             language=u"en")
 
     for object in object_list:
-        link = 'http://%s%s/%s' % (Site.objects.get_current().domain, object.get_absolute_url(), object.version)
+        link = 'http://%s%s%s' % (Site.objects.get_current().domain, object.get_absolute_url(), object.version)
         commentlink=u'http://%s/software/rss/comments/%i' % (Site.objects.get_current().domain, object.id)
         feed.add_item( object.title.encode('utf-8') + u' ' + object.version.encode('utf-8'),
                 link, object.get_description_page(),
                 author_name=object.authors.encode('utf-8'),
                 comments=commentlink,
-                pubdate=object.pub_date, unique_id=link,
+                pubdate=object.updated_date, unique_id=link,
                 categories=[x.name for x in object.get_taglist()] )
     response = HttpResponse(mimetype='application/xml')
     feed.write(response, 'utf-8')
@@ -39,13 +39,13 @@ def RssSoftwareAndCommentsFeed(request, software_id):
             u'Updates and additions to ' + sw.title.encode('utf-8'),
             language=u"en")
 
-    link = 'http://%s%s/%s' % (Site.objects.get_current().domain, sw.get_absolute_url(), sw.version)
+    link = 'http://%s%s%s' % (Site.objects.get_current().domain, sw.get_absolute_url(), sw.version)
     commentlink=u'http://%s/software/rss/comments/%i' % (Site.objects.get_current().domain, sw.id)
     feed.add_item( sw.title.encode('utf-8') + u' ' + sw.version.encode('utf-8'),
         link, sw.get_description_page(),
         author_name=sw.authors.encode('utf-8'),
         comments=commentlink,
-        pubdate=sw.pub_date, unique_id=link,
+        pubdate=sw.updated_date, unique_id=link,
         categories=[x.name for x in sw.get_taglist()] )
 
     for object in object_list:
