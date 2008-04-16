@@ -23,7 +23,7 @@ urlpatterns = patterns('',
 
     # redirect the root to news
     #('^$', 'forshow.views.newsindex'),
-    ('^$', 'django.views.generic.simple.redirect_to', {'url':'/about/'}),
+    ('^$', 'django.views.generic.simple.redirect_to', {'url':'/software/'}),
 
     # Enable comments
     (r'^comments/', include('django.contrib.comments.urls.comments')),
