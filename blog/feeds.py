@@ -16,11 +16,11 @@ def RssBlogFeed(request):
 
     for object in object_list:
         link = 'http://%s%s' % (Site.objects.get_current().domain, object.get_absolute_url())
-        commentlink=u'http://%s/software/rss/comments/%i' % (Site.objects.get_current().domain, object.id)
+        #commentlink=u'http://%s/software/rss/comments/%i' % (Site.objects.get_current().domain, object.id)
+        #comments=commentlink,
         feed.add_item( object.headline.encode('utf-8'),
                 link, markdown(object.body),
                 author_name=object.author.encode('utf-8'),
-                comments=commentlink,
                 pubdate=object.pub_date, unique_id=link)
     response = HttpResponse(mimetype='application/xml')
     feed.write(response, 'utf-8')
