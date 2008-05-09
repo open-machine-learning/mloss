@@ -49,10 +49,9 @@
 {% endblock %}
 
 {% block content %}
-
-
-{% if latest_blog %}
+{% if blog_entries %}
   {% load safe_markup %}
+  {% for latest_blog in blog_entries %}
   <h2><a href="{{ latest_blog.get_absolute_url }}">{{ latest_blog.headline }}</a></h2>
   <p class="date small">by 
     <strong>{{ latest_blog.author }}</strong>
@@ -62,28 +61,6 @@
   <p>
   {{ latest_blog.body|safe_markdown:"safe" }}
   </p>
-
-  {% load comments %}
-  {% get_comment_list for blog.blogitem latest_blog.id as comment_list %}
-
-  <div id="content-secondary">
-  <h2 id="comments">Comments</h2>
-
-  {% for comment in comment_list %}
-  <div class="comment" id="c{{ comment.id }}">
-      <h3>{{ comment.person_name|escape }} <span class="small quiet">{{ comment.submit_date|date:"F j, Y" }} at {{ comment.submit_date|date:"P" }}</span></h3>
-      {{ comment.comment|escape|urlizetrunc:"40"|linebreaks }}
-  </div>
   {% endfor %}
-
-<h2>Post a comment</h2>
-
-{% comment_form for blog.blogitem latest_blog.id %}
-</div>
-
-
-{% else %}
-  <p>No thoughts yet</p>
 {% endif %}
-
 {% endblock %}

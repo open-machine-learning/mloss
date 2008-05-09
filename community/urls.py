@@ -48,5 +48,3 @@ urlpatterns = patterns('',
 	(r'^(?P<forum>[A-Za-z0-9-_]+)/new/$', 'community.views.newthread'),
 	(r'^(?P<forum>[A-Za-z0-9-_]+)/(?P<thread>[0-9]+)/reply/$', 'community.views.reply'),
 )
-
-

@@ -280,12 +280,6 @@ def get_latest_feeds(request):
 
     return latest_feeds
 
-def get_latest_blog(request):
-    """Return the latest editorial"""
-    all_blog_items = BlogItem.objects.order_by('-pub_date')
-
-    return all_blog_items[0]
-
 def get_summary_page(request):
     """Get a summary of:
     - Latest forum posts
@@ -293,11 +287,11 @@ def get_summary_page(request):
     """
     latest_posts = get_latest_posts(request)
     latest_feeds = get_latest_feeds(request)
-    latest_blog = get_latest_blog(request)
+    blog_entries = BlogItem.objects.order_by('-pub_date')[:10]
 
     return render_to_response('community/summary.html',
-			RequestContext(request, {
-			'latest_posts': latest_posts,
-			'latest_feeds': latest_feeds,
-                        'latest_blog' : latest_blog,
-			}))
+            RequestContext(request, {
+                'latest_posts': latest_posts,
+                'latest_feeds': latest_feeds,
+                'blog_entries' : blog_entries,
+                }))
