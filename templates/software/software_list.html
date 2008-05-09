@@ -71,6 +71,9 @@ All entries
 								{% else %}
 								<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
 								{% endif %}
+								{% if object.jmlr_mloss_url %}
+								<img src="/media/images/jmlr.jpg" width="60" height="32" align="top" alt="JMLR"></img>
+								{% endif %}
 								<a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}</a>
 							</h2>
 							<p class="more">
