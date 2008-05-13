@@ -1,8 +1,8 @@
+{% extends "base_2col.html" %}
+
 {% load comments %}
 {% load safe_markup %}
 {% load show_stars %}
-
-{% extends "base_2col.html" %}
 
 {% block sectionid %}browse{% endblock %}
 
@@ -70,7 +70,7 @@
 {% block content %}
 <dl>
 	<dd>
-	<table class="swlist">
+	<table {% if object.jmlr_mloss_url|escape %} class="jmlr" {% else %} class="swlist"{% endif %}>
 		<tr>
 			<td>
 				<div class="rating">
@@ -80,11 +80,13 @@
 								<h2>
 									{% if object.screenshot %}
 									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="128" height="80" alt='Screenshot' title='Screenshot'></img></a>
-									<a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}</a>
 									{% else %}
 									<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
-									<a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}</a>
 									{% endif %}
+									{% if object.jmlr_mloss_url %}
+									<img src="/media/images/jmlr.jpg" width="60" height="32" align="top" alt="JMLR"></img>
+									{% endif %}
+									<a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}</a>
 								</h2>
 								<p class="more">
 								by <a href="/software{{ object.user.get_absolute_url|escape }}">{{ object.user.username }}</a> 
