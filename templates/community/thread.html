@@ -1,7 +1,8 @@
+{% extends "community/forum_base.html" %}
+
 {% load paginator %}
 {% load safe_markup %}
 
-{% extends "community/forum_base.html" %}
 {% block title %}{{ thread.title }} ({{ forum.title }}){% endblock %}
 {% block billboard %}Thread: {{ thread.title }} ({{ forum.title }}){% endblock %}
 

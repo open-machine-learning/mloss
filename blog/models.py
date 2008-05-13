@@ -1,8 +1,9 @@
 from django.db import models
+from utils import slugify
 
 class BlogItem(models.Model):
     pub_date = models.DateTimeField()
-    slug = models.SlugField(unique_for_date='pub_date')
+    slug = models.SlugField(unique_for_date='pub_date', editable=False)
     headline = models.CharField(maxlength=200)
     summary = models.TextField(help_text="Use raw HTML.")
     body = models.TextField(help_text="Use raw HTML.")
@@ -20,3 +21,8 @@ class BlogItem(models.Model):
 
     def get_absolute_url(self):
         return "/community/blog/%s/%s/" % (self.pub_date.strftime("%Y/%b/%d").lower(), self.slug)
+
+    def save(self):
+        if not self.id:
+            self.slug = slugify(self.headline)
+        super(BlogItem,self).save()

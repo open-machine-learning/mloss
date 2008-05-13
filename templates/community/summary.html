@@ -52,15 +52,28 @@
 {% if blog_entries %}
   {% load safe_markup %}
   {% for latest_blog in blog_entries %}
+  <p>
   <h2><a href="{{ latest_blog.get_absolute_url }}">{{ latest_blog.headline }}</a></h2>
   <p class="date small">by 
-    <strong>{{ latest_blog.author }}</strong>
-    on {{ latest_blog.pub_date|date:"F j, Y" }}
+  <strong>{{ latest_blog.author }}</strong>
+  on {{ latest_blog.pub_date|date:"F j, Y" }}
+
+  {% load comments %}
+  {% get_comment_list for blog.blogitem latest_blog.id as comment_list %}
+  {% if comment_list %}
+  (<a href="{{ latest_blog.get_last_comments_url }}">{{ comment_list.count }} comment{{ comment_list.count|pluralize }}</a>)
+  {% else %}
+  ({{ comment_list.count }} comment{{ comment_list.count|pluralize }})
+  {% endif %}
   </p>
 
   <p>
   {{ latest_blog.body|safe_markdown:"safe" }}
   </p>
+  </p>
+  {% if not forloop.last %}
+  <hr></hr>
+  {% endif %}
   {% endfor %}
 {% endif %}
 {% endblock %}
