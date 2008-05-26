@@ -15,6 +15,7 @@ from software.models import Software, SoftwareRating, SoftwareStatistics
 from software.models import Author, Tag, License, Language, OpSys
 from software.forms import RatingForm
 from subscriptions.models import Subscriptions
+from community.views import get_latest_news
 
 import settings
 
@@ -163,6 +164,7 @@ def software_all_authors(request):
                                    paginate_by=20,
                                    queryset=authorlist,
                                    template_name='software/author_list.html',
+                                   extra_context=get_latest_news(),
                                    )
 
 
@@ -172,6 +174,7 @@ def software_all_tags(request):
                                    paginate_by=20,
                                    queryset=taglist,
                                    template_name='software/tag_list.html',
+                                   extra_context=get_latest_news(),
                                    )
 
 
@@ -181,6 +184,7 @@ def software_all_licenses(request):
                                    paginate_by=20,
                                    queryset=licenselist,
                                    template_name='software/license_list.html',
+                                   extra_context=get_latest_news(),
                                    )
 
 
@@ -190,6 +194,7 @@ def software_all_languages(request):
                                    paginate_by=20,
                                    queryset=languagelist,
                                    template_name='software/language_list.html',
+                                   extra_context=get_latest_news(),
                                    )
 
 
@@ -199,6 +204,7 @@ def software_all_opsyss(request):
                                    paginate_by=20,
                                    queryset=opsyslist,
                                    template_name='software/opsys_list.html',
+                                   extra_context=get_latest_news(),
                                    )
 
 def user_with_software(request):
@@ -207,6 +213,7 @@ def user_with_software(request):
                                    paginate_by=20,
                                    queryset=userlist,
                                    template_name='software/user_list.html',
+                                   extra_context=get_latest_news(),
                                    )
 
 def stats_helper(request, software_id, type, dpi):
