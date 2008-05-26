@@ -247,7 +247,7 @@ def community_base(request):
                                    template_name='community_base.html',)
 
 
-def get_latest_posts(request):
+def get_latest_posts():
     """For each Forum, get the latest post"""
     latest_posts = []
     all_forums = Forum.objects.all()
@@ -264,7 +264,7 @@ def get_latest_posts(request):
         latest_posts.append(summary)
     return latest_posts
 
-def get_latest_feeds(request):
+def get_latest_feeds():
     """For each feed from an external site, get the latest post title"""
     all_feeds = Feed.objects.all()
 
@@ -280,18 +280,22 @@ def get_latest_feeds(request):
 
     return latest_feeds
 
+def get_latest_news(extra=None):
+    if extra is None:
+        extra=dict()
+
+    latest_posts = get_latest_posts()
+    latest_feeds = get_latest_feeds()
+    blog_entries = BlogItem.objects.order_by('-pub_date')[:10]
+    extra['latest_posts']=latest_posts
+    extra['latest_feeds']=latest_feeds
+    extra['blog_entries']=blog_entries
+    return extra
+
 def get_summary_page(request):
     """Get a summary of:
     - Latest forum posts
     - Latest feeds from external sites
     """
-    latest_posts = get_latest_posts(request)
-    latest_feeds = get_latest_feeds(request)
-    blog_entries = BlogItem.objects.order_by('-pub_date')[:10]
-
     return render_to_response('community/summary.html',
-            RequestContext(request, {
-                'latest_posts': latest_posts,
-                'latest_feeds': latest_feeds,
-                'blog_entries' : blog_entries,
-                }))
+            RequestContext(request, get_latest_news()))

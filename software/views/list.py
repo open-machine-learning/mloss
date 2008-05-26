@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 from software.models import Software
 from software.models import Author, Tag, License, Language, OpSys
+from community.views import get_latest_news
 
 
 
@@ -15,7 +16,7 @@ def software_by_user(request, username):
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=Software.objects.get_by_submitter(user.username).order_by('-updated_date'),
-                                   extra_context={ 'object': user },
+                                   extra_context=get_latest_news({ 'object': user }),
                                    template_name='software/software_list.html'
                                    )
 
@@ -27,7 +28,7 @@ def software_by_author(request, slug):
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=Software.objects.get_by_author(author.slug).order_by('-updated_date'),
-                                   extra_context={ 'object':author },
+                                   extra_context=get_latest_news({ 'object':author }),
                                    template_name='software/software_list.html',
                                    )
 
@@ -39,7 +40,7 @@ def software_by_tag(request, slug):
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=Software.objects.get_by_tag(tag.slug).order_by('-updated_date'),
-                                   extra_context={ 'object':tag },
+                                   extra_context=get_latest_news({ 'object':tag }),
                                    template_name='software/software_list.html',
                                    )
 
@@ -51,7 +52,7 @@ def software_by_license(request, slug):
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=Software.objects.get_by_license(lic.slug).order_by('-updated_date'),
-                                   extra_context={ 'object':lic },
+                                   extra_context=get_latest_news({ 'object':lic }),
                                    template_name='software/software_list.html',
                                    )
 
@@ -63,7 +64,7 @@ def software_by_language(request, slug):
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=Software.objects.get_by_language(language.slug).order_by('-updated_date'),
-                                   extra_context={ 'object':language },
+                                   extra_context=get_latest_news({ 'object':language }),
                                    template_name='software/software_list.html',
                                    )
 
@@ -75,7 +76,7 @@ def software_by_opsys(request, slug):
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=Software.objects.get_by_opsys(opsys.slug).order_by('-updated_date'),
-                                   extra_context={ 'object':opsys },
+                                   extra_context=get_latest_news({ 'object':opsys }),
                                    template_name='software/software_list.html',
                                    )
 
@@ -90,7 +91,9 @@ def software_by_pub_date(request):
                                    paginate_by=10,
                                    queryset=softwarelist,
                                    template_name='software/software_list.html',
+                                   extra_context=get_latest_news(),
                                    )
+
 def software_by_updated_date(request):
     """
     List of Software ranked by date
@@ -102,6 +105,7 @@ def software_by_updated_date(request):
                                    paginate_by=10,
                                    queryset=softwarelist,
                                    template_name='software/software_list.html',
+                                   extra_context=get_latest_news(),
                                    )
 
 def software_by_title(request):
@@ -115,6 +119,7 @@ def software_by_title(request):
                                    paginate_by=10,
                                    queryset=softwarelist,
                                    template_name='software/software_list.html',
+                                   extra_context=get_latest_news(),
                                    )
 
 def software_by_views(request):
@@ -128,6 +133,7 @@ def software_by_views(request):
                                    paginate_by=10,
                                    queryset=softwarelist,
                                    template_name='software/software_list.html',
+                                   extra_context=get_latest_news(),
                                    )
 def software_by_downloads(request):
     """
@@ -140,6 +146,7 @@ def software_by_downloads(request):
                                    paginate_by=10,
                                    queryset=softwarelist,
                                    template_name='software/software_list.html',
+                                   extra_context=get_latest_news(),
                                    )
 
 def software_by_rating(request):
@@ -152,6 +159,7 @@ def software_by_rating(request):
                                    paginate_by=10,
                                    queryset=softwarelist,
                                    template_name='software/software_list.html',
+                                   extra_context=get_latest_news(),
                                    )
 
 def search_description(request, q):
@@ -165,5 +173,5 @@ def search_description(request, q):
                                    paginate_by=10,
                                    queryset=qs,
                                    template_name='software/software_list.html',
-                                   extra_context={ 'search_term': q },
+                                   extra_context=get_latest_news({ 'search_term': q }),
                                    )
