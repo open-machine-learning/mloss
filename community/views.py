@@ -25,7 +25,7 @@ class NewPostFormwPassword(forms.Form):
 	def clean_username(self):
 		if 'username' not in self.cleaned_data:
 			raise forms.ValidationError(u'This field is required.')
-		if 'username' in self.data and 'password' in self.data:
+		if 'username' in self.cleaned_data and 'password' in self.cleaned_data:
 			username=self.cleaned_data['username']
 			password=self.cleaned_data['password']
 			user = authenticate(username=username, password=password)
