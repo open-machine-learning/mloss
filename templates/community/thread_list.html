@@ -1,5 +1,5 @@
 {% extends "community/forum_base.html" %}
-{% load safe_markup %}
+{% load markup %}
 
 {% block title %}{{ forum.title }}{% endblock %}
 {% block billboard %}Forum: {{ forum.title }}{% endblock %}
@@ -39,7 +39,7 @@
     <dl>
         <dt id="post{{ posting.id }}">{{ posting.author }} ( on {{ posting.time|date:"F j, Y, H:i:s" }} )</dt>
     </dl>
-    {{ posting.body|safe_markdown:"safe" }}
+    {{ posting.body|markdown:"safe" }}
 </div>
 {% endif %}
 

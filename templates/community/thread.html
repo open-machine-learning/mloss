@@ -1,7 +1,7 @@
 {% extends "community/forum_base.html" %}
 
 {% load paginator %}
-{% load safe_markup %}
+{% load markup %}
 
 {% block title %}{{ thread.title }} ({{ forum.title }}){% endblock %}
 {% block billboard %}Thread: {{ thread.title }} ({{ forum.title }}){% endblock %}
@@ -24,7 +24,7 @@
 				<td>
 					<dl>
 						<dt id="post{{ post.id }}">{{ post.author }} ( on {{ post.time|date:"F j, Y, H:i:s" }} )</dt>
-						<dd>{{ post.body|safe_markdown:"safe" }}</dd>
+						<dd>{{ post.body|markdown:"safe" }}</dd>
 					</dl>
 				</td>
 			</tr>
@@ -41,7 +41,7 @@
 <h2>Preview</h2>
 <div id="threadlist">
 	<dt id="post{{ posting.id }}">{{ posting.author }} ( on {{ posting.time|date:"F j, Y, H:i:s" }} )</dt>
-	{{ posting.body|safe_markdown:"safe" }}
+	{{ posting.body|markdown:"safe" }}
 </div>
 {% endif %}
 

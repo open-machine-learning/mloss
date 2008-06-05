@@ -41,14 +41,14 @@
 
 
 {% if latest %}
-    {% load safe_markup %}
+    {% load markup %}
     {% for object in latest %}
         <h2><a href="{{ object.get_absolute_url }}">{{ object.headline }}</a></h2>
         <p class="date small">Posted by 
 	  <strong>{{ object.author }}</strong> 
 	  on {{ object.pub_date|date:"F j, Y" }} 
 	</p>
-	<p>{{ object.body|safe_markdown:"safe" }}</p>
+	<p>{{ object.body|markdown:"safe" }}</p>
     {% endfor %}
 {% else %}
     <p>No blogs yet</p>

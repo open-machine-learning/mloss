@@ -3,13 +3,13 @@
 {% block title %}Weblog | {{ month|date:"F" }}{% endblock %}
 
 {% block content %}
-{% load safe_markup %}
+{% load markup %}
 <h1>{{ month|date:"F Y" }} archive</h1>
 
 {% for object in object_list %}
 <h2><a href="{{ object.get_absolute_url }}">{{ object.headline }}</a></h2>
 <p class="small date">{{ object.pub_date|date:"F j, Y" }}</p>
-{{ object.body|safe_markdown:"safe" }}
+{{ object.body|markdown:"safe" }}
 
 {% endfor %}
 

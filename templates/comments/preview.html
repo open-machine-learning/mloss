@@ -1,5 +1,5 @@
 {% extends "base_2col.html" %}
-{% load safe_markup %}
+{% load markup %}
 
 {% block sectionid %}browse{% endblock %}
 
@@ -26,7 +26,7 @@
   {% endif %}
 
   <div class="comment">
-	  {{ comment.comment|safe_markdown:"safe" }}
+	  {{ comment.comment|markdown:"safe" }}
 	  <p class="date small">Posted by <strong>{{ comment.person_name|escape }}</strong></p>
   </div>
 
