@@ -1,5 +1,5 @@
 {% extends "software/base_software.html" %}
-{% load markup %}
+{% load safe_markup %}
 {% load paginator %}
 {% load show_stars %}
 {% load comments %}
@@ -102,7 +102,7 @@ All entries
 				</tr></table>
 			</div>
 			<div class="description">
-				{{ object.description|markdown:"safe,cut=200" }}
+				{{ object.description|safe_markdown:"cut=200" }}
 				<hr></hr>
 				<table class="swdetails">
 					<tr><td>

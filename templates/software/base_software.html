@@ -64,7 +64,7 @@
 </p>
 {% endif %}
 
-{% load markup %}
+{% load safe_markup %}
 {% if latest_posts %}
 <p>
 <h2>Recent <a href="forum/">forum</a> posts</h2>
@@ -74,7 +74,7 @@
         <li>{{ post.title }}
 	  <br></br>
 	  <a href='{{ post.url }}'>
-	    {{ post.body|markdown:"safe,cut=100" }}
+	    {{ post.body|safe_markdown:"cut=100" }}
 	  </a></li>
     {% endfor %}
     </ul>

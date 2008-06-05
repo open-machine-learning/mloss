@@ -16,12 +16,13 @@ click on the <a href="http://mloss.org/community/">Community</a> tab for our for
 {% endblock %}
 
 {% block content %}
+{% load markup %}
 {% if all_faq_items %}
     <ul>
     {% for nitem in all_faq_items %}
         <li>
-            <h3>{{ nitem.question }}</h3>
-	    {{ nitem.answer }}
+            <h3>{{ nitem.question|markdown }}</h3>
+	    {{ nitem.answer|markdown }}
 	</li>
     {% endfor %}
 {% else %}
