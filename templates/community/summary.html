@@ -50,6 +50,7 @@
 
 {% block content %}
 {% if blog_entries %}
+  {% load markup %}
   {% for latest_blog in blog_entries %}
   <p>
   <h2><a href="{{ latest_blog.get_absolute_url }}">{{ latest_blog.headline }}</a></h2>
