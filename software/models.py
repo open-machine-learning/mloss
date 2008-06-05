@@ -48,7 +48,7 @@ def clean_all():
 
 
 class Author(models.Model):
-    name = models.CharField(maxlength=50, unique=True)
+    name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
 
     class Admin:
@@ -68,7 +68,7 @@ class Author(models.Model):
     
 
 class Tag(models.Model):
-    name = models.CharField(maxlength=50, unique=True)
+    name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
 
     class Admin:
@@ -88,7 +88,7 @@ class Tag(models.Model):
     
 
 class License(models.Model):
-    name = models.CharField(maxlength=50, unique=True)
+    name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
 
     class Admin:
@@ -107,7 +107,7 @@ class License(models.Model):
         return self.name
     
 class Language(models.Model):
-    name = models.CharField(maxlength=50, unique=True)
+    name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
 
     class Admin:
@@ -127,7 +127,7 @@ class Language(models.Model):
     
 
 class OpSys(models.Model):
-    name = models.CharField(maxlength=50, unique=True)
+    name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
 
     class Admin:

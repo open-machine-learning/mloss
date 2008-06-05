@@ -38,12 +38,11 @@ def safe_markdown(value, arg=''):
             return linebreaks(escape(value))
     else:
         extensions=arg.split(",")
-        safe_mode = True
-        #if len(extensions) > 0 and extensions[0] == "safe":
-        #    extensions = extensions[1:]
-        #    safe_mode = True
-        #else:
-        #    safe_mode = False
+        if len(extensions) > 0 and extensions[0] == "safe":
+            extensions = extensions[1:]
+            safe_mode = True
+        else:
+            safe_mode = False
         if len(extensions) > 0 and extensions[0].startswith("cut"):
             cutoff = int(extensions[0][extensions[0].rfind("=")+1:])
             extensions = extensions[1:]
@@ -60,5 +59,32 @@ def safe_markdown(value, arg=''):
 
                 value = value[:cutoff] + append
         return markdown.markdown(value, extensions, safe_mode=safe_mode)
+
+
+def firstwords(value, arg=''):
+    """
+    Return the first paragraph of a string,
+    or up to number of characters defined by keyword cut
+    """
+    extensions=arg.split(",")
+    if len(extensions) > 0 and extensions[0].startswith("cut"):
+        cutoff = int(extensions[0][extensions[0].rfind("=")+1:])
+    else:
+        cutoff = 200
+
+    if len(value)>cutoff:
+        p = value[:cutoff].find("\n")
+        append=""
+        if p == -1:
+            append=" [...]"
+            p = value[:cutoff-1].rfind(" ")
+            if p >= 0:
+                cutoff = p
+        else:
+            cutoff = p
+        value = value[:cutoff] + append
+    return value
+
+register.filter('firstwords',firstwords)
 
 register.filter('safe_markdown', safe_markdown)

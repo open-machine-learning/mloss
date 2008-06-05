@@ -155,7 +155,7 @@ class RegistrationProfile(models.Model):
     
     """
     user = models.ForeignKey(User, unique=True)
-    activation_key = models.CharField(maxlength=40)
+    activation_key = models.CharField(max_length=40)
     
     objects = RegistrationManager()
     

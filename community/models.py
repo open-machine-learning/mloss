@@ -20,7 +20,7 @@ class Forum(models.Model):
 	and posts fielsd are updated by the save() methods of their
 	respective models and are used for display purposes.
 	"""
-	title = models.CharField(maxlength=100)
+	title = models.CharField(max_length=100)
 	slug = models.SlugField()
 	description = models.TextField()
 	threads = models.IntegerField(default=0)
@@ -87,7 +87,7 @@ class Thread(models.Model):
 	automatically updated with saving a post or viewing the thread.
 	"""
 	forum = models.ForeignKey(Forum)
-	title = models.CharField(maxlength=100)
+	title = models.CharField(max_length=100)
 	sticky = models.BooleanField(blank=True, null=True)
 	closed = models.BooleanField(blank=True, null=True)
 	posts = models.IntegerField(default=0)

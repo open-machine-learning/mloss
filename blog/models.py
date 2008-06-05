@@ -4,10 +4,10 @@ from utils import slugify
 class BlogItem(models.Model):
     pub_date = models.DateTimeField()
     slug = models.SlugField(unique_for_date='pub_date', editable=False)
-    headline = models.CharField(maxlength=200)
+    headline = models.CharField(max_length=200)
     summary = models.TextField(help_text="Use markdown.")
     body = models.TextField(help_text="Use markdown.")
-    author = models.CharField(maxlength=100)
+    author = models.CharField(max_length=100)
 
     class Meta:
         ordering = ('-pub_date',)

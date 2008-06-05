@@ -131,7 +131,7 @@
 			<td>
 				<dl>
 					<dt>Description:</dt>
-					<dd>{{ object.description_html }}</dd>
+					<dd>{{ object.description|markdown:"safe" }}</dd>
 				</dl>
 			</td>
 		</tr>
