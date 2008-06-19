@@ -134,4 +134,5 @@ INSTALLED_APPS = (
     'mloss.subscriptions',
     'mloss.aggregator',
     'mloss.blog',
+    'mloss.cran',
 )
