@@ -3,11 +3,11 @@ import datetime
 import time
 import sys
 import os
-sys.path.insert(0, '/home/mloss')
-sys.path.insert(0, '/home/mloss/mloss')
-sys.path.insert(0, '/home/mloss/lib/python2.5/site-packages')
-#sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss')
-#sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss/mloss')
+#sys.path.insert(0, '/home/mloss')
+#sys.path.insert(0, '/home/mloss/mloss')
+#sys.path.insert(0, '/home/mloss/lib/python2.5/site-packages')
+sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss')
+sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss/mloss')
 os.environ['DJANGO_SETTINGS_MODULE']='mloss.settings'
 
 from xml.dom import minidom
@@ -40,6 +40,9 @@ class CRANPackage:
         return (self.name, self.url, self.cran_text, self.description_url, self.is_core)
 
     def convert_date(self, date):
+        """
+        Try various ways to grab a valid date from the R DESCRIPTION file
+        """
         if date:
             try:
                 self.date=datetime.datetime(*time.strptime(date, "%Y-%m-%d")[:5])
@@ -57,6 +60,37 @@ class CRANPackage:
                     self.date=datetime.datetime(*time.strptime(date)[:5])
                 except ValueError:
                     pass
+
+    def convert_license(self, license):
+        """
+        Licenses in R are usually very compact strings, like GPL-2 etc.
+        Now '-' is an illegal letter on mloss.org tags (causing name clashes)
+        Try to come up with a mapping for licenses
+        """
+        license=license.strip().lower()
+        license_hash= {
+                'gpl' : 'gpl',
+                'gpl (>= 2)' : 'gpl version 2 or later',
+                'gpl (>=2)' : 'gpl version 2 or later',
+                'gpl-2' : 'gpl version 2',
+                'gpl 2.0' : 'gpl version 2',
+                'gpl2.0' : 'gpl version 2',
+                'gpl-2 | file licence' : 'gpl version 2',
+                'gpl-2 | gpl-3' : 'gpl version 2 or later',
+                'gpl-3' : 'gpl version 3',
+                'gpl version 2' : 'gpl version 2',
+                'gpl (version 2 or later)' : 'gpl version 2 or later',
+                'gpl version 2 or later' : 'gpl version 2 or later',
+                'gpl (version 2 or newer)' : 'gpl version 2 or later',
+                'gpl version 2 or newer' : 'gpl version 2 or later',
+                'lgpl' : 'lgpl',
+                'pl (>=2)' : 'gpl version 2 or later',
+                'use under gpl2, or see file licence' : 'gpl version 2'}
+        try:
+            license=license_hash[license]
+        except KeyError:
+            pass
+        self.os_license = license
 
 
     def parse_cran_text(self):
@@ -101,7 +135,7 @@ class CRANPackage:
         if self.date is None:
             self.date = datetime.datetime.now()
 
-        self.os_license = cran_dict['License'].strip()
+        self.convert_license(cran_dict['License'])
         self.version = cran_dict['Version'].strip()
         if cran_dict.has_key('Title'):
             self.description = cran_dict['Title'] + ': ' + cran_dict['Description']
