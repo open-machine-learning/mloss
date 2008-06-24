@@ -81,7 +81,11 @@
 									{% if object.screenshot %}
 									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="128" height="80" alt='Screenshot' title='Screenshot'></img></a>
 									{% else %}
+									{% ifequal object.user.username "r-cran-robot" %}
+									<img src="/media/images/rlogo.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
+									{% else %}
 									<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
+									{% endifequal %}
 									{% endif %}
 									{% if object.jmlr_mloss_url %}
 									<img src="/media/images/jmlr.jpg" width="60" height="32" align="top" alt="JMLR"></img>

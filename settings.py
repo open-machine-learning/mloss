@@ -17,6 +17,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+R_CRAN_BOT = 'r-cran-robot'
+
 if PRODUCTION:
     SERVER_EMAIL = 'admin@mloss.org'
     

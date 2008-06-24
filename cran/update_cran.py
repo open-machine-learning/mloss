@@ -1,15 +1,25 @@
 import urllib
+import datetime
+import time
+import sys
+import os
+sys.path.insert(0, '/home/mloss/')
+sys.path.insert(0, '/home/mloss/lib/python2.5/site-packages/')
+#sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss')
+#sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss/mloss')
+os.environ['DJANGO_SETTINGS_MODULE']='mloss.settings'
+
 from xml.dom import minidom
 from software.models import Software
 from django.contrib.auth.models import User
-
-
+import settings
 
 class CRANPackage:
     """
     Modelling a software package in CRAN
     http://cran.r-project.org/
     """
+    prefix="r-cran-"
     name = ""
     url = ""
     description_url = ""    
@@ -27,6 +37,26 @@ class CRANPackage:
 
     def __repr__(self):
         return (self.name, self.url, self.cran_text, self.description_url, self.is_core)
+
+    def convert_date(self, date):
+        if date:
+            try:
+                self.date=datetime.datetime(*time.strptime(date, "%Y-%m-%d")[:5])
+            except ValueError:
+                pass
+
+            if self.date is None:
+                try:
+                    self.date=datetime.datetime(*time.strptime(date, "%d/%m/%Y")[:5])
+                except ValueError:
+                    pass
+
+            if self.date is None:
+                try:
+                    self.date=datetime.datetime(*time.strptime(date)[:5])
+                except ValueError:
+                    pass
+
 
     def parse_cran_text(self):
         """
@@ -49,10 +79,27 @@ class CRANPackage:
                     cran_dict[curkey] = curval
                 if line == '':
                     continue
-                kv = line.split(':')
-                curkey = kv[0]
-                curval = kv[1].strip()   # this doesn't work for url
-                
+                idx=line.index(':')
+                curkey = line[:idx]
+                curval = line[(idx+2):].strip()
+        if curkey is not None:
+            cran_dict[curkey] = curval
+
+        self.date=None
+        try:
+            self.convert_date(cran_dict['Date'])
+        except KeyError:
+            pass
+
+        if self.date is None:
+            try:
+                self.convert_date(cran_dict['Packaged'].split(';')[0])
+            except KeyError:
+                pass
+
+        if self.date is None:
+            self.date = datetime.datetime.now()
+
         self.os_license = cran_dict['License'].strip()
         self.version = cran_dict['Version'].strip()
         if cran_dict.has_key('Title'):
@@ -64,29 +111,42 @@ class CRANPackage:
         """
         For a given CRANPackage construct Software object and insert it into database
         """
-        # check whether the package exists
-        dbpkg = Software.objects.filter(title=self.name)
-        if dbpkg.count() == 0:
-            # Hard code that Cheng submits software.
-            me = User.objects.filter(username='ong')[0]
+        try:
+            me = User.objects.get(username=settings.R_CRAN_BOT)
+        except User.DoesNotExist:
+            user = User.objects.create_user(settings.R_CRAN_BOT, settings.R_CRAN_BOT + '@mloss.org', 'xdf46i07XGTASGDTGEIjtrt')
+            user.save()
+            me = User.objects.get(username=settings.R_CRAN_BOT)
 
+        # check whether the package exists (without prefix)
+        dbpkg = Software.objects.filter(title=self.name)
+        if dbpkg.count() > 0:
+            return
+
+        # check whether the package exists (without prefix)
+        dbpkg = Software.objects.filter(user=me, title=self.prefix+self.name)
+        if dbpkg.count() == 0:
             # if not create a new Software project
-            spkg = Software(user=me, title=self.name, version=self.version,
+            spkg = Software(user=me, title=self.prefix+self.name, version=self.version,
                             description=self.description, os_license=self.os_license,
                             language='R', operating_systems='agnostic',
-                            download_url=self.url, tags='auto from cran')
+                            download_url=self.url, project_url=self.url, tags='r-cran',
+                            pub_date=self.date, updated_date=self.date)
+            spkg.save(False)
         else:
             print 'Package ' + self.name + ' found, UPDATING...'
             assert(dbpkg.count() == 1)
             spkg = dbpkg[0]
             # Don't mess around with manual entries.
-            if spkg.tags == 'auto from cran':
+            if spkg.tags != 'r-cran':
                 return
             spkg.version = self.version
             spkg.description = self.description
             spkg.os_license = self.os_license
             spkg.download_url = self.url
-        spkg.save()
+            spkg.project_url = self.url
+            spkg.updated_date=self.date
+            spkg.save(False)
 
 
 def parse_ctv():
@@ -112,12 +172,10 @@ def parse_ctv():
             assert(len(pkg.attributes.keys())==0)
         cpkglist.append(cpkg)
     return cpkglist
-        
 
-def main():
-    """Slurp projects from CRAN"""
-    cpkglist = parse_ctv()
-    for pkg in cpkglist:
-        print pkg.name
-        pkg.parse_cran_text()
-        pkg.insert_into_database()
+"""Slurp projects from CRAN"""
+cpkglist = parse_ctv()
+for pkg in cpkglist:
+    print pkg.name
+    pkg.parse_cran_text()
+    pkg.insert_into_database()

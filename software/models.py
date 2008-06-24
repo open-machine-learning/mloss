@@ -288,7 +288,7 @@ class Software(models.Model):
 
     def save(self, auto_update_date=True):
         new_software = not self.id
-        if new_software:
+        if new_software and self.pub_date is None:
             self.pub_date = datetime.datetime.now()
         if auto_update_date:
             self.updated_date = datetime.datetime.now()
