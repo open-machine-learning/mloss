@@ -3,11 +3,15 @@ import datetime
 import time
 import sys
 import os
-sys.path.insert(0, '/home/mloss')
-sys.path.insert(0, '/home/mloss/mloss')
-sys.path.insert(0, '/home/mloss/lib/python2.5/site-packages')
-#sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss')
-#sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss/mloss')
+import re
+
+if os.environ['HOME'].endswith('/mloss'):
+    sys.path.insert(0, '/home/mloss')
+    sys.path.insert(0, '/home/mloss/mloss')
+    sys.path.insert(0, '/home/mloss/lib/python2.5/site-packages')
+else:
+    sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss')
+    sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss/mloss')
 os.environ['DJANGO_SETTINGS_MODULE']='mloss.settings'
 
 from xml.dom import minidom
@@ -23,7 +27,8 @@ class CRANPackage:
     prefix="r-cran-"
     name = ""
     url = ""
-    description_url = ""    
+    author = ""
+    description_url = ""
     is_core = False
     cran_text = ""
 
@@ -92,6 +97,26 @@ class CRANPackage:
             pass
         self.os_license = license
 
+    def convert_author(self, author):
+        author,count = re.subn(r'<[^\s].*>', "", author,100)
+        author,count = re.subn(r'Material from the book.s webpage, R port and packaging by ', "", author,100)
+        author,count = re.subn(r'[\s]&', ",", author,100)
+        author,count = re.subn(r'[\s]and', ",", author,100)
+        author,count = re.subn(r'R port by ', "", author,100)
+        author,count = re.subn(r'rpart by ', "", author,100)
+        author,count = re.subn(r', Jr', " Jr", author,100)
+        author,count = re.subn(r'; port to R, tests etc:', ",", author,100)
+        author,count = re.subn(r'[Oo]riginal by ', "", author,100)
+        author,count = re.subn(r'[Cc]ontributions from ', "", author,100)
+        author,count = re.subn(r'with contributions (by|from) ', "", author,100)
+        author,count = re.subn(r'following earlier work (by|from) ', "", author,100)
+        author,count = re.subn(r'derived from [^\s].* by ', ",", author,100)
+        author,count = re.subn(r'with ', "", author,100)
+        author,count = re.subn(r'\s\.', ",", author,100)
+        author,count = re.subn(r'(,,|\s,)', ",", author,100)
+        author,count = re.subn(r'[\.,]?\s*$', "", author,100)
+        author,count = re.subn(r'([^\s]){2}\.', r'\1,', author,100)
+        self.author=author
 
     def parse_cran_text(self):
         """
@@ -137,6 +162,7 @@ class CRANPackage:
 
         self.convert_license(cran_dict['License'])
         self.version = cran_dict['Version'].strip()
+        self.convert_author(cran_dict['Author'])
         if cran_dict.has_key('Title'):
             self.description = cran_dict['Title'] + ': ' + cran_dict['Description']
         else:
@@ -166,10 +192,10 @@ class CRANPackage:
                             description=self.description, os_license=self.os_license,
                             language='R', operating_systems='agnostic',
                             download_url=self.url, project_url=self.url, tags='r-cran',
-                            pub_date=self.date, updated_date=self.date)
+                            pub_date=self.date, updated_date=self.date, authors=self.author)
             spkg.save(False)
         else:
-            print 'Package ' + self.name + ' found, UPDATING...'
+            #print 'Package ' + self.name + ' found, UPDATING...'
             assert(dbpkg.count() == 1)
             spkg = dbpkg[0]
             # Don't mess around with manual entries.
@@ -181,6 +207,7 @@ class CRANPackage:
             spkg.download_url = self.url
             spkg.project_url = self.url
             spkg.updated_date=self.date
+            spkg.authors=self.author
             spkg.save(False)
 
 
@@ -211,6 +238,6 @@ def parse_ctv():
 """Slurp projects from CRAN"""
 cpkglist = parse_ctv()
 for pkg in cpkglist:
-    print pkg.name
     pkg.parse_cran_text()
+    print pkg.name, pkg.author
     pkg.insert_into_database()
