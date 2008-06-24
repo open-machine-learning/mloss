@@ -3,8 +3,9 @@ import datetime
 import time
 import sys
 import os
-sys.path.insert(0, '/home/mloss/')
-sys.path.insert(0, '/home/mloss/lib/python2.5/site-packages/')
+sys.path.insert(0, '/home/mloss')
+sys.path.insert(0, '/home/mloss/mloss')
+sys.path.insert(0, '/home/mloss/lib/python2.5/site-packages')
 #sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss')
 #sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss/mloss')
 os.environ['DJANGO_SETTINGS_MODULE']='mloss.settings'
