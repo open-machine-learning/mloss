@@ -62,6 +62,12 @@ class CRANPackage:
 
             if self.date is None:
                 try:
+                    self.date=datetime.datetime(*time.strptime(date, "%Y/%m/%d")[:5])
+                except ValueError:
+                    pass
+
+            if self.date is None:
+                try:
                     self.date=datetime.datetime(*time.strptime(date)[:5])
                 except ValueError:
                     pass
