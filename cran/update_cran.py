@@ -185,36 +185,39 @@ class CRANPackage:
             user.save()
             me = User.objects.get(username=settings.R_CRAN_BOT)
 
-        # check whether the package exists (without prefix)
-        dbpkg = Software.objects.filter(title=self.name)
-        if dbpkg.count() > 0:
-            return
 
-        # check whether the package exists (without prefix)
-        dbpkg = Software.objects.filter(user=me, title=self.prefix+self.name)
-        if dbpkg.count() == 0:
-            # if not create a new Software project
-            spkg = Software(user=me, title=self.prefix+self.name, version=self.version,
-                            description=self.description, os_license=self.os_license,
-                            language='R', operating_systems='agnostic',
-                            download_url=self.url, project_url=self.url, tags='r-cran',
-                            pub_date=self.date, updated_date=self.date, authors=self.author)
-            spkg.save(False)
-        else:
-            #print 'Package ' + self.name + ' found, UPDATING...'
-            assert(dbpkg.count() == 1)
-            spkg = dbpkg[0]
-            # Don't mess around with manual entries.
-            if spkg.tags != 'r-cran':
+        #don't insert crappy items having future date
+        if self.date<datetime.datetime.now():
+            # check whether the package exists (without prefix)
+            dbpkg = Software.objects.filter(title=self.name)
+            if dbpkg.count() > 0:
                 return
-            spkg.version = self.version
-            spkg.description = self.description
-            spkg.os_license = self.os_license
-            spkg.download_url = self.url
-            spkg.project_url = self.url
-            spkg.updated_date=self.date
-            spkg.authors=self.author
-            spkg.save(False)
+
+            # check whether the package exists (without prefix)
+            dbpkg = Software.objects.filter(user=me, title=self.prefix+self.name)
+            if dbpkg.count() == 0:
+                # if not create a new Software project
+                spkg = Software(user=me, title=self.prefix+self.name, version=self.version,
+                                description=self.description, os_license=self.os_license,
+                                language='R', operating_systems='agnostic',
+                                download_url=self.url, project_url=self.url, tags='r-cran',
+                                pub_date=self.date, updated_date=self.date, authors=self.author)
+                spkg.save(False)
+            else:
+                #print 'Package ' + self.name + ' found, UPDATING...'
+                assert(dbpkg.count() == 1)
+                spkg = dbpkg[0]
+                # Don't mess around with manual entries.
+                if spkg.tags != 'r-cran':
+                    return
+                spkg.version = self.version
+                spkg.description = self.description
+                spkg.os_license = self.os_license
+                spkg.download_url = self.url
+                spkg.project_url = self.url
+                spkg.updated_date=self.date
+                spkg.authors=self.author
+                spkg.save(False)
 
 
 def parse_ctv():
