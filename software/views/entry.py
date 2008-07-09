@@ -6,7 +6,7 @@ rated and viewed according to various criteria.
 
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect, Http404
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
 from django.views.generic import list_detail
@@ -239,6 +239,9 @@ def stats_helper(request, software_id, type, dpi):
     ax = fig.add_subplot(111)
 
     stat = SoftwareStatistics.objects.filter(software=software_id).distinct().order_by('date')
+
+    if stat.count()<=0:
+        return HttpResponseForbidden()
 
     x=list()
     y=list()
