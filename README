@@ -1,0 +1,32 @@
+This is the README file for the code to the mloss.org website.
+For licensing issues, see COPYING.
+For contributors, see ACKNOWLEDGEMENTS.
+
+This website is built using the django framework
+(http://www.djangoproject.com). Refer to that website for general
+information about the framework. An online version of a very nice book
+on django can be found at http://www.djangobook.com/ . 
+
+The website contains quite a few features and is also quite specific,
+so you may or may not find it useful for your means. The features include:
+
+* a registration system for users of the site
+* a database of user submitted software projects
+* a rating system for the projects
+* a commenting system for the projects
+* access-statistics to the projects
+* a blog (although articles have to be entered directly through django's
+  admin interface)
+* a forum
+* email notifications for tracking projects and the forum
+* a tool which automatically extracts projects in the "machine learning"
+  section from CRAN (a repository for packages for the R programming 
+  language)
+
+The source code is organized into several sub-directories, so called
+"applications". Each directory is organized more or less according to
+the django standard, at least containing a definition of the models in
+models.py, and of the url mappings in urls.py. If you want to find out
+how a specific url is processed, have a look at the urls.py which tell
+you which method takes care of the request.
+

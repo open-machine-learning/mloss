@@ -1,0 +1,37 @@
+All programs in this collection are free software:
+you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+Copyright 2007-2008:
+Cheng Soon Ong <chengsoon.ong@inf.ethz.ch>
+Soeren Sonnenburg <soeren.sonnenburg@first.fraunhofer.de>
+Mikio Braun <mikio@cs.tu-berlin.de>
+
+
+The design of this site was heavily based on the design of
+http://www.djangoproject.com/, and built using:
+- django (http://www.djangoproject.com/)
+BSD License
+
+- markdown-1.7 (http://pypi.python.org/pypi/Markdown/1.7)
+BSD License, GNU Public License (GPL)
+
+- registration-0.2 (http://code.google.com/p/django-registration/),
+New BSD License
+
+- feedparser-4.1 (http://www.feedparser.org/)
+MIT License
+
+
+
