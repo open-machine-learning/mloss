@@ -9,6 +9,12 @@ root URLConf to include this URLConf for any URL beginning with
 
 from django.conf.urls.defaults import *
 
+from community.models import Forum
+forum_dict = {
+    'queryset' : Forum.objects.all(),
+}
+
+
 # General softwares views.
 urlpatterns = patterns('',
     #catch all view/<num>/1.2.3 urls, change later when we support versions
@@ -52,4 +58,5 @@ urlpatterns = patterns('',
     (r'^tags/(?P<slug>[^/]+)/$', 'software.views.list.software_by_tag'),
     (r'^opsys/$', 'software.views.entry.software_all_opsyss'),
     (r'^opsys/(?P<slug>[^/]+)/$', 'software.views.list.software_by_opsys'),
+    (r'^forum/$', 'django.views.generic.list_detail.object_list', forum_dict),
 )
