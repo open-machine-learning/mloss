@@ -9,7 +9,6 @@ from django.db import models
 import datetime
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from mloss.subscriptions.models import Subscriptions
@@ -74,9 +73,6 @@ Friendly,
         '''
 
 		send_mails(subscribers, subject, message)
-
-class ForumAdmin(admin.ModelAdmin):
-	pass
 
 class Thread(models.Model):
 	"""
@@ -148,9 +144,6 @@ Friendly,
 
 		send_mails(subscribers, subject, message)
 
-class ThreadAdmin(admin.ModelAdmin):
-	pass
-
 class Post(models.Model):
 	""" 
 	A Post is a User's input to a thread. Uber-basic - the save() 
@@ -193,9 +186,6 @@ class Post(models.Model):
 	def __str__(self):
 		return "%s" % self.id
 
-class PostAdmin(admin.ModelAdmin):
-	pass
-
 class ForumSummary(models.Model):
     """
     Summarises latest forum posts
@@ -213,6 +203,3 @@ class FeedSummary(models.Model):
     url = ''
     items = []
 
-admin.site.register(Forum, ForumAdmin)
-admin.site.register(Thread, ThreadAdmin)
-admin.site.register(Post, PostAdmin)

@@ -19,7 +19,6 @@ from django.db import models
 from django.template import Context, loader
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.contrib import admin
 
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
@@ -173,9 +172,3 @@ class RegistrationProfile(models.Model):
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
         return self.user.date_joined + expiration_date <= datetime.datetime.now()
     activation_key_expired.boolean = True
-
-class RegistrationProfileAdmin(admin.ModelAdmin):
-	list_display = ('__str__', 'activation_key_expired')
-	search_fields = ('user__username', 'user__first_name')
-
-admin.site.register(RegistrationProfile, RegistrationProfileAdmin)

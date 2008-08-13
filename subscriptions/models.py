@@ -2,7 +2,6 @@ from markdown import markdown
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.contrib import admin
 from django.db import models
 
 class Subscriptions(models.Model):
@@ -51,7 +50,3 @@ class Subscriptions(models.Model):
             c=self.content_type.get_object_for_this_type(id=self.object_id)
             return "/community/rmbookmark/%s/%d" % (c.forum.slug, self.object_id)
 
-class SubscriptionsAdmin(admin.ModelAdmin):
-    list_display = ('user', 'title', 'last_updated', 'subscribed_date', 'url',
-            'object_id', 'content_type', 'bookmark')
-    pass
