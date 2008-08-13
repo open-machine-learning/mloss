@@ -1,3 +1,35 @@
+The design of this site was heavily based on the design of
+http://www.djangoproject.com/ and http://www.djangosnippets.org.
+
+The file markdown.py was obtained from markdown-1.7
+(http://pypi.python.org/pypi/Markdown/1.7) and is licensed under
+the BSD License and GNU Public License (GPL).
+
+The files in registration are based on registration-0.2
+(http://code.google.com/p/django-registration/) licensed under
+the BSD License.
+
+The files in aggregation are based on feedparser-4.1
+(http://www.feedparser.org/) and licensed under the MIT License.
+
+The files in community are based on django-forum obtained from
+http://code.google.com/p/django-forum/ and licensed
+under the BSD License.
+
+Apart from the files in registration/, aggregation/, community/ and the file
+markdown.py, all files are licensed under under the terms of the GNU General
+Public License as published by the Free Software Foundation, either version 3 of
+the License, or (at your option) any later version and
+
+Copyright 2007-2008 the mloss team, which currently is (in alphabetical order)
+
+	Mikio Braun <mikio@cs.tu-berlin.de>
+	Cheng Soon Ong <chengsoon.ong@inf.ethz.ch>
+	Soeren Sonnenburg <soeren.sonnenburg@first.fraunhofer.de>
+
+
+
+
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 

@@ -1,11 +1,12 @@
-This is the README file for the code to the mloss.org website.
-For licensing issues, see COPYING.
-For contributors, see ACKNOWLEDGEMENTS.
+This is the source code of the mloss.org website. It was written by the
+mloss team, which currently is (in alphabetical order)
 
-This website is built using the django framework
-(http://www.djangoproject.com). Refer to that website for general
-information about the framework. An online version of a very nice book
-on django can be found at http://www.djangobook.com/ . 
+Mikio Braun <mikio@cs.tu-berlin.de>
+Cheng Soon Ong <chengsoon.ong@inf.ethz.ch>
+Soeren Sonnenburg <soeren.sonnenburg@first.fraunhofer.de>
+
+
+FEATURES
 
 The website contains quite a few features and is also quite specific,
 so you may or may not find it useful for your means. The features include:
@@ -30,3 +31,36 @@ models.py, and of the url mappings in urls.py. If you want to find out
 how a specific url is processed, have a look at the urls.py which tell
 you which method takes care of the request.
 
+
+LICENSE
+
+The source code is licensed under GPLv3, and incorporates the work of
+a number of projects, cf. LICENSE for details.
+
+
+INSTALLING
+
+This website is built using the django framework
+(http://www.djangoproject.com). Refer to that website for general
+information about the framework. An online version of a very nice book
+on django can be found at http://www.djangobook.com/ . 
+
+Download Django 1.0 or a recent svn snapshot
+
+svn co http://code.djangoproject.com/svn/django/trunk/ Django
+
+and install it via the usual python setup.py install.
+
+To locally test out the mloss.org webpage untar the source and run
+
+python manage.py syncdb
+python manage.py runserver
+
+then open http://127.0.0.1:8000 in a web browser and have fun.
+
+In case you want to put things live follow the steps described at
+http://www.djangoproject.com/documentation/modpython/.
+
+
+Sincerely,
+	your mloss team.
