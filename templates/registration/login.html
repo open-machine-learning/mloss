@@ -21,9 +21,9 @@
 <form method="post" action="{% if next %}?next={{ next }}{% endif %}">
 <dl>
 <dt><label for="id_username">Username:</label>{% if form.username.errors %} <span class="error">{{ form.username.errors|join:", " }}</span>{% endif %}</dt>
-<dd>{{ form.username }}</dd>
+<dd>{{ form.username|safe }}</dd>
 <dt><label for="id_password">Password:</label>{% if form.password.errors %} <span class="error">{{ form.password.errors|join:", " }}</span>{% endif %}</dt>
-<dd>{{ form.password }}</dd>
+<dd>{{ form.password|safe }}</dd>
 <dt><input type="submit" value="Log in" /></dt>
 </dl>
 </form>

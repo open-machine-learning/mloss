@@ -53,14 +53,14 @@
         {% if form.username.errors %}
         <span class="error">{{ form.username.errors|join:", " }}</span>
         {% endif %}
-        {{ form.username }}
+        {{ form.username|safe }}
         </dt>
         <dt><label for="id_password"><tt>Password:</tt></label></dt>
         <dt>
         {% if form.password.errors %}
         <span class="error">{{ form.password.errors|join:", " }}</span>
         {% endif %}
-        {{ form.password }} (<a href="/accounts/password/reset/">
+        {{ form.password|safe }} (<a href="/accounts/password/reset/">
             Forgotten your password?</a>)
         </dt>
         {% endif %}
@@ -70,7 +70,7 @@
             {% endif %}
         </label></dt>
         <dt>
-        {{ form.title }}
+        {{ form.title|safe }}
         </dt>
         <dt><label>
             {% if user.is_authenticated %}
@@ -81,7 +81,7 @@
             {% if form.body.errors %}
             <span class="error">{{ form.body.errors|join:", " }}</span>
             {% endif %}</label></dt>
-        <dt>{{ form.body }}</dt>
+        <dt>{{ form.body|safe }}</dt>
         <dd>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</dd>
         <dd><input type="submit" name="preview" value="Preview comment"/>
         <input type="submit" name="post" value="Post Message"/></dd>

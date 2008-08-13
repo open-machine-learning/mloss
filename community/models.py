@@ -9,6 +9,7 @@ from django.db import models
 import datetime
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from mloss.subscriptions.models import Subscriptions
@@ -26,9 +27,6 @@ class Forum(models.Model):
 	threads = models.IntegerField(default=0)
 	posts = models.IntegerField(default=0)
 	forum_latest_post = models.ForeignKey('Post', blank=True, null=True, related_name='forum_latest_post')
-
-	class Admin:
-		pass
 
 	def get_absolute_url(self):
 		return '/community/%s/' % self.slug
@@ -77,6 +75,8 @@ Friendly,
 
 		send_mails(subscribers, subject, message)
 
+class ForumAdmin(admin.ModelAdmin):
+	pass
 
 class Thread(models.Model):
 	"""
@@ -108,9 +108,6 @@ class Thread(models.Model):
 	def get_absolute_url(self):
 		return '/community/%s/%s/' % (self.forum.slug, self.id)
 	
-	class Admin:
-		pass
-
 	def __str__(self):
 		return self.title
 
@@ -151,6 +148,9 @@ Friendly,
 
 		send_mails(subscribers, subject, message)
 
+class ThreadAdmin(admin.ModelAdmin):
+	pass
+
 class Post(models.Model):
 	""" 
 	A Post is a User's input to a thread. Uber-basic - the save() 
@@ -190,13 +190,11 @@ class Post(models.Model):
 				return '/community/%s/%s/?page=%d#post%s' % (self.thread.forum.slug, self.thread.id, p / 10+1, self.id)
 			p+=1
 	
-	class Admin:
-		pass
-
 	def __str__(self):
 		return "%s" % self.id
 
-
+class PostAdmin(admin.ModelAdmin):
+	pass
 
 class ForumSummary(models.Model):
     """
@@ -214,3 +212,7 @@ class FeedSummary(models.Model):
     title = ''
     url = ''
     items = []
+
+admin.site.register(Forum, ForumAdmin)
+admin.site.register(Thread, ThreadAdmin)
+admin.site.register(Post, PostAdmin)

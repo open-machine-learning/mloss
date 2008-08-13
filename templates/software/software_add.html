@@ -88,7 +88,7 @@ function addStringToElement(element_id, combo_id)
 						{{ form.title.errors|join:", " }}
 					</span>
 					{% endif %}
-					<dd>{{ form.title }}</dd>
+					<dd>{{ form.title|safe }}</dd>
 				</td>
 				<td>
 					<b>{{ form.version.label }}</b><br></br> <span class="help">{{ form.version.help_text }}</span>
@@ -97,7 +97,7 @@ function addStringToElement(element_id, combo_id)
 						{{ form.version.errors|join:", " }}
 					</span>
 					{% endif %}
-					<dd>{{ form.version }}</dd>
+					<dd>{{ form.version|safe }}</dd>
 				</td>
 			</tr>
 			<tr>
@@ -108,7 +108,7 @@ function addStringToElement(element_id, combo_id)
 						{{ form.authors.errors|join:", " }}
 					</span>
 					{% endif %}
-					<dd>{{ form.authors_choice }}{{ form.authors }}</dd>
+					<dd>{{ form.authors_choice|safe }}{{ form.authors|safe }}</dd>
 					<script type="text/javascript">
 						<!--
 						document.getElementById('{{ form.authors_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.authors.auto_id }}', '{{ form.authors_choice.auto_id }}');};
@@ -122,7 +122,7 @@ function addStringToElement(element_id, combo_id)
 					{{ form.contact.errors|join:", " }}
 				</span>
 				{% endif %}
-				<dd>{{ form.contact }}</dd>
+				<dd>{{ form.contact|safe }}</dd>
 			</td> 
 		</tr>
 		<tr>
@@ -133,7 +133,7 @@ function addStringToElement(element_id, combo_id)
 					{{ form.tags.errors|join:", " }}
 				</span>
 				{% endif %}
-				<dd>{{ form.tags_choice }}{{ form.tags }}</dd>
+				<dd>{{ form.tags_choice|safe }}{{ form.tags|safe }}</dd>
 				<script type="text/javascript">
 					<!--
 					document.getElementById('{{ form.tags_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.tags.auto_id }}', '{{ form.tags_choice.auto_id }}');};
@@ -147,7 +147,7 @@ function addStringToElement(element_id, combo_id)
 					{{ form.language.errors|join:", " }}
 				</span>
 				{% endif %}
-				<dd>{{ form.language_choice }}{{ form.language }}</dd>
+				<dd>{{ form.language_choice|safe }}{{ form.language|safe }}</dd>
 				<script type="text/javascript">
 					<!--
 					document.getElementById('{{ form.language_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.language.auto_id }}', '{{ form.language_choice.auto_id }}');};
@@ -163,7 +163,7 @@ function addStringToElement(element_id, combo_id)
 					{{ form.operating_systems.errors|join:", " }}
 				</span>
 				{% endif %}
-				<dd>{{ form.operating_systems_choice }}{{ form.operating_systems }}</dd>
+				<dd>{{ form.operating_systems_choice|safe }}{{ form.operating_systems|safe }}</dd>
 				<script type="text/javascript">
 					<!--
 					document.getElementById('{{ form.operating_systems_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.operating_systems.auto_id }}', '{{ form.operating_systems_choice.auto_id }}');};
@@ -177,7 +177,7 @@ function addStringToElement(element_id, combo_id)
 					{{ form.os_license.errors|join:", " }}
 				</span>
 				{% endif %}
-				<dd>{{ form.os_license_choice }}{{ form.os_license }}</dd>
+				<dd>{{ form.os_license_choice|safe }}{{ form.os_license|safe }}</dd>
 				<script type="text/javascript">
 					<!--
 					document.getElementById('{{ form.os_license_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.os_license.auto_id }}', '{{ form.os_license_choice.auto_id }}');};
@@ -193,7 +193,7 @@ function addStringToElement(element_id, combo_id)
 					{{ form.project_url.errors|join:", " }}
 				</span>
 				{% endif %}
-				<dd>{{ form.project_url }}</dd>
+				<dd>{{ form.project_url|safe }}</dd>
 			</td>
 			<td>
 				{{ form.screenshot.label }}<br></br> <span class="help">{{ form.screenshot.help_text }}</span>
@@ -202,7 +202,7 @@ function addStringToElement(element_id, combo_id)
 					{{ form.screenshot.errors|join:", " }}
 				</span>
 				{% endif %}
-				<dd>{{ form.screenshot }} {{ form.screenshot_file }}</dd>
+				<dd>{{ form.screenshot|safe }} {{ form.screenshot_file|safe }}</dd>
 			</tr>
 			<tr>
 				<td>
@@ -212,7 +212,7 @@ function addStringToElement(element_id, combo_id)
 						{{ form.tarball.errors|join:", " }}
 					</span>
 					{% endif %}
-					<dd>{{ form.tarball }} {{ form.tarball_file }}</dd>
+					<dd>{{ form.tarball|safe }} {{ form.tarball_file|safe }}</dd>
 				</td>
 				<td>
 					{{ form.download_url.label }}<br></br> <span class="help">{{ form.download_url.help_text }}</span>
@@ -221,7 +221,7 @@ function addStringToElement(element_id, combo_id)
 						{{ form.download_url.errors|join:", " }}
 					</span>
 					{% endif %}
-					<dd>{{ form.download_url }}</dd>
+					<dd>{{ form.download_url|safe }}</dd>
 				</td>
 			</tr>
 			<tr>
@@ -232,7 +232,7 @@ function addStringToElement(element_id, combo_id)
 						{{ form.paper_bib.errors|join:", " }}
 					</span>
 					{% endif %}
-					<dd>{{ form.paper_bib }}</dd>
+					<dd>{{ form.paper_bib|safe }}</dd>
 				</td>
 			</tr>
 			<tr>
@@ -243,7 +243,7 @@ function addStringToElement(element_id, combo_id)
 						{{ form.description.errors|join:", " }}
 					</span>
 					{% endif %}
-					<dd>{{ form.description }}</dd>
+					<dd>{{ form.description|safe }}</dd>
 				</td>
 			</tr>
 		</table>

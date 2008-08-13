@@ -1,13 +1,14 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib import admin
 from django.views.generic.list_detail import object_list
 
-
+admin.autodiscover()
 
 urlpatterns = patterns('',
     # administration
-    (r'^admin/', include('django.contrib.admin.urls')),
+    (r'^admin/(.*)', admin.site.root),
 
     # Using cab to browse software
     (r'^software/', include('software.urls')),

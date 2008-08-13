@@ -143,15 +143,15 @@
 <form method="post" action="/user/update/{{object.pk}}/">
 <dl>
 <dt><label for="id_firstname">First Name:</label>{% if form.firstname.errors %} <span class="error">{{ form.firstname.errors|join:", " }}</span>{% endif %}</dt>
-<dd>{{ form.firstname }}</dd>
+<dd>{{ form.firstname|safe }}</dd>
 <dt><label for="id_lastname">Last Name:</label>{% if form.lastname.errors %} <span class="error">{{ form.lastname.errors|join:", " }}</span>{% endif %}</dt>
-<dd>{{ form.lastname }}</dd>
+<dd>{{ form.lastname|safe }}</dd>
 <dt><label for="id_email">Email address:</label>{% if form.email.errors %} <span class="error">{{ form.email.errors|join:", " }}</span>{% endif %}</dd>
-<dd>{{ form.email }}</dd>
+<dd>{{ form.email|safe }}</dd>
 <dt><label for="id_password1">Password:</label>{% if form.password1.errors %} <span class="error">{{ form.password2.errors|join:", " }}</span>{% endif %}</dt>
-<dd>{{ form.password1 }}</dd>
+<dd>{{ form.password1|safe }}</dd>
 <dt><label for="id_password2">Password (type again to catch any typos):</label>{% if form.password2.errors %} <span class="error">{{ form.password2.errors|join:", " }}</span>{% endif %}</dt>
-<dd>{{ form.password2 }}</dd>
+<dd>{{ form.password2|safe }}</dd>
 <dt><input type="submit" value="Update" /></dt>
 </dl>
 </form>

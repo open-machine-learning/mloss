@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib import admin
 from utils import slugify
 
 class BlogItem(models.Model):
@@ -13,9 +14,6 @@ class BlogItem(models.Model):
         ordering = ('-pub_date',)
         get_latest_by = 'pub_date'
 
-    class Admin:
-        list_display = ('pub_date', 'headline', 'author')
-
     def __str__(self):
         return self.headline
 
@@ -26,3 +24,9 @@ class BlogItem(models.Model):
         if not self.id:
             self.slug = slugify(self.headline)
         super(BlogItem,self).save()
+
+class BlogItemAdmin(admin.ModelAdmin):
+	list_display = ('pub_date', 'headline', 'author')
+
+
+admin.site.register(BlogItem, BlogItemAdmin)

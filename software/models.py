@@ -1,5 +1,6 @@
 import datetime
 from django.utils.html import strip_tags
+from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
 from django.contrib.auth.models import User
@@ -13,7 +14,7 @@ from django.shortcuts import get_object_or_404
 
 from markdown import markdown
 from utils import parsewords, slugify, send_mails
-from subscriptions.models import Subscriptions
+from subscriptions.models import Subscriptions, SubscriptionsAdmin
 
 # make sure this list of variables is up-to-date (i.e. matches
 # the fields in the Software object
@@ -51,9 +52,6 @@ class Author(models.Model):
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
 
-    class Admin:
-        pass
-
     def save(self):
         if not self.id:
             self.slug = slugify(self.name)
@@ -66,13 +64,12 @@ class Author(models.Model):
     def __str__(self):
         return self.name
     
+class AuthorAdmin(admin.ModelAdmin):
+    pass
 
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
-
-    class Admin:
-        pass
 
     def save(self):
         if not self.id:
@@ -86,13 +83,12 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
     
+class TagAdmin(admin.ModelAdmin):
+    pass
 
 class License(models.Model):
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
-
-    class Admin:
-        pass
 
     def save(self):
         if not self.id:
@@ -105,13 +101,13 @@ class License(models.Model):
     
     def __str__(self):
         return self.name
+
+class LicenseAdmin(admin.ModelAdmin):
+    pass
     
 class Language(models.Model):
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
-
-    class Admin:
-        pass
 
     def save(self):
         if not self.id:
@@ -125,13 +121,12 @@ class Language(models.Model):
     def __str__(self):
         return self.name
     
+class LanguageAdmin(admin.ModelAdmin):
+    pass
 
 class OpSys(models.Model):
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
-
-    class Admin:
-        pass
 
     def save(self):
         if not self.id:
@@ -144,6 +139,9 @@ class OpSys(models.Model):
     
     def __str__(self):
         return self.name
+
+class OpSysAdmin(admin.ModelAdmin):
+    pass
 
 class SoftwareManager(models.Manager):
     """
@@ -217,7 +215,7 @@ class Software(models.Model):
     A description of some machine learning open source
     software project.
     """
-    user = models.ForeignKey(User, raw_id_admin=True)
+    user = models.ForeignKey(User)
     title = models.CharField(max_length=80)
     version = models.CharField(max_length=80)
     authors = models.CharField(max_length=200)
@@ -390,21 +388,6 @@ Friendly,
 
     get_absolute_url = models.permalink(get_absolute_url)
 
-    class Admin:
-        fields = (
-            ('Metadata', {
-            'fields': ('user', 'title', 'version', 'authors')}),
-            ('None', {
-            'fields': ( 'contact', 'description',
-                'project_url', 'jmlr_mloss_url', 'tags', 'language', 'os_license', 
-                'pub_date', 'updated_date', 'tarball', 'screenshot', 'operating_systems',
-                'paper_bib', 'total_number_of_views', 'total_number_of_downloads')}),
-            )
-        list_filter = ['pub_date']
-        date_hierarchy = 'pub_date'
-        search_fields = ['title']
-
-
     def get_stats_for_today(self):
         t = datetime.date.today().strftime("%Y-%m-%d")
         stats, flag = SoftwareStatistics.objects.get_or_create(software=self, date=t)
@@ -430,16 +413,30 @@ Friendly,
         self.save(auto_update_date=False)
         e=self.get_stats_for_today()
         e.update_downloads()
-        
+
     class Meta:
         ordering = ('-pub_date',)
+
+class SoftwareAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Metadata', {
+        'fields': ('user', 'title', 'version', 'authors')}),
+        ('None', {
+        'fields': ( 'contact', 'description',
+            'project_url', 'jmlr_mloss_url', 'tags', 'language', 'os_license', 
+            'updated_date', 'tarball', 'screenshot', 'operating_systems',
+            'paper_bib', 'total_number_of_views', 'total_number_of_downloads')}),
+        )
+    list_filter = ['pub_date']
+    date_hierarchy = 'pub_date'
+    search_fields = ['title']
 
 class SoftwareRating(models.Model):
     """Rating for a software
 
     Each user can rate a software only once (but she might change
     her rating?)"""
-    user = models.ForeignKey(User, raw_id_admin=True)
+    user = models.ForeignKey(User)
     software = models.ForeignKey(Software)
     features = models.IntegerField(default=0)
     usability = models.IntegerField(default=0)
@@ -471,9 +468,8 @@ class SoftwareRating(models.Model):
         self.save()
         self.update_software_ratings()
 
-    class Admin:
-        list_display = ('software', 'user', 'features', 'usability', 'documentation')
-        pass
+class SoftwareRatingAdmin(admin.ModelAdmin):
+    list_display = ('software', 'user', 'features', 'usability', 'documentation')
 
 class SoftwareStatistics(models.Model):
     """
@@ -492,14 +488,16 @@ class SoftwareStatistics(models.Model):
         self.number_of_downloads += 1
         self.save()
     
-    class Admin:
-        list_display = ('date', 'number_of_views', 'number_of_downloads')
-        pass
+class SoftwareStatisticsAdmin(admin.ModelAdmin):
+	list_display = ('date', 'number_of_views', 'number_of_downloads')
 
-def comment_notification(sender, instance):
+def comment_notification(**kwargs):
     """
          instance is the comment object
     """
+
+    sender=kwargs['sender']
+    instance=kwargs['instance']
 
     try:
         sw=Software.objects.get(id=instance.object_id)
@@ -529,5 +527,15 @@ Friendly,
     except ObjectDoesNotExist:
         pass
 
-dispatcher.connect(comment_notification, sender=FreeComment, signal=signals.post_save)
-dispatcher.connect(comment_notification, sender=Comment, signal=signals.post_save)
+admin.site.register(Author, AuthorAdmin)
+admin.site.register(Tag, TagAdmin)
+admin.site.register(License, LicenseAdmin)
+admin.site.register(Language, LanguageAdmin)
+admin.site.register(OpSys, OpSysAdmin)
+admin.site.register(Software, SoftwareAdmin)
+admin.site.register(SoftwareRating, SoftwareRatingAdmin)
+admin.site.register(SoftwareStatistics, SoftwareStatisticsAdmin)
+admin.site.register(Subscriptions, SubscriptionsAdmin)
+
+signals.post_save.connect(comment_notification, sender=FreeComment)
+signals.post_save.connect(comment_notification, sender=Comment)

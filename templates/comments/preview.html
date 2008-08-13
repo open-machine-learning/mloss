@@ -10,13 +10,13 @@
 {% block content %}
 <form action="/comments/post/" method="post">
   {% if comment_form.username.errors or comment_form.password.errors %}
-  <p><label for="id_username"><tt>Username:</tt>{{ comment_form.username }}
+  <p><label for="id_username"><tt>Username:</tt>{{ comment_form.username|safe }}
     {% if comment_form.username.errors %}
       <span class="error">{{ comment_form.username.error_list|join:", " }}</span>
     {% endif %}
     </label>
       </p>
-	  <p><label for="id_password"><tt>Password:</tt>{{ comment_form.password }}
+	  <p><label for="id_password"><tt>Password:</tt>{{ comment_form.password|safe }}
     {% if comment_form.password.errors %}
       <span class="error">{{ comment_form.password.error_list|join:", " }}</span>
     {% endif %}
@@ -36,7 +36,7 @@
       {{ comment_form.comment.error_list|join:", "  }}
     </span>
   {% endif %}
-  </label><br />{{ comment_form.comment }}</p>
+  </label><br />{{ comment_form.comment|safe }}</p>
   <input type="hidden" name="options" value="{{ options }}" />
   <input type="hidden" name="target" value="{{ target }}" />
   <input type="hidden" name="gonzo" value="{{ hash }}" />

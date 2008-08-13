@@ -36,7 +36,7 @@ a:link, a:visited { color:#ffc757; }
 #nav-global li { display:block; float:left; list-style-type:none; margin:0; padding:0; }
 #nav-global a { display:block; float:left; padding:1em 10px 10px 10px; background:#336699; }
 #nav-global a:hover { color:#f7f7f7; background:#113366; }
-#news #nav-news a, #browse #nav-browse a, #submit #nav-submit a, #community #nav-community a, #Workshop #nav-workshop a, #links #nav-links a, #faq #nav-faq a, #About #nav-about a { color:#113366; background:#f7f7f7; bottom repeat-x; }
+#news #nav-news a, #browse #nav-browse a, #submit #nav-submit a, #forum #nav-forum a, #blog #nav-blog a, #Workshop #nav-workshop a, #links #nav-links a, #faq #nav-faq a, #About #nav-about a { color:#113366; background:#f7f7f7; bottom repeat-x; }
 #nav-global h1,h2,h3 { margin-top:.8em; font-family:"Trebuchet MS",sans-serif; font-weight:normal; }
 #nav-global h1 { font-size:158%; margin-top:.6em; margin-bottom:.6em; color:#FFFFFF; line-height:1.1em; }
 #nav-global h2 { font-size:110%; margin-top:1em; margin-bottom:.2em; line-height:1.2em; color:#FFFFFF; }

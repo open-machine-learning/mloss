@@ -1,8 +1,9 @@
 from markdown import markdown
 from django.contrib.auth.models import User
-from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.contrib import admin
+from django.db import models
 
 class Subscriptions(models.Model):
     """ 
@@ -17,7 +18,7 @@ class Subscriptions(models.Model):
 	"""
 
     # user, title, url
-    user = models.ForeignKey(User, raw_id_admin=True)
+    user = models.ForeignKey(User)
     title = models.CharField(max_length=200)
     url = models.URLField(verify_exists=False)
     # if bookmark == true don't send out notifications
@@ -50,7 +51,7 @@ class Subscriptions(models.Model):
             c=self.content_type.get_object_for_this_type(id=self.object_id)
             return "/community/rmbookmark/%s/%d" % (c.forum.slug, self.object_id)
 
-    class Admin:
-        list_display = ('user', 'title', 'last_updated', 'subscribed_date', 'url',
-                'object_id', 'content_type', 'bookmark')
-        pass
+class SubscriptionsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'title', 'last_updated', 'subscribed_date', 'url',
+            'object_id', 'content_type', 'bookmark')
+    pass

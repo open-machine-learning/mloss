@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib import admin
 
 # Create your models here.
 class News(models.Model):
@@ -10,16 +11,20 @@ class News(models.Model):
 
     class Meta:
         ordering = ('-publication_date',)
-    class Admin:
-        list_display = ('headline', 'publication_date')
-    
+
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ('headline', 'publication_date')
+
 class Faq(models.Model):
     question = models.TextField()
     answer = models.TextField()
 
-    class Admin:
-        list_display = ('question', 'answer')
-        fields = (
+class FaqAdmin(admin.ModelAdmin):
+    list_display = ('question', 'answer')
+    fieldsets = (
             (None, {'fields': ('question','answer')}),
             )
-        
+
+
+admin.site.register(News, NewsAdmin)
+admin.site.register(Faq, FaqAdmin)

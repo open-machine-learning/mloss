@@ -195,7 +195,7 @@
 					be changed later on.</p>
 					<form method="post" action="/software/rate/{{ object.id }}/">
 						<table>
-							{{ ratingform }}
+							{{ ratingform|safe }}
 						</table>
 						<input type="submit" value="Submit my ratings!">
 					</form>
