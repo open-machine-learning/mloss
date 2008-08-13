@@ -146,9 +146,10 @@ class UpdateSoftwareForm(forms.Form):
         """
         Check that archive is only .tar.gz .tar.bz2 .zip 
         """
-        if 'tarball' in self.data:
+        if 'tarball' in self.data and len(self.data['tarball']):
             tarball = self.data['tarball']
-            if tarball and tarball.get('content-type') not in ('application/zip',
+
+            if tarball and tarball.content_type not in ('application/zip',
                     'application/gzip', 
                     'application/x-gzip', 
                     'application/tar', 
@@ -157,7 +158,7 @@ class UpdateSoftwareForm(forms.Form):
                     'application/x-bzip', 
                     'application/x-bzip-compressed-tar'):
                 raise forms.ValidationError(u'Only compressed or uncompressed zip or tar archives allowed.')
-            if len(tarball['content']) > settings.MAX_FILE_UPLOAD_SIZE * 1024:
+            if tarball.size > settings.MAX_FILE_UPLOAD_SIZE * 1024:
                 raise forms.ValidationError(u'Tarball too big, max allowed size is %d KB' % settings.MAX_FILE_UPLOAD_SIZE)
 
         return self.cleaned_data['tarball']
@@ -166,18 +167,20 @@ class UpdateSoftwareForm(forms.Form):
         """
         Check that screenshot is only jpeg/png/gif
         """
-        if 'screenshot' in self.data:
+        if 'screenshot' in self.data and len(self.data['screenshot']):
             screenshot = self.data['screenshot']
-            if screenshot and screenshot.get('content-type') not in ('image/jpeg',
+
+            if screenshot and screenshot.content_type not in ('image/jpeg',
                     'image/gif', 'image/png', 'image/x-png', 'image/pjpeg'):
                 raise forms.ValidationError(u'Only images of type png, gif or jpeg allowed.')
 
-            if len(screenshot['content']) > settings.MAX_IMAGE_UPLOAD_SIZE * 1024:
+            if screenshot.size > settings.MAX_IMAGE_UPLOAD_SIZE * 1024:
                 raise forms.ValidationError(u'Image too big, max allowed size is %d KB' % settings.MAX_IMAGE_UPLOAD_SIZE)
 
             try:
                 from PIL import Image  
-                img = Image.open(StringIO(screenshot['content']))  
+                img = Image.open(StringIO(screenshot.read()))
+                screenshot.open() # seek to beginning of file
                 width, height = img.size
                 if width > settings.MAX_IMAGE_UPLOAD_WIDTH:
                     raise forms.ValidationError('Maximum image width is %s' % settings.MAX_IMAGE_UPLOAD_WIDTH)
@@ -250,16 +253,17 @@ def save_tarball(request, object):
     Retrieve filename and save the file
     """
     if request.FILES.has_key('tarball'):
-        filename = request.FILES['tarball']['filename']
-        object.save_tarball_file(filename, request.FILES['tarball']['content'])
+        filename = request.FILES['tarball'].name
+        object.tarball.save(filename, request.FILES['tarball'], save=False)
+
 
 def save_screenshot(request, object):
     """
     Retrieve filename and save the file
     """
     if request.FILES.has_key('screenshot'):
-        filename = request.FILES['screenshot']['filename']
-        object.save_screenshot_file(filename, request.FILES['screenshot']['content'])
+        filename = request.FILES['screenshot'].name
+        object.screenshot.save(filename, content=request.FILES['screenshot'], save=False)
 
 def add_software(request):
     """

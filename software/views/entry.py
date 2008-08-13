@@ -82,7 +82,7 @@ def download_software(request, software_id):
     if entry.download_url:
         return HttpResponseRedirect(entry.download_url)
     elif entry.tarball:
-        return HttpResponseRedirect('/media/' + entry.tarball)
+        return HttpResponseRedirect('/media/' + entry.tarball.name)
     else:
         raise Http404
 
