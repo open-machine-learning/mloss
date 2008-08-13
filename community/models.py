@@ -170,12 +170,12 @@ class Post(models.Model):
 		super(Post, self).save()
 
 		if new_post:
-			t = Thread.objects.get(id=self.thread.id)
+			t=self.thread
 			t.thread_latest_post_id = self.id
 			t.posts += 1
 			t.save()
 
-			f = Forum.objects.get(id=self.thread.forum.id)
+			f = self.thread.forum
 			f.forum_latest_post_id = self.id
 			f.posts += 1
 			f.save()
