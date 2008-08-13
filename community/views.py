@@ -8,7 +8,7 @@ from datetime import datetime
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
-from django import newforms as forms
+from django import forms
 from django.contrib.auth import authenticate, login
 from django.views.generic import list_detail
 from aggregator.models import Feed, FeedItem

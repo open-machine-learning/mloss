@@ -3,12 +3,12 @@ Forms for adding Software
 
 """
 from django.conf import settings
-from django import newforms as forms
+from django import forms
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.views.generic.create_update import update_object
-from django.newforms.widgets import RadioSelect
+from django.forms.widgets import RadioSelect
 from django.utils.html import strip_tags
 from StringIO import StringIO  
 from software.models import Software, Language, License, Tag, Author, OpSys

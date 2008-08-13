@@ -1,7 +1,7 @@
 from django.views.generic.list_detail import object_list
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django import newforms as forms
+from django import forms
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
