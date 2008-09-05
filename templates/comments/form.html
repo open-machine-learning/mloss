@@ -1,4 +1,4 @@
-{% if display_form %}
+{% load comments %}
 
 <form action="/comments/post/" method="post">
 {% if user.is_authenticated %}
@@ -22,13 +22,12 @@
 <p><label for="id_comment">Comment:</label><br></br>
 <textarea name="comment" id="id_comment" rows="10" cols="80"></textarea></p>
 
-<p>
+<p
+    {% if form.field.errors %} class="error"{% endif %}
+    {% ifequal form.field.name "honeypot" %} style="display:none;"{% endifequal %}>
 <input type="hidden" name="options" value="{{ options }}"/>
 <input type="hidden" name="target" value="{{ target }}"/>
 <input type="hidden" name="gonzo" value="{{ hash }}"/></p>
 <p>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</p>
-<p><input type="submit" name="preview" value="Preview comment"/></p>
+<p><input type="submit" name="submit" value="Preview comment"/></p>
 </form>
-
-
-{% endif %}

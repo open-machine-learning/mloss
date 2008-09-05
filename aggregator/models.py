@@ -9,8 +9,8 @@ class Feed(models.Model):
     class Meta:
         db_table = 'aggregator_feeds'
 
-    def __str__(self):
-        return self.title
+    def __unicode__(self):
+        return unicode(self.title)
 
 class FeedItem(models.Model):
     feed = models.ForeignKey(Feed)
@@ -24,8 +24,8 @@ class FeedItem(models.Model):
         db_table = 'aggregator_feeditems'
         ordering = ("-date_modified",)
 
-    def __str__(self):
-        return self.title
+    def __unicode__(self):
+        return unicode(self.title)
 
     def get_absolute_url(self):
         return self.link

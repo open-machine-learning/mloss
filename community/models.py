@@ -30,8 +30,8 @@ class Forum(models.Model):
 	def get_absolute_url(self):
 		return '/community/%s/' % self.slug
 
-	def __str__(self):
-		return self.title
+	def __unicode__(self):
+		return unicode(self.title)
 
 	def subscribe(self, user, bookmark):
 		ctype = ContentType.objects.get_for_model(self)
@@ -104,8 +104,8 @@ class Thread(models.Model):
 	def get_absolute_url(self):
 		return '/community/%s/%s/' % (self.forum.slug, self.id)
 	
-	def __str__(self):
-		return self.title
+	def __unicode__(self):
+		return unicode(self.title)
 
 	def subscribe(self, user, bookmark):
 		ctype = ContentType.objects.get_for_model(self)
@@ -183,8 +183,8 @@ class Post(models.Model):
 				return '/community/%s/%s/?page=%d#post%s' % (self.thread.forum.slug, self.thread.id, p / 10+1, self.id)
 			p+=1
 	
-	def __str__(self):
-		return "%s" % self.id
+	def __unicode__(self):
+		return u"%s" % self.id
 
 class ForumSummary(models.Model):
     """

@@ -8,7 +8,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q, signals
 from django.dispatch import dispatcher
-from django.contrib.comments.models import Comment, FreeComment
 from django.shortcuts import get_object_or_404
 
 from markdown import markdown
@@ -60,8 +59,8 @@ class Author(models.Model):
         return('mloss.software.views.list.software_by_author', (), { 'slug': self.slug })
     get_absolute_url = models.permalink(get_absolute_url)
     
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return unicode(self.name)
     
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -76,8 +75,8 @@ class Tag(models.Model):
         return('mloss.software.views.list.software_by_tag', (), { 'slug': self.slug })
     get_absolute_url = models.permalink(get_absolute_url)
     
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return unicode(self.name)
     
 class License(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -92,8 +91,8 @@ class License(models.Model):
         return('mloss.software.views.list.software_by_license', (), { 'slug': self.slug })
     get_absolute_url = models.permalink(get_absolute_url)
     
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return unicode(self.name)
 
 class Language(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -108,8 +107,8 @@ class Language(models.Model):
         return('mloss.software.views.list.software_by_language', (), { 'slug': self.slug })
     get_absolute_url = models.permalink(get_absolute_url)
     
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return unicode(self.name)
     
 class OpSys(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -124,8 +123,8 @@ class OpSys(models.Model):
         return('mloss.software.views.list.software_by_opsys', (), { 'slug': self.slug })
     get_absolute_url = models.permalink(get_absolute_url)
     
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return unicode(self.name)
 
 class SoftwareManager(models.Manager):
     """
@@ -354,9 +353,9 @@ Friendly,
     def get_opsyslist(self):
         return [ x for x in self.opsyslist.all() ]
     def get_num_comments(self):
-        return Comment.objects.filter(object_id=self.id).count()
+        return Comment.objects.filter(id=self.id).count()
     def get_last_comments_url(self):
-        u=Comment.objects.filter(object_id=self.id).order_by('-submit_date')
+        u=Comment.objects.filter(id=self.id).order_by('-submit_date')
         if u.count():
             return u[0].get_absolute_url()
 
@@ -364,8 +363,8 @@ Friendly,
         s="<html>" + self.description_html + "</html>"
         return s.encode('utf-8')
 
-    def __str__(self):
-        return self.title
+    def __unicode__(self):
+        return unicode(self.title)
 
     def get_absolute_url(self):
         return ('software.views.entry.software_detail', (), { 'software_id': str(self.id) })
@@ -491,5 +490,5 @@ Friendly,
     except ObjectDoesNotExist:
         pass
 
-signals.post_save.connect(comment_notification, sender=FreeComment)
+#signals.post_save.connect(comment_notification, sender=FreeComment)
 signals.post_save.connect(comment_notification, sender=Comment)

@@ -159,8 +159,8 @@ class RegistrationProfile(models.Model):
     
     objects = RegistrationManager()
     
-    def __str__(self):
-        return "Registration information for %s" % self.user.username
+    def __unicode__(self):
+        return u"Registration information for %s" % self.user.username
     
     def activation_key_expired(self):
         """

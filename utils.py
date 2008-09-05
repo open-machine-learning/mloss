@@ -9,12 +9,12 @@ def parsewords(curobj,fieldname='language'):
     """
     Returns a set of words contained in fieldname
     """
-    DELIMITERS = '(,| and |et\.?al\.?)'
+    DELIMITERS = u'(,| and |et\.?al\.?)'
     STOPWORDS = set(['',',','and','et.al.','et.al','etal','others'])
     STRIPLIST = ('.',',')
     
     unique_words = list()
-    curstr = eval('curobj.'+fieldname)
+    curstr = unicode(eval('curobj.'+fieldname))
     curstr = curstr.lower()
     curwords = re.split(DELIMITERS,curstr)
     for word in curwords:

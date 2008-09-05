@@ -27,7 +27,7 @@ urlpatterns = patterns('',
     ('^$', 'django.views.generic.simple.redirect_to', {'url':'/software/'}),
 
     # Enable comments
-    (r'^comments/', include('django.contrib.comments.urls.comments')),
+    (r'^comments/', include('django.contrib.comments.urls')),
 )
 
 if settings.DEBUG and not settings.PRODUCTION:

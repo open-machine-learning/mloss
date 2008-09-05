@@ -1747,7 +1747,7 @@ class Markdown:
         return (self.docType + xml).strip()
 
 
-    def __str__(self):
+    def __unicode__(self):
         ''' Report info about instance. Markdown always returns unicode. '''
         if self.source is None:
             status = 'in which no source text has been assinged.'

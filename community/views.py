@@ -150,10 +150,8 @@ def thread(request, forum, thread):
 
 def newthread(request, forum):
 	"""
-	Rudimentary post function - this should probably use 
-	newforms, although not sure how that goes when we're updating 
-	two models.
-
+	Rudimentary post function.
+        
 	Only allows a user to post if they're logged in.
 	"""
 	f = get_object_or_404(Forum, slug=forum)

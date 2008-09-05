@@ -62,9 +62,10 @@
   {% load comments %}
   {% get_comment_list for blog.blogitem latest_blog.id as comment_list %}
   {% if comment_list %}
-  (<a href="{{ latest_blog.get_last_comments_url }}">{{ comment_list.count }} comment{{ comment_list.count|pluralize }}</a>)
+    {% get_comment_count for object as comment_count %}
+    (<a href="{{ latest_blog.get_last_comments_url }}">{{ comment_count }} comment{{ comment_count|pluralize }}</a>)
   {% else %}
-  ({{ comment_list.count }} comment{{ comment_list.count|pluralize }})
+    ({{ comment_list.count }} comment{{ comment_list.count|pluralize }})
   {% endif %}
   </p>
 

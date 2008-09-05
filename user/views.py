@@ -29,7 +29,7 @@ class ChangeUserDetailsForm(forms.Form):
             widget=forms.TextInput(attrs=attrs_dict),
             label=u'Last Name', required=False)
     email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,
-        maxlength=200)),
+        max_length=200)),
         label=u'Email address')
     password1 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict),
             label=u'Password')

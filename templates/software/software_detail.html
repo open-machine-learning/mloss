@@ -107,7 +107,14 @@
 
                                 <p class="more">
 								<a href="/software/viewstats/{{ object.id }}">{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize}}</a> ({{ todays_stats.number_of_views }} today),
-								<a href="/software/downloadstats/{{ object.id }}">{{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize}}</a> ( {{ todays_stats.number_of_downloads }} today ){% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, {{ comment_list.count }} comment{{ comment_list.count|pluralize }}{% endif %}
+<a href="/software/downloadstats/{{ object.id }}">{{ object.total_number_of_downloads }} 
+download{{ object.total_number_of_downloads|pluralize}}</a> 
+( {{ todays_stats.number_of_downloads }} today )
+{% get_comment_list for software.software object.id as comment_list %}
+{% if comment_list %}, 
+  {% get_comment_count for object as comment_count %}
+  {{ comment_count }} comment{{ comment_count|pluralize }}
+{% endif %}
 
                                 </p>
                                 <p class="more">
@@ -235,7 +242,7 @@
 				{% endif %}
 
 				<h2>Leave a comment</h2>
-				{% comment_form for software.software object.id %}
+				{% render_comment_form for object %}
 			</td>
 		</tr>
 	</table>
