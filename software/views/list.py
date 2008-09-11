@@ -7,6 +7,16 @@ from software.models import Author, Tag, License, Language, OpSys
 from community.summary import get_latest_news
 
 
+def software_in_jmlr(request):
+    """
+    List Software that appeared in JMLR
+    """
+    return list_detail.object_list(request,
+                                   paginate_by=20,
+                                   queryset=Software.objects.get_jmlr().order_by('-updated_date'),
+                                   extra_context=get_latest_news(),
+                                   template_name='software/software_list.html'
+                                   )
 
 def software_by_user(request, username):
     """
@@ -166,11 +176,11 @@ def search_description(request, q):
     qs=Software.objects.get_by_searchterm(q)
     if qs.count()==0:
         return render_to_response('software/software_list.html',
-                              { 'search_term': q, },
-                                context_instance=RequestContext(request))
+                get_latest_news({ 'search_term': q }),
+                context_instance=RequestContext(request))
     else:
         return list_detail.object_list(request,
-                                   paginate_by=10,
+                                   paginate_by=100,
                                    queryset=qs,
                                    template_name='software/software_list.html',
                                    extra_context=get_latest_news({ 'search_term': q }),

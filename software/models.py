@@ -134,6 +134,13 @@ class SoftwareManager(models.Manager):
     popular related objects.
     
     """
+    def get_jmlr(self):
+        """
+        Returns a QuerySet of Software submitted by a particular User.
+        
+        """
+        return self.filter(jmlr_mloss_url__startswith='http://')
+
     def get_by_submitter(self, username):
         """
         Returns a QuerySet of Software submitted by a particular User.
