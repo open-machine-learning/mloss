@@ -19,14 +19,14 @@
 
 {% block content %}
 {% if all_news_items %}
-    <ul>
-    {% for nitem in all_news_items %}
-        <li>
-            <h2>{{ nitem.headline }}</h2>
-	    <h3>{{ nitem.author }} - {{ nitem.publication_date }}</h3>
-	    {{ nitem.article }}
+<ul>
+	{% for nitem in all_news_items %}
+	<li>
+	<h2>{{ nitem.headline }} ({{ nitem.publication_date }})</h2>
+	{{ nitem.article }}
 	</li>
-    {% endfor %}
+	{% endfor %}
+</ul>
 {% else %}
     <p>No news items</p>
 {% endif %}

@@ -6,6 +6,9 @@
 
 {% block billboard %}Open Thoughts{% endblock %}
 
+{% load safe_markup %}
+{% load markup %}
+
 {% block content-related %}
 {% if blog_entries %}
 <h2>Latest Thoughts</h2>
@@ -23,16 +26,39 @@
 </p>
 {% endif %}
 
+{% if blog_years %}
 <h2> Archive </h2>
 <p>
  <ul>
-  {% for year in years %}
+  {% for year in blog_years %}
   <li>
 	<h3><a href="/community/blog/{{ year|date:"Y" }}">{{ year|date:"Y"}}</a></h3>
   </li>
   {% endfor %}
  </ul>
 </p>
+{% endif %}
+
+{% if latest_posts %}
+<h2>Recent <a href="forum/">forum</a> posts</h2>
+<p>
+    <ul>
+    {% for post in latest_posts %}
+	<li>Forum <strong>{{ post.title }}</strong><div class="date small">Thread <i>{{ post.thread }}</i></div>
+	  <a href='{{ post.url }}'>
+	    {{ post.body|firstwords:"cut=100"|markdown:"safe" }}
+	</a>
+  <div class="date small">by 
+	  <strong>{{ post.author }}</strong>
+	  on {{ post.pub_date|date:"F j, Y" }}
+  </div>
+	</li>
+    {% endfor %}
+    </ul>
+</p>
+{% else %}
+    <p>No forum yet.</p>
+{% endif %}
 
 <h3><a href="/community/blog/rss/latest"><img src="/media/images/rss.png" alt="RSS Feed" border="0" width="16" height="16" align="top"></img> RSS Feed - Blog</a></h3>
 {% endblock %}
@@ -41,7 +67,6 @@
 
 
 {% if latest %}
-    {% load markup %}
     {% for object in latest %}
         <h2><a href="{{ object.get_absolute_url }}">{{ object.headline }}</a></h2>
         <p class="date small">Posted by 

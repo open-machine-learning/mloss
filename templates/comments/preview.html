@@ -8,40 +8,32 @@
 {% block billboard %}Preview your comment submission{% endblock %}
 
 {% block content %}
-<form action="/comments/post/" method="post">
-  {% if comment_form.username.errors or comment_form.password.errors %}
-  <p><label for="id_username"><tt>Username:</tt>{{ comment_form.username|safe }}
-    {% if comment_form.username.errors %}
-      <span class="error">{{ comment_form.username.error_list|join:", " }}</span>
-    {% endif %}
-    </label>
+  {% load comments %}
+  <form action="{% comment_form_target %}" method="POST">
+    {% if form.errors %}
+      <h1>Please correct the error{{ form.errors|pluralize }} below</h1>
+    {% else %}
+      <h1>Preview your comment</h1>
+      <blockquote>{{ comment|escape|linebreaks }}</blockquote>
+      <p>
+        and <input type="submit" name="submit" value="Post your comment" id="submit"> or make changes:
       </p>
-	  <p><label for="id_password"><tt>Password:</tt>{{ comment_form.password|safe }}
-    {% if comment_form.password.errors %}
-      <span class="error">{{ comment_form.password.error_list|join:", " }}</span>
     {% endif %}
-    </label> </p>
-  {% else %}
-    <p>User: <strong>{{ comment.user }}</strong></p>
-  {% endif %}
-
-  <div class="comment">
-	  {{ comment.comment|markdown:"safe" }}
-	  <p class="date small">Posted by <strong>{{ comment.person_name|escape }}</strong></p>
-  </div>
-
-  <p><label for="id_comment">Comment:
-  {% if comment_form.comment.errors %}
-    <span class="error">
-      {{ comment_form.comment.error_list|join:", "  }}
-    </span>
-  {% endif %}
-  </label><br />{{ comment_form.comment|safe }}</p>
-  <input type="hidden" name="options" value="{{ options }}" />
-  <input type="hidden" name="target" value="{{ target }}" />
-  <input type="hidden" name="gonzo" value="{{ hash }}" />
-  <input type="submit" name="preview" value="Preview comment" />
-  <input type="submit" name="post" value="Post comment" />
-</form>
-
+    {% for field in form %}
+      {% if field.is_hidden %}
+        {{ field }}
+      {% else %}
+        <p
+          {% if field.errors %} class="error"{% endif %}
+          {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
+          {% if field.errors %}{{ field.errors }}{% endif %}
+          {{ field.label_tag }} {{ field }}
+        </p>
+      {% endif %}
+    {% endfor %}
+    <p class="submit">
+      <input type="submit" name="submit" class="submit-post" value="Post">
+      <input type="submit" name="submit" class="submit-preview" value="Preview">
+    </p>
+  </form>
 {% endblock %}

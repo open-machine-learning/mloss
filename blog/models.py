@@ -19,6 +19,9 @@ class BlogItem(models.Model):
     def get_absolute_url(self):
         return "/community/blog/%s/%s/" % (self.pub_date.strftime("%Y/%b/%d").lower(), self.slug)
 
+    def get_comment_url(self):
+        return "/community/blog/%s/%s/#comments" % (self.pub_date.strftime("%Y/%b/%d").lower(), self.slug)
+
     def save(self):
         if not self.id:
             self.slug = slugify(self.headline)

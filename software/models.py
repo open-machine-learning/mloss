@@ -463,9 +463,9 @@ def comment_notification(**kwargs):
     instance=kwargs['instance']
 
     try:
-        sw=Software.objects.get(id=instance.object_id)
+        sw=Software.objects.get(id=instance.id)
         ctype = ContentType.objects.get_for_model(sw)
-        subscribers=Subscriptions.objects.filter(content_type=ctype, object_id=sw.id)
+        subscribers=Subscriptions.objects.filter(content_type=ctype, id=sw.id)
 
         subject='New comment on mloss.org software project ' + sw.title
         message='''Dear mloss.org user,
@@ -490,5 +490,4 @@ Friendly,
     except ObjectDoesNotExist:
         pass
 
-#signals.post_save.connect(comment_notification, sender=FreeComment)
 signals.post_save.connect(comment_notification, sender=Comment)

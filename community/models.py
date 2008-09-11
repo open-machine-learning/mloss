@@ -185,21 +185,3 @@ class Post(models.Model):
 	
 	def __unicode__(self):
 		return u"%s" % self.id
-
-class ForumSummary(models.Model):
-    """
-    Summarises latest forum posts
-    """
-    title = ''
-    url = ''
-    body = ''
-
-
-class FeedSummary(models.Model):
-    """
-    Summarises the latest feeds from external sites
-    """
-    title = ''
-    url = ''
-    items = []
-

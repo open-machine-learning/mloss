@@ -17,14 +17,13 @@ a {text-decoration: none;}
 a img {border: none;}
 a:link, a:visited { color:#ffc757; }
 #content-main a:link, #content-main a:visited { color:#103163; text-decoration:underline; }
-#content-main a:hover { color:#FFFFFF; }
 #content-main a:hover { background-color:#FFFFFF; color:#113366; text-decoration:none; }
 #content-main h2 a, #content-main h3 a { text-decoration:none !important; }
 #pagination a, #pagination h5 a, #pagination a:link, #pagination a:visited { color:#103163; text-decoration:underline; }
 #pagination a:hover { color:#113366; background:#f7f7f7; }
 
 /* HEADER */
-#header #logo { position:absolute; width:315px; height:89px; left:20%; top:4px; display:inline; margin-left:-30px; text-align:left; padding-bottom:5px; }
+#header #logo { position:absolute; width:315px; height:89px; left:20%; top:4px; display:inline; margin-left:-32px; text-align:left; padding-bottom:5px; }
 #header { position:relative; height:105px; background:#336699; }
 #accounts { position:absolute: width:10%; display:inline; text-align:right; background:#113366; color:#ffffff; padding:5em 5px 12px 7px}
 #accounts a { display:inline; text-align:right;color:#ffc757; background:#113366; padding:5em 1px 1px 1px }
@@ -35,8 +34,8 @@ a:link, a:visited { color:#ffc757; }
 #nav-global { position:absolute; margin:0; bottom:0; right:0; font-family:"Trebuchet MS",sans-serif; white-space:nowrap; }
 #nav-global li { display:block; float:left; list-style-type:none; margin:0; padding:0; }
 #nav-global a { display:block; float:left; padding:1em 10px 10px 10px; background:#336699; }
-#nav-global a:hover { color:#f7f7f7; background:#113366; }
-#news #nav-news a, #browse #nav-browse a, #submit #nav-submit a, #forum #nav-forum a, #blog #nav-blog a, #Workshop #nav-workshop a, #links #nav-links a, #faq #nav-faq a, #About #nav-about a { color:#113366; background:#f7f7f7; bottom repeat-x; }
+#nav-global a:hover { color:#f7f7f7; }
+#news #nav-news a, #browse #nav-browse a, #submit #nav-submit a, #forum #nav-forum a, #blog #nav-blog a, #Workshop #nav-workshop a, #links #nav-links a, #faq #nav-faq a, #About #nav-about a { font-weight:bold; color:#ffffff; background:#336699; bottom repeat-x; }
 #nav-global h1,h2,h3 { margin-top:.8em; font-family:"Trebuchet MS",sans-serif; font-weight:normal; }
 #nav-global h1 { font-size:158%; margin-top:.6em; margin-bottom:.6em; color:#FFFFFF; line-height:1.1em; }
 #nav-global h2 { font-size:110%; margin-top:1em; margin-bottom:.2em; line-height:1.2em; color:#FFFFFF; }

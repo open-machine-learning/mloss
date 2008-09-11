@@ -67,27 +67,29 @@
 {% load safe_markup %}
 {% load markup %}
 {% if latest_posts %}
-<p>
 <h2>Recent <a href="forum/">forum</a> posts</h2>
 <p>
     <ul>
     {% for post in latest_posts %}
-        <li>{{ post.title }}
-	  <br></br>
+	<li>Forum <strong>{{ post.title }}</strong><div class="date small">Thread <i>{{ post.thread }}</i></div>
 	  <a href='{{ post.url }}'>
 	    {{ post.body|firstwords:"cut=100"|markdown:"safe" }}
-	  </a></li>
+	</a>
+  <div class="date small">by 
+	  <strong>{{ post.author }}</strong>
+	  on {{ post.pub_date|date:"F j, Y" }}
+  </div>
+	</li>
     {% endfor %}
     </ul>
 </p>
 {% else %}
     <p>No forum yet.</p>
 {% endif %}
-</p>
 
 <p>
-<h3><a href="/software/rss/latest"><img src="/media/images/rss.png" alt="RSS Feed" border="0" width="16" height="16" align="top"></img> RSS Feed - New Software</a></h3>
 <h3><a href="/community/blog/rss/latest"><img src="/media/images/rss.png" alt="RSS Feed" border="0" width="16" height="16" align="top"></img> RSS Feed - Blog</a></h3>
+<h3><a href="/software/rss/latest"><img src="/media/images/rss.png" alt="RSS Feed" border="0" width="16" height="16" align="top"></img> RSS Feed - New Software</a></h3>
 </p>
 {% endblock %}
 

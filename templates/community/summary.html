@@ -8,27 +8,62 @@
 
 {% block content-related %}
 
-<h2>Recent <a href="forum/">forum</a> posts</h2>
-
 {% load safe_markup %}
 {% load markup %}
+
+{% if blog_entries %}
+<h2>Latest Thoughts</h2>
+<p>
+ <ul>
+  {% for latest_blog in blog_entries %}
+  <li><a href="{{ latest_blog.get_absolute_url }}">{{ latest_blog.headline }}</a>
+  <div class="date small">by 
+	  <strong>{{ latest_blog.author }}</strong>
+	  on {{ latest_blog.pub_date|date:"F j, Y" }}
+  </div>
+  </li>
+  {% endfor %}
+ </ul>
+</p>
+{% endif %}
+
+{% if blog_years %}
+<h2> Archive </h2>
+<p>
+ <ul>
+  {% for year in blog_years %}
+  <li>
+	<h3><a href="/community/blog/{{ year|date:"Y" }}">{{ year|date:"Y"}}</a></h3>
+  </li>
+  {% endfor %}
+ </ul>
+</p>
+{% endif %}
+
 {% if latest_posts %}
+<h2>Recent <a href="forum/">forum</a> posts</h2>
+<p>
     <ul>
     {% for post in latest_posts %}
-        <li>{{ post.title }}
-	  <br></br>
+	<li>Forum <strong>{{ post.title }}</strong><div class="date small">Thread <i>{{ post.thread }}</i></div>
 	  <a href='{{ post.url }}'>
 	    {{ post.body|firstwords:"cut=100"|markdown:"safe" }}
-	  </a></li>
+	</a>
+  <div class="date small">by 
+	  <strong>{{ post.author }}</strong>
+	  on {{ post.pub_date|date:"F j, Y" }}
+  </div>
+	</li>
     {% endfor %}
     </ul>
+</p>
 {% else %}
     <p>No forum yet.</p>
 {% endif %}
 
-<h2>Recent posts from external sites</h2>
-
 {% if latest_feeds %}
+<h2>Recent posts from external sites</h2>
+<p>
     <ul>
     {% for feed in latest_feeds %}
         <li><h3><a href='{{ feed.url }}'>{{ feed.title }}</a></h3>
@@ -40,6 +75,7 @@
 	  </li>
     {% endfor %}
     </ul>
+</p>
 {% else %}
     <p>No forum yet.</p>
 {% endif %}
@@ -51,7 +87,6 @@
 
 {% block content %}
 {% if blog_entries %}
-  {% load markup %}
   {% for latest_blog in blog_entries %}
   <p>
   <h2><a href="{{ latest_blog.get_absolute_url }}">{{ latest_blog.headline }}</a></h2>
@@ -62,10 +97,10 @@
   {% load comments %}
   {% get_comment_list for blog.blogitem latest_blog.id as comment_list %}
   {% if comment_list %}
-    {% get_comment_count for object as comment_count %}
-    (<a href="{{ latest_blog.get_last_comments_url }}">{{ comment_count }} comment{{ comment_count|pluralize }}</a>)
+    {% get_comment_count for blog.blogitem latest_blog.id as comment_count %}
+    (<a href="{{ latest_blog.get_comment_url }}">{{ comment_count }} comment{{ comment_count|pluralize }}</a>)
   {% else %}
-    ({{ comment_list.count }} comment{{ comment_list.count|pluralize }})
+    (0 comments)
   {% endif %}
   </p>
 

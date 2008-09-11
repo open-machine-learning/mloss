@@ -1,12 +1,12 @@
 from django.conf.urls.defaults import *
 from blog.models import BlogItem
 from blog.feeds import RssBlogFeed
+from community.summary import get_latest_news
 
 info_dict = {
     'queryset' : BlogItem.objects.all(),
     'date_field' : 'pub_date',
-    'extra_context' : {'blog_entries': BlogItem.objects.order_by('-pub_date')[:10],
-        'years': BlogItem.objects.dates('pub_date', 'year')}
+    'extra_context' : get_latest_news()
 }
 
 

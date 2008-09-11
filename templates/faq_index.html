@@ -18,13 +18,14 @@ click on the <a href="http://mloss.org/community/forum/">Forum</a> tab for our f
 {% block content %}
 {% load markup %}
 {% if all_faq_items %}
-    <ul>
-    {% for nitem in all_faq_items %}
-        <li>
-            <h3>{{ nitem.question|markdown }}</h3>
-	    {{ nitem.answer|markdown }}
+<ol>
+	{% for nitem in all_faq_items %}
+	<li>
+	<h3>{{ nitem.question|markdown }}</h3>
+	{{ nitem.answer|markdown }}
 	</li>
-    {% endfor %}
+	{% endfor %}
+</ol>
 {% else %}
     <p>No faq items</p>
 {% endif %}

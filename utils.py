@@ -50,6 +50,6 @@ def send_mails(subscribers, subject, message):
                 #print subject
                 #print s.user.email
                 #print message
-                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [ s.user.email ])
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [ s.user.email ],fail_silently=True)
                 s.last_updated=now
                 s.save()

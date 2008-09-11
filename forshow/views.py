@@ -18,7 +18,7 @@ def faqindex(request):
     """
     List of all FAQ items
     """
-    all_faq_items = Faq.objects.all()
+    all_faq_items = Faq.objects.all().order_by('question')
     return render_to_response('faq_index.html',
                               {'all_faq_items': all_faq_items},
 							  context_instance=RequestContext(request))

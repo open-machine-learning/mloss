@@ -3,7 +3,7 @@ All forum logic is kept here - displaying lists of forums, threads
 and posts, adding new threads, and adding replies.
 """
 
-from community.models import Forum,Thread,Post,ForumSummary,FeedSummary
+from community.models import Forum,Thread,Post
 from datetime import datetime
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -11,8 +11,7 @@ from django.template import RequestContext
 from django import forms
 from django.contrib.auth import authenticate, login
 from django.views.generic import list_detail
-from aggregator.models import Feed, FeedItem
-from blog.models import BlogItem
+from community.summary import get_latest_news
 
 class NewPostForm(forms.Form):
 	body = forms.CharField(widget=forms.Textarea(attrs={"rows":10, "cols":80}))
@@ -115,14 +114,14 @@ def forum(request, slug):
 	f = get_object_or_404(Forum, slug=slug)
 
 	inputform = create_newthreadform(request)
+	extra= get_latest_news()
+	extra['forum']=f
+	extra['form']=inputform
+	extra['form_action']='new/'
+	extra['threads']=f.thread_set.all().order_by('thread_latest_post')
 
 	return render_to_response('community/thread_list.html',
-		RequestContext(request, {
-			'forum': f,
-			'form': inputform,
-			'form_action' : 'new/',
-			'threads': f.thread_set.all()
-		}))
+		RequestContext(request, extra))
 
 def thread(request, forum, thread):
 	"""
@@ -137,16 +136,17 @@ def thread(request, forum, thread):
 	t.save()
 
 	inputform = create_newpostform(request)
+	extra= get_latest_news()
+	extra['forum']=f
+	extra['form']=inputform
+	extra['thread']=t
+	extra['form_action']='reply/'
 
 	return list_detail.object_list(request,
 			paginate_by=10,
 			queryset=p,
 			template_name='community/thread.html',
-		extra_context= {
-			'forum': f,
-			'form': inputform,
-			'thread': t,
-			'form_action' : 'reply/'})
+			extra_context=extra)
 
 def newthread(request, forum):
 	"""
@@ -244,61 +244,15 @@ def reply(request, forum, thread):
 			'form_action' : ''})
 
 
-
 def community_base(request):
-    return list_detail.object_list(request,
-                                   template_name='community_base.html',)
-
-
-def get_latest_posts():
-    """For each Forum, get the latest post"""
-    latest_posts = []
-    all_forums = Forum.objects.all()
-    for forum in all_forums:
-        summary = ForumSummary()
-        summary.title = forum.title
-        post = forum.forum_latest_post
-        if post is None:
-            summary.body = ''
-            summary.url = ''
-        else:
-            summary.body = post.body
-            summary.url = post.get_absolute_url()
-        latest_posts.append(summary)
-    return latest_posts
-
-def get_latest_feeds():
-    """For each feed from an external site, get the latest post title"""
-    all_feeds = Feed.objects.all()
-
-    latest_feeds = []
-    for feed in all_feeds:
-        cur_feed = FeedSummary()
-        cur_feed.title = feed.title
-        cur_feed.url = feed.public_url
-        items = FeedItem.objects.filter(feed__title=feed.title).order_by('-date_modified')
-        cur_feed.items = items[:3]
-            
-        latest_feeds.append(cur_feed)
-
-    return latest_feeds
-
-def get_latest_news(extra=None):
-    if extra is None:
-        extra=dict()
-
-    latest_posts = get_latest_posts()
-    latest_feeds = get_latest_feeds()
-    blog_entries = BlogItem.objects.order_by('-pub_date')[:10]
-    extra['latest_posts']=latest_posts
-    extra['latest_feeds']=latest_feeds
-    extra['blog_entries']=blog_entries
-    return extra
+		return list_detail.object_list(request,
+					template_name='community_base.html',)
 
 def get_summary_page(request):
-    """Get a summary of:
-    - Latest forum posts
-    - Latest feeds from external sites
-    """
-    return render_to_response('community/summary.html',
-            RequestContext(request, get_latest_news()))
+	"""
+	Get a summary of:
+	- Latest forum posts
+	- Latest feeds from external sites
+	"""
+	return render_to_response('community/summary.html',
+			RequestContext(request, get_latest_news()))

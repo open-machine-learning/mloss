@@ -12,19 +12,23 @@ Usage in your base urls.py:
 from django.conf.urls.defaults import *
 from community.models import Forum
 from aggregator.models import FeedItem
+from community.summary import get_latest_news
 
 forum_dict = {
     'queryset' : Forum.objects.all(),
+    'extra_context' : get_latest_news()
 }
 
 comm1_dict = {
     'template_name' : 'community/community1.html',
     'queryset' : Forum.objects.all(),
+    'extra_context' : get_latest_news()
 }
 
 comm2_dict = {
     'template_name' : 'community/community2.html',
     'queryset' : FeedItem.objects.all(),
+    'extra_context' : get_latest_news()
 }
 
 

@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 from software.models import Software
 from software.models import Author, Tag, License, Language, OpSys
-from community.views import get_latest_news
+from community.summary import get_latest_news
 
 
 

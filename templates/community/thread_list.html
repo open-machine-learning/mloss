@@ -90,13 +90,65 @@
 </form>
 {% endblock %}
 
+{% load safe_markup %}
+{% load markup %}
+
 {% block content-related %}
 <dl><dd>
     You are in Forum <a href='{{ forum.get_absolute_url }}'><b>{{ forum.title }}</b></a>.
     Choose the thread thread you would like to read or contribute to. Or simply create a new one if the existing threads do not fit.
     </dd>
 </dl>
+
 <dl>
+	<dd>
+	{% if latest_posts %}
+	<h2>Recent <a href="forum/">forum</a> posts</h2>
+	<p>
+	<ul>
+		{% for post in latest_posts %}
+		<li>Forum <strong>{{ post.title }}</strong><div class="date small">Thread <i>{{ post.thread }}</i></div>
+		<a href='{{ post.url }}'>
+			{{ post.body|firstwords:"cut=100"|markdown:"safe" }}
+		</a>
+		<div class="date small">by 
+			<strong>{{ post.author }}</strong>
+			on {{ post.pub_date|date:"F j, Y" }}
+		</div>
+		</li>
+		{% endfor %}
+	</ul>
+	</p>
+	{% else %}
+	<p>No forum yet.</p>
+	{% endif %}
+	</dd>
+</dl>
+
+{% if blog_entries %}
+<dl>
+	<dd>
+	<h2>Latest Thoughts</h2>
+	<p>
+	<ul>
+		{% for latest_blog in blog_entries %}
+		<li><a href="{{ latest_blog.get_absolute_url }}">{{ latest_blog.headline }}</a>
+		<div class="date small">by 
+			<strong>{{ latest_blog.author }}</strong>
+			on {{ latest_blog.pub_date|date:"F j, Y" }}
+		</div>
+		</li>
+		{% endfor %}
+	</ul>
+	</p>
+	</dd>
+</dl>
+{% endif %}
+
+<dl>
+	<dd>
+	<h3><a href="/community/blog/rss/latest"><img src="/media/images/rss.png" alt="RSS Feed" border="0" width="16" height="16" align="top"></img> RSS Feed - Blog</a></h3>
+	</dd>
     <dd>
     <h3><a href="/community/rss/{{forum.slug}}/"><img src="/media/images/rss.png" alt="RSS Feed" border="0" width="16" height="16" align="top"></img> RSS Feed - Forum "{{ forum.title }}"</a></h3>
     </dd>
