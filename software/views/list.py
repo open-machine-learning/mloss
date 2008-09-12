@@ -172,6 +172,19 @@ def software_by_rating(request):
                                    extra_context=get_latest_news(),
                                    )
 
+def software_by_subscription(request):
+    """
+    List of Software ranked by number of subscription
+    """
+    softwarelist = Software.objects.get_by_subscription()
+
+    return list_detail.object_list(request,
+                                   paginate_by=10,
+                                   queryset=softwarelist,
+                                   template_name='software/software_list.html',
+                                   extra_context=get_latest_news(),
+                                   )
+
 def search_description(request, q):
     qs=Software.objects.get_by_searchterm(q)
     if qs.count()==0:

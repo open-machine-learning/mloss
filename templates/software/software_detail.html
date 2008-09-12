@@ -109,12 +109,10 @@
 								<a href="/software/viewstats/{{ object.id }}">{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize}}</a> ({{ todays_stats.number_of_views }} today),
 <a href="/software/downloadstats/{{ object.id }}">{{ object.total_number_of_downloads }} 
 download{{ object.total_number_of_downloads|pluralize}}</a> 
-( {{ todays_stats.number_of_downloads }} today )
-{% get_comment_list for software.software object.id as comment_list %}
-{% if comment_list %}, 
+( {{ todays_stats.number_of_downloads }} today ){% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, 
   {% get_comment_count for object as comment_count %}
-  {{ comment_count }} comment{{ comment_count|pluralize }}
-{% endif %}
+  {{ comment_count }} comment{{ comment_count|pluralize }}{% endif %}, {{ object.get_subscription_count }} subscription{{ object.get_subscription_count|pluralize }}
+
 
                                 </p>
                                 <p class="more">
@@ -221,7 +219,7 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 				<dl><dd>
 				<div class="comment">
 					<dl>
-						<dt id="c{{ comment.id }}">{{ comment.user.username }} (on {{ comment.submit_date|date:"F j, Y, H:i:s" }})</dt>
+						<dt id="c{{ comment.id }}">{{ comment.name }} (on {{ comment.submit_date|date:"F j, Y, H:i:s" }})</dt>
 						<dd>{{ comment.comment|markdown:"safe" }}</dd>
 					</dl>
 				</div>

@@ -14,15 +14,24 @@
 <div id="content-secondary">
 	<h2 id="comments">Comments</h2>
 
-	{% for comment in comment_list %}
-	<div class="comment" id="c{{ comment.id }}">
-		<h3>{{ comment.person_name|escape }} <span class="small quiet">{{ comment.submit_date|date:"F j, Y" }} at {{ comment.submit_date|date:"P" }}</span></h3>
-		{{ comment.comment|escape|urlizetrunc:"40"|linebreaks }}
-	</div>
-	{% endfor %}
+    {% if comment_list %}
+    {% for comment in comment_list %}
+    <dl><dd>
+        <div class="comment">
+            <dl>
+                <dt id="c{{ comment.id }}">{{ comment.name }} (on {{ comment.submit_date|date:"F j, Y, H:i:s" }})</dt>
+                <dd>{{ comment.comment|markdown:"safe" }}</dd>
+            </dl>
+        </div>
+        </dd></dl>
+        {% endfor %}
+        {% else %}
+        <p>
+        No one has posted any comments yet. Perhaps you'd like to be the first?
+        </p>
+        {% endif %}
 
-	<h2>Post a comment</h2>
-
-	{% render_comment_form for blog.blogitem object.id %}
+        <h2>Leave a comment</h2>
+        {% render_comment_form for blog.blogitem object.id %}
 </div>
 {% endblock %}

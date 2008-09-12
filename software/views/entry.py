@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect, Http404
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
+from django.contrib.comments.forms import CommentForm
 from django.views.generic import list_detail
 
 from software.models import Software, SoftwareRating, SoftwareStatistics
@@ -227,14 +228,15 @@ def stats_helper(request, software_id, type, dpi):
     matplotlib.use('Cairo')
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_cairo import FigureCanvasCairo as FigureCanvas
-    from matplotlib.dates import DayLocator, WeekdayLocator, HourLocator, DateFormatter, date2num
+    from matplotlib.dates import DayLocator, WeekdayLocator, HourLocator, MonthLocator, YearLocator
+    from matplotlib.dates import DateFormatter, date2num
     from StringIO import StringIO
 
     if dpi<=40:
         bgcol='#f7f7f7'
     else:
         bgcol='#ffffff'
-    fig = Figure(figsize=(8,5), dpi=dpi, facecolor=bgcol)
+    fig = Figure(figsize=(8,6), dpi=dpi, facecolor=bgcol)
     canvas = FigureCanvas(fig)
     ax = fig.add_subplot(111)
 
@@ -252,18 +254,27 @@ def stats_helper(request, software_id, type, dpi):
         elif type=='views':
             y.append(entry.number_of_views)
 
-    ax.bar(x,y)
+    ax.plot(x,y,'bo', alpha=0.7)
+    ax.plot(x,y,'b-',linewidth=1, alpha=0.5)
 
     days = DayLocator()
     weeks= WeekdayLocator()
+    months= MonthLocator()
+    years= YearLocator()
     dateFmt = DateFormatter("%Y-%m-%d")
     ax.xaxis.set_major_formatter(dateFmt)
 
     if len(x)<=14:
         ax.xaxis.set_major_locator(days)
-    elif len:
+    elif len(x)<60:
         ax.xaxis.set_major_locator(weeks)
         ax.xaxis.set_minor_locator(days)
+    elif len(x)<720:
+        ax.xaxis.set_major_locator(months)
+        ax.xaxis.set_minor_locator(weeks)
+    else:
+        ax.xaxis.set_major_locator(years)
+        ax.xaxis.set_minor_locator(months)
 
     if dpi>40:
         if type=='downloads':
@@ -274,8 +285,8 @@ def stats_helper(request, software_id, type, dpi):
             ax.set_ylabel('Views per Day')
 
         ax.grid(True)
-
     ax.axis("tight")
+
     for label in ax.get_xticklabels():
         label.set_ha('right')
         label.set_rotation(30)

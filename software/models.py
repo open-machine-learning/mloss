@@ -324,6 +324,10 @@ class Software(models.Model):
                 user=user, bookmark=bookmark)
         object.delete()
 
+    def get_subscription_count(self):
+        ctype = ContentType.objects.get_for_model(self)
+        return Subscriptions.objects.filter(content_type=ctype, object_id=self.id).count()
+
     def notify_update(self):
         ctype = ContentType.objects.get_for_model(self)
         subscribers=Subscriptions.objects.filter(content_type=ctype, object_id=self.id)
@@ -362,9 +366,12 @@ Friendly,
     def get_num_comments(self):
         return Comment.objects.filter(id=self.id).count()
     def get_last_comments_url(self):
-        u=Comment.objects.filter(id=self.id).order_by('-submit_date')
+        ctype = ContentType.objects.get_for_model(self)
+        u=Comment.objects.filter(content_type=ctype).order_by('-submit_date')
         if u.count():
             return u[0].get_absolute_url()
+        else:
+            return self.get_absolute_url()
 
     def get_description_page(self):
         s="<html>" + self.description_html + "</html>"

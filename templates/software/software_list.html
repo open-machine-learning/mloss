@@ -94,16 +94,10 @@ All entries
 							]
 
 {% if object.total_number_of_views %}
-	<a href="/software/viewstats/{{ object.id }}">{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize }}</a>
-{% endif %}
-{% if object.total_number_of_downloads %},
-	 <a href="/software/downloadstats/{{ object.id }}">{{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize }}</a>
-{% endif %}
-{% get_comment_list for software.software object.id as comment_list %}
-{% if comment_list %}, 
+	<a href="/software/viewstats/{{ object.id }}">{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize }}</a>{% endif %}{% if object.total_number_of_downloads %},
+	 <a href="/software/downloadstats/{{ object.id }}">{{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize }}</a>{% endif %}{% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, 
 	{% get_comment_count for object as comment_count %}
-	<a href="{{ object.get_last_comments_url }}">{{ comment_count }} comment{{ comment_count|pluralize }}</a>
-{% endif %}
+	<a href="{{ object.get_last_comments_url }}">{{ comment_count }} comment{{ comment_count|pluralize }}</a>{% endif %}, {{ object.get_subscription_count }} subscription{{ object.get_subscription_count|pluralize }}
 							</p>
 						</td>
 						{% if object.total_number_of_votes %}

@@ -1,6 +1,4 @@
 {% extends "base_2col.html" %}
-{% load markup %}
-
 {% block sectionid %}browse{% endblock %}
 
 {% block title %}Preview your comment submission{% endblock %}
@@ -8,32 +6,71 @@
 {% block billboard %}Preview your comment submission{% endblock %}
 
 {% block content %}
-  {% load comments %}
-  <form action="{% comment_form_target %}" method="POST">
+{% load comments %}
+{% load markup %}
+{% load safe_markup %}
+
+<form action="{% comment_form_target %}" method="POST">
     {% if form.errors %}
       <h1>Please correct the error{{ form.errors|pluralize }} below</h1>
     {% else %}
       <h1>Preview your comment</h1>
-      <blockquote>{{ comment|escape|linebreaks }}</blockquote>
-      <p>
-        and <input type="submit" name="submit" value="Post your comment" id="submit"> or make changes:
-      </p>
+	  <table class="swlist">
+		  <tr>
+			  <td>
+				  <dl><dd>
+					  <div class="comment">
+						  <dl>
+							  <dt>(on {% now "F j, Y, H:i:s" %})</dt>
+							  <dd>{{ comment|markdown:"safe" }}</dd>
+						  </dl>
+					  </div>
+					  </dd>
+				  </dl>
+			  </td>
+		  </tr>
+	  </table>
     {% endif %}
+
     {% for field in form %}
       {% if field.is_hidden %}
         {{ field }}
       {% else %}
-        <p
-          {% if field.errors %} class="error"{% endif %}
-          {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
-          {% if field.errors %}{{ field.errors }}{% endif %}
-          {{ field.label_tag }} {{ field }}
-        </p>
+		{% ifequal field.name "honeypot" %}
+		<p style="display:none;"> {{ field.label_tag }} {{ field }} </p>
+		{% endifequal %}
       {% endif %}
     {% endfor %}
+	<dl>
+		<dt> <label for="id_name">Name</label>
+		<span
+			{% if form.name.errors %} class="error"{% endif %}>
+			{% if form.name.errors %}{{ form.name.errors }}{% endif %}
+		</span>
+		
+		</dt>
+		<dd>{{ form.name }}</dd>
+
+		<dt><label for="id_email">Email address</label> <span class="more">(will not appear publicly)</span>
+		<span
+			{% if form.email.errors %} class="error"{% endif %}>
+			{% if form.email.errors %}{{ form.email.errors }}{% endif %}
+		</span>
+		</dt>
+		<dd>{{ form.email }}</dd>
+
+		<dt><label for="id_comment">Comment</label>
+		<span
+			{% if form.comment.errors %} class="error"{% endif %}>
+			{% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
+		</span>
+		</dt>
+		<dd> {{ form.comment }}</dd>
+	</dl>
     <p class="submit">
       <input type="submit" name="submit" class="submit-post" value="Post">
       <input type="submit" name="submit" class="submit-preview" value="Preview">
     </p>
   </form>
+
 {% endblock %}

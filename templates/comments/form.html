@@ -2,37 +2,29 @@
 
 <form action="{% comment_form_target %}" method="post">
 	{% if user.is_authenticated %}
-	<p>
-	Username:
-	<strong>{{ user.username }}</strong>
-	(<a href="{{ logout_url }}">Log out</a>)
-	</p>
-	{% else %}
-	<p>
-	<label for="id_username"><tt>Username:</tt></label>
-	<input type="text" name="username" id="id_username"/>
-	<br></br>
-	<label for="id_password"><tt>Password:</tt></label>
-	<input type="password" name="password" id="id_password"/>
-	(<a href="/accounts/password/reset/">
-		Forgotten your password?</a>)
-	</p>
+	{{ user.username }}
 	{% endif %}
-  {% for field in form %}
-    {% if field.is_hidden %}
-      {{ field }}
-    {% else %}
-      <p
-        {% if field.errors %} class="error"{% endif %}
-        {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}
-        {% ifequal field.name "name" %} style="display:none;"{% endifequal %}
-        {% ifequal field.name "email" %} style="display:none;"{% endifequal %}
-        {% ifequal field.name "url" %} style="display:none;"{% endifequal %}>
-        {% if field.errors %}{{ field.errors }}{% endif %}
-		<b>{{ field.label_tag }}</b><br></br>{{ field }}
-      </p>
-    {% endif %}
-  {% endfor %}
+	{% for field in form %}
+	{% if field.is_hidden %}
+	{{ field }}
+	{% else %}
+	{% ifequal field.name "honeypot" %}
+	<p style="display:none;"> {{ field.label_tag }} {{ field }} </p>
+	{% endifequal %}
+	{% endif %}
+	{% endfor %}
+
+	<dl>
+		<dt> <label for="id_name">Name</label></dt>
+		<dd><input id="id_name" type="text" name="name" maxlength="50" value="{% if user.is_authenticated %}{{ user.first_name }} {{ user.last_name }}{% endif %}"/></dd>
+
+		<dt><label for="id_email">Email address</label> <span class="more">(will not appear publicly)</span>
+</dt>
+		<dd><input type="text" name="email" id="id_email" value="{{ user.email }}"/></dd>
+
+		<dt><label for="id_comment">Comment</label></dt>
+		<dd><textarea id="id_comment" rows="15" cols="60" name="comment"></textarea></dd>
+	</dl>
 
 	<p>You may use <a href="http://daringfireball.net/projects/markdown/syntax">Markdown syntax</a> here, but <b>raw HTML will be removed</b>.</p>
 	<p class="submit">
