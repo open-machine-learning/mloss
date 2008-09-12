@@ -47,7 +47,6 @@ class Forum(models.Model):
 
 	def save(self):
 		super(Forum, self).save()
-		self.notify_update()
 
 	def notify_update(self):
 		ctype = ContentType.objects.get_for_model(self)
@@ -99,7 +98,6 @@ class Thread(models.Model):
 			f.threads += 1
 			f.save()
 		super(Thread, self).save()
-		self.notify_update()
 	
 	def get_absolute_url(self):
 		return '/community/%s/%s/' % (self.forum.slug, self.id)
@@ -167,11 +165,13 @@ class Post(models.Model):
 			t.thread_latest_post_id = self.id
 			t.posts += 1
 			t.save()
+			t.notify_update()
 
 			f = self.thread.forum
 			f.forum_latest_post_id = self.id
 			f.posts += 1
 			f.save()
+			f.notify_update()
 
 	class Meta:
 		ordering = ('-time',)
