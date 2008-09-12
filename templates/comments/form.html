@@ -1,9 +1,6 @@
 {% load comments %}
 
 <form action="{% comment_form_target %}" method="post">
-	{% if user.is_authenticated %}
-	{{ user.username }}
-	{% endif %}
 	{% for field in form %}
 	{% if field.is_hidden %}
 	{{ field }}

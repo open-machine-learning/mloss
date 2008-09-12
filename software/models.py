@@ -6,9 +6,10 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.db.models import Q, signals
+from django.db.models import Q
 from django.dispatch import dispatcher
 from django.shortcuts import get_object_or_404
+from django.contrib.comments.signals import comment_was_posted
 
 from markdown import markdown
 from utils import parsewords, slugify, send_mails
@@ -364,7 +365,8 @@ Friendly,
     def get_opsyslist(self):
         return [ x for x in self.opsyslist.all() ]
     def get_num_comments(self):
-        return Comment.objects.filter(id=self.id).count()
+        ctype = ContentType.objects.get_for_model(self)
+        return Comment.objects.filter(content_type=ctype).count()
     def get_last_comments_url(self):
         ctype = ContentType.objects.get_for_model(self)
         u=Comment.objects.filter(content_type=ctype).order_by('-submit_date')
@@ -474,12 +476,12 @@ def comment_notification(**kwargs):
     """
 
     sender=kwargs['sender']
-    instance=kwargs['instance']
+    comment=kwargs['comment']
 
     try:
-        sw=Software.objects.get(id=instance.id)
+        sw=comment.content_object
         ctype = ContentType.objects.get_for_model(sw)
-        subscribers=Subscriptions.objects.filter(content_type=ctype, id=sw.id)
+        subscribers=Subscriptions.objects.filter(content_type=ctype, object_id=sw.id)
 
         subject='New comment on mloss.org software project ' + sw.title
         message='''Dear mloss.org user,
@@ -493,7 +495,7 @@ for which a new comment has just been posted.
 Feel free to visit mloss.org to see what has changed.
 
 '''
-        message+='http://%s%s' % (Site.objects.get_current().domain, instance.get_absolute_url())
+        message+='http://%s%s' % (Site.objects.get_current().domain, comment.get_absolute_url())
         message+='''
 
 Friendly,
@@ -502,6 +504,7 @@ Friendly,
 
         send_mails(subscribers, subject, message)
     except ObjectDoesNotExist:
+        print "error"
         pass
 
-signals.post_save.connect(comment_notification, sender=Comment)
+comment_was_posted.connect(comment_notification)

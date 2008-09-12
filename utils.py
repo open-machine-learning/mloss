@@ -42,14 +42,16 @@ slugify = stringfilter(slugify)
 
 def send_mails(subscribers, subject, message):
     # we don't use send_mass_mail as we don't want to leak other users email addresses
+    print subscribers
     for s in subscribers:
         if not s.bookmark:
             now=datetime.datetime.now()
             # only send out things once every 60 seconds 
             if now-s.last_updated > datetime.timedelta(0, 60):
-                #print subject
-                #print s.user.email
-                #print message
+                print subject
+                print s.user.email
+                print message
+                print settings.DEFAULT_FROM_EMAIL
                 send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [ s.user.email ],fail_silently=True)
                 s.last_updated=now
                 s.save()
