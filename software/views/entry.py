@@ -254,8 +254,9 @@ def stats_helper(request, software_id, type, dpi):
         elif type=='views':
             y.append(entry.number_of_views)
 
-    ax.plot(x,y,'bo', alpha=0.7)
-    ax.plot(x,y,'b-',linewidth=1, alpha=0.5)
+    #ax.plot(x,y,'bo', alpha=0.7)
+    #ax.plot(x,y,'b-',linewidth=1, alpha=0.5)
+    ax.bar(x,y)
 
     days = DayLocator()
     weeks= WeekdayLocator()
