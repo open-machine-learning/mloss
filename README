@@ -31,6 +31,25 @@ models.py, and of the url mappings in urls.py. If you want to find out
 how a specific url is processed, have a look at the urls.py which tell
 you which method takes care of the request.
 
+CHANGELOG
+
+mloss.org svn-r481-September-2008
+
+  * Several bugfixes and adjustments related to last minute
+    changes in django 1.0:
+
+   - comments now don't require a password
+   - search didn't work when returning >10 results
+   - added #of subscriptions to list view
+   - better interlinking between forum and blog
+   - fix comments links in blog and show archive,
+   - option to filter by published in JMLR
+   - minor style changes
+   - change sorting order in forum (new threads first)
+
+mloss.org svn-r470-August-2008
+
+ * Initial Release
 
 LICENSE
 
@@ -60,7 +79,6 @@ then open http://127.0.0.1:8000 in a web browser and have fun.
 
 In case you want to put things live follow the steps described at
 http://www.djangoproject.com/documentation/modpython/.
-
 
 Sincerely,
 	your mloss team.
