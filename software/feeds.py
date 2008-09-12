@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from django.contrib.comments.models import Comment
 from django.shortcuts import get_object_or_404
@@ -32,7 +33,8 @@ def RssSoftwareFeed(request):
 
 def RssSoftwareAndCommentsFeed(request, software_id):
     sw = get_object_or_404(Software, pk=software_id)
-    object_list = Comment.objects.filter(object_id=software_id).order_by('submit_date')
+    ctype = ContentType.objects.get_for_model(sw)
+    object_list = Comment.objects.filter(content_type=ctype).order_by('submit_date')
 
     feed = WellFormedWebRss( u'mloss.org ' + sw.title.encode('utf-8'),
             "http://mloss.org",
@@ -50,9 +52,9 @@ def RssSoftwareAndCommentsFeed(request, software_id):
 
     for object in object_list:
         link = 'http://%s%s' % (Site.objects.get_current().domain, object.get_absolute_url())
-        feed.add_item(u'<b>Comment by %s on %s</b>' % (object.user.username, object.submit_date.strftime("%Y-%m-%d %H:%M")),
+        feed.add_item(u'<b>Comment by %s on %s</b>' % (object.name, object.submit_date.strftime("%Y-%m-%d %H:%M")),
                 link, markdown(object.comment),
-                author_name=object.user,
+                author_name=object.name,
                 pubdate=object.submit_date, unique_id=link,)
     response = HttpResponse(mimetype='application/xml')
     feed.write(response, 'utf-8')
@@ -60,7 +62,8 @@ def RssSoftwareAndCommentsFeed(request, software_id):
 
 def RssCommentsFeed(request, software_id):
     sw = get_object_or_404(Software, pk=software_id)
-    object_list = Comment.objects.filter(object_id=software_id).order_by('submit_date')
+    ctype = ContentType.objects.get_for_model(sw)
+    object_list = Comment.objects.filter(content_type=ctype).order_by('submit_date')
 
     feed = WellFormedWebRss( u'mloss.org ' + sw.title.encode('utf-8'),
             "http://mloss.org",
@@ -69,9 +72,9 @@ def RssCommentsFeed(request, software_id):
 
     for object in object_list:
         link = 'http://%s%s' % (Site.objects.get_current().domain, object.get_absolute_url())
-        feed.add_item(u'<b>By: %s on: %s</b>' % (object.user.username, object.submit_date.strftime("%Y-%m-%d %H:%M")),
+        feed.add_item(u'<b>By: %s on: %s</b>' % (object.name, object.submit_date.strftime("%Y-%m-%d %H:%M")),
                 link, markdown(object.comment),
-                author_name=object.user,
+                author_name=object.name,
                 pubdate=object.submit_date, unique_id=link,)
     response = HttpResponse(mimetype='application/xml')
     feed.write(response, 'utf-8')
