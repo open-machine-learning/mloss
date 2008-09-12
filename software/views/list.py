@@ -180,7 +180,7 @@ def search_description(request, q):
                 context_instance=RequestContext(request))
     else:
         return list_detail.object_list(request,
-                                   paginate_by=100,
+                                   paginate_by=10,
                                    queryset=qs,
                                    template_name='software/software_list.html',
                                    extra_context=get_latest_news({ 'search_term': q }),

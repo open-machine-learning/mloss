@@ -316,9 +316,12 @@ class SearchForm(forms.Form):
 def search_software(request):
     searchform = SearchForm()
 
-    if request.method == 'POST':
-        q = request.POST['searchterm'];
-        return software.views.list.search_description(request, q)
+    if request.method == 'GET':
+		try:
+			q = request.GET['searchterm'];
+			return software.views.list.search_description(request, q)
+		except:
+			return HttpResponseRedirect('/software')
     else:
         return HttpResponseRedirect('/software')
 

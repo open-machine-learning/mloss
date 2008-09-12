@@ -3,27 +3,47 @@
 	<h5>
 		Showing Items {{ first_this_page }}-{{ last_this_page }} of {{ hits }} on page {{ page }} of {{ pages }}:
 		{% if show_first %}<a> </a>
+        {% if search_term %}
+        <a href="?page=1&searchterm={{ search_term }}">First</a>
+        {% else %}
 		<a href="?page=1">First</a>
+        {% endif %}
 		{% endif %}
 
 		{% if has_previous %}<a> </a>
+        {% if search_term %}
+		<a href="?page={{ previous }}&searchterm={{ search_term }}">Previous</a>
+        {% else %}
 		<a href="?page={{ previous }}">Previous</a>
+        {% endif %}
 		{% endif %}
 
 		{% for pg in page_numbers %}
 		{% ifequal pg page %}
 		<a> </a><a>{{ pg }}</a><a> </a>
 		{% else %}
+        {% if search_term %}
+		<a> </a><a href="?page={{ pg }}&searchterm={{ search_term }}">{{ pg }}</a><a> </a>
+        {% else %}
 		<a> </a><a href="?page={{ pg }}">{{ pg }}</a><a> </a>
+        {% endif %}
 		{% endifequal %}
 		{% endfor %}
 
 		{% if has_next %}
+        {% if search_term %}
+		<a href="?page={{ next }}&searchterm={{ search_term }}">Next</a><a> </a>
+        {% else %}
 		<a href="?page={{ next }}">Next</a><a> </a>
+		{% endif %}
 		{% endif %}
 
 		{% if show_last %}
+        {% if search_term %}
+		<a href="?page=last&searchterm={{ search_term }}">Last</a>
+        {% else %}
 		<a href="?page=last">Last</a>
+		{% endif %}
 		{% endif %}
 	</h5>
 </div>
