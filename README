@@ -33,7 +33,7 @@ you which method takes care of the request.
 
 CHANGELOG
 
-mloss.org svn-r481-September-2008
+mloss.org svn-r482-September-2008
 
   * Several bugfixes and adjustments related to last minute
     changes in django 1.0:

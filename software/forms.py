@@ -156,8 +156,9 @@ class UpdateSoftwareForm(forms.Form):
                     'application/x-tar', 
                     'application/x-gzip', 
                     'application/x-bzip', 
+                    'application/bzip2', 
                     'application/x-bzip-compressed-tar'):
-                raise forms.ValidationError(u'Only compressed or uncompressed zip or tar archives allowed.')
+                raise forms.ValidationError(u'Only compressed or uncompressed zip or tar archives allowed, got "%s".' % tarball.content_type)
             if tarball.size > settings.MAX_FILE_UPLOAD_SIZE * 1024:
                 raise forms.ValidationError(u'Tarball too big, max allowed size is %d KB' % settings.MAX_FILE_UPLOAD_SIZE)
 
