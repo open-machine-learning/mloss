@@ -483,18 +483,22 @@ def comment_notification(**kwargs):
         ctype = ContentType.objects.get_for_model(sw)
         subscribers=Subscriptions.objects.filter(content_type=ctype, object_id=sw.id)
 
-        subject='New comment on mloss.org software project ' + sw.title
-        message='''Dear mloss.org user,
+        if ctype.name and ctype.name == u'software':
+            subject='New comment on mloss.org software project ' + sw.title
+            message='''Dear mloss.org user,
 
 you are receiving this email as you have subscribed to the "'''
 
-        message+=sw.title
-        message+='''" software project,
+            message+=sw.title
+            message+='''" software project,
 for which a new comment has just been posted.
 
 Feel free to visit mloss.org to see what has changed.
 
-'''
+    '''
+        else:
+            return # no comment notification for objects other than software yet
+
         message+='http://%s%s' % (Site.objects.get_current().domain, comment.get_absolute_url())
         message+='''
 
@@ -504,7 +508,6 @@ Friendly,
 
         send_mails(subscribers, subject, message)
     except ObjectDoesNotExist:
-        print "error"
         pass
 
 comment_was_posted.connect(comment_notification)
