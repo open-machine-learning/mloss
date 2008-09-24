@@ -35,7 +35,7 @@ class SoftwareRatingAdmin(admin.ModelAdmin):
     list_display = ('software', 'user', 'features', 'usability', 'documentation')
 
 class SoftwareStatisticsAdmin(admin.ModelAdmin):
-	list_display = ('date', 'number_of_views', 'number_of_downloads')
+    list_display = ('software', 'date', 'number_of_views', 'number_of_downloads')
 
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Tag, TagAdmin)
