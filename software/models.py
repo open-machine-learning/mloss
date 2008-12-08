@@ -366,10 +366,10 @@ Friendly,
         return [ x for x in self.opsyslist.all() ]
     def get_num_comments(self):
         ctype = ContentType.objects.get_for_model(self)
-        return Comment.objects.filter(content_type=ctype).count()
+        return Comment.objects.filter(content_type=ctype, object_pk=self.pk).count()
     def get_last_comments_url(self):
         ctype = ContentType.objects.get_for_model(self)
-        u=Comment.objects.filter(content_type=ctype).order_by('-submit_date')
+        u=Comment.objects.filter(content_type=ctype, object_pk=self.pk).order_by('-submit_date')
         if u.count():
             return u[0].get_absolute_url()
         else:
