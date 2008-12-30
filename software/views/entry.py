@@ -13,7 +13,7 @@ from django.contrib.comments.forms import CommentForm
 from django.views.generic import list_detail
 
 from software.models import Software, SoftwareRating, SoftwareStatistics
-from software.models import Author, Tag, License, Language, OpSys
+from software.models import Author, Tag, License, Language, OpSys, DataFormat
 from software.forms import RatingForm
 from subscriptions.models import Subscriptions
 from community.views import get_latest_news
@@ -205,6 +205,15 @@ def software_all_opsyss(request):
                                    paginate_by=20,
                                    queryset=opsyslist,
                                    template_name='software/opsys_list.html',
+                                   extra_context=get_latest_news(),
+                                   )
+
+def software_all_dataformats(request):
+    dataformatlist = DataFormat.objects.filter(name__isnull=False).distinct().order_by('slug')
+    return list_detail.object_list(request,
+                                   paginate_by=20,
+                                   queryset=dataformatlist,
+                                   template_name='software/dataformat_list.html',
                                    extra_context=get_latest_news(),
                                    )
 

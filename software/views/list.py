@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 from software.models import Software
-from software.models import Author, Tag, License, Language, OpSys
+from software.models import Author, Tag, License, Language, OpSys, DataFormat
 from community.summary import get_latest_news
 
 
@@ -90,12 +90,24 @@ def software_by_opsys(request, slug):
                                    template_name='software/software_list.html',
                                    )
 
+def software_by_dataformats(request, slug):
+    """
+    List of software with a particular Operating System
+    """
+    dataformat = get_object_or_404(DataFormat, slug__exact=slug)
+    return list_detail.object_list(request,
+                                   paginate_by=20,
+                                   queryset=Software.objects.get_by_dataformat(dataformat.slug).order_by('-updated_date'),
+                                   extra_context=get_latest_news({ 'object':dataformat }),
+                                   template_name='software/software_list.html',
+                                   )
+
 def software_by_pub_date(request):
     """
     List of Software ranked by date
     """
 
-    softwarelist = Software.objects.all().order_by('-pub_date')
+    softwarelist = Software.objects.filter(revision=0).order_by('-pub_date')
 
     return list_detail.object_list(request,
                                    paginate_by=10,
@@ -109,7 +121,7 @@ def software_by_updated_date(request):
     List of Software ranked by date
     """
 
-    softwarelist = Software.objects.all().order_by('-updated_date')
+    softwarelist = Software.objects.filter(revision=0).order_by('-updated_date')
 
     return list_detail.object_list(request,
                                    paginate_by=10,
@@ -123,7 +135,7 @@ def software_by_title(request):
     List of Software ranked by date
     """
 
-    softwarelist = Software.objects.all().order_by('title','-updated_date')
+    softwarelist = Software.objects.filter(revision=0).order_by('title','-updated_date')
 
     return list_detail.object_list(request,
                                    paginate_by=10,
@@ -137,7 +149,7 @@ def software_by_views(request):
     List of Software ranked by vies
     """
 
-    softwarelist = Software.objects.all().order_by('-total_number_of_views','-updated_date')
+    softwarelist = Software.objects.filter(revision=0).order_by('-total_number_of_views','-updated_date')
 
     return list_detail.object_list(request,
                                    paginate_by=10,
@@ -150,7 +162,7 @@ def software_by_downloads(request):
     List of Software ranked by downloads
     """
 
-    softwarelist = Software.objects.all().order_by('-total_number_of_downloads','-updated_date')
+    softwarelist = Software.objects.filter(revision=0).order_by('-total_number_of_downloads','-updated_date')
 
     return list_detail.object_list(request,
                                    paginate_by=10,
@@ -163,7 +175,7 @@ def software_by_rating(request):
     """
     List of Software ranked by rating
     """
-    softwarelist = Software.objects.all().order_by('-average_rating','-updated_date')
+    softwarelist = Software.objects.filter(revision=0).order_by('-average_rating','-updated_date')
 
     return list_detail.object_list(request,
                                    paginate_by=10,

@@ -18,9 +18,9 @@ from subscriptions.models import Subscriptions
 # make sure these lists of variables are up-to-date (i.e. match
 # the fields in the Software object
 editables=('version','authors',
-        'contact', 'description', 'project_url', 'tags', 'language',
-        'os_license', 'tarball', 'download_url', 'screenshot', 'operating_systems',
-        'paper_bib')
+        'contact', 'short_description', 'description', 'project_url', 'tags', 'language',
+        'os_license', 'tarball', 'download_url', 'screenshot', 'thumbnail',
+        'operating_systems', 'dataformats', 'paper_bib', 'changes')
 
 noneditables=('user','title', 'description_html', 'jmlr_mloss_url', 'pub_date', 'average_rating', 'average_features_rating', 'average_usability_rating', 'average_documentation_rating', 'total_number_of_votes', 'total_number_of_views', 'total_number_of_downloads') 
 
@@ -48,6 +48,7 @@ def clean_all():
     clean_list('License','os_license')
     clean_list('Language','language')
     clean_list('OpSys','operating_systems')
+    clean_list('DataFormat','dataformats')
 
 
 class Author(models.Model):
@@ -62,10 +63,10 @@ class Author(models.Model):
     def get_absolute_url(self):
         return('mloss.software.views.list.software_by_author', (), { 'slug': self.slug })
     get_absolute_url = models.permalink(get_absolute_url)
-    
+
     def __unicode__(self):
         return unicode(self.name)
-    
+
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
@@ -78,10 +79,10 @@ class Tag(models.Model):
     def get_absolute_url(self):
         return('mloss.software.views.list.software_by_tag', (), { 'slug': self.slug })
     get_absolute_url = models.permalink(get_absolute_url)
-    
+
     def __unicode__(self):
         return unicode(self.name)
-    
+
 class License(models.Model):
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
@@ -94,7 +95,7 @@ class License(models.Model):
     def get_absolute_url(self):
         return('mloss.software.views.list.software_by_license', (), { 'slug': self.slug })
     get_absolute_url = models.permalink(get_absolute_url)
-    
+
     def __unicode__(self):
         return unicode(self.name)
 
@@ -110,10 +111,10 @@ class Language(models.Model):
     def get_absolute_url(self):
         return('mloss.software.views.list.software_by_language', (), { 'slug': self.slug })
     get_absolute_url = models.permalink(get_absolute_url)
-    
+
     def __unicode__(self):
         return unicode(self.name)
-    
+
 class OpSys(models.Model):
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(editable=False)
@@ -126,73 +127,96 @@ class OpSys(models.Model):
     def get_absolute_url(self):
         return('mloss.software.views.list.software_by_opsys', (), { 'slug': self.slug })
     get_absolute_url = models.permalink(get_absolute_url)
-    
+
+    def __unicode__(self):
+        return unicode(self.name)
+
+class DataFormat(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(editable=False)
+
+    def save(self):
+        if not self.id:
+            self.slug = slugify(self.name)
+        super(DataFormat,self).save()
+
+    def get_absolute_url(self):
+        return('mloss.software.views.list.software_by_dataformat', (), { 'slug': self.slug })
+    get_absolute_url = models.permalink(get_absolute_url)
+
     def __unicode__(self):
         return unicode(self.name)
 
 class SoftwareManager(models.Manager):
     """
     Custom manager for the Software model.
-    
+
     Adds shortcuts for common filtering operations, and for retrieving
     popular related objects.
-    
+
     """
     def get_jmlr(self):
         """
         Returns a QuerySet of Software submitted by a particular User.
-        
+
         """
-        return self.filter(jmlr_mloss_url__startswith='http://')
+        return self.filter(revision=0, jmlr_mloss_url__startswith='http://')
 
     def get_by_submitter(self, username):
         """
         Returns a QuerySet of Software submitted by a particular User.
-        
+
         """
-        return self.filter(user__username__exact=username)
+        return self.filter(revision=0, user__username__exact=username)
 
     def get_by_author(self, slug):
         """
         Returns a QuerySet of Software submitted by a particular User.
-        
+
         """
-        return self.filter(authorlist__slug__exact=slug)
+        return self.filter(revision=0, authorlist__slug__exact=slug)
 
     def get_by_license(self, license):
         """
         Returns a QuerySet of Software sorted by a particular license.
-        
+
         """
-        return self.filter(licenselist__slug__exact=license)
+        return self.filter(revision=0, licenselist__slug__exact=license)
 
     def get_by_language(self, language):
         """
         Returns a QuerySet of Software sorted by a particular language.
-        
+
         """
-        return self.filter(languagelist__slug__exact=language)
+        return self.filter(revision=0, languagelist__slug__exact=language)
 
     def get_by_opsys(self, opsys):
         """
         Returns a QuerySet of Software sorted by a particular language.
-        
+
         """
-        return self.filter(opsyslist__slug__exact=opsys)
+        return self.filter(revision=0, opsyslist__slug__exact=opsys)
+
+    def get_by_dataformat(self, dataformat):
+        """
+        Returns a QuerySet of Software sorted by a particular language.
+
+        """
+        return self.filter(revision=0, dataformatlist__slug__exact=dataformat)
 
     def get_by_tag(self, tag):
         """
         Returns a QuerySet of Software sorted by a particular language.
-        
+
         """
-        return self.filter(taglist__slug__exact=tag)
+        return self.filter(revision=0, taglist__slug__exact=tag)
 
     def get_by_searchterm(self, searchterm):
         """
         Returns a QuerySet of Software matching the searchterm
-        
+
         """
-        return self.filter(
+        return self.filter(revision=0).filter(
                 Q(user__username__icontains=searchterm) |
                 Q(title__icontains=searchterm) |
                 Q(version__icontains=searchterm) |
@@ -215,8 +239,11 @@ class Software(models.Model):
     authors = models.CharField(max_length=200)
     authorlist = models.ManyToManyField(Author, editable=False)
     contact = models.EmailField(max_length=80)
+    short_description = models.TextField()
     description = models.TextField()
     description_html = models.TextField(editable=False)
+    changes = models.TextField()
+    changes_html = models.TextField(editable=False)
     project_url = models.URLField(verify_exists=False)
     jmlr_mloss_url = models.URLField(verify_exists=False, blank=True)
     tags = models.CharField(max_length=200,blank=True)
@@ -227,6 +254,8 @@ class Software(models.Model):
     licenselist = models.ManyToManyField(License, editable=False)
     operating_systems = models.CharField(max_length=200)
     opsyslist = models.ManyToManyField(OpSys, editable=False)
+    dataformats = models.CharField(max_length=200)
+    dataformatlist = models.ManyToManyField(DataFormat, editable=False)
     paper_bib = models.TextField(blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField()
@@ -243,12 +272,16 @@ class Software(models.Model):
     total_number_of_views = models.IntegerField(editable=True, default=0)
     total_number_of_downloads = models.IntegerField(editable=True, default=0)
 
+    revision = models.IntegerField(editable=True, default=0)
+
     try:
         from PIL import Image  
         screenshot = models.ImageField(upload_to="screenshot_archive/",blank=True,null=True)
+        thumbnail = models.ImageField(upload_to="thumbnail_archive/",blank=True,null=True)
     except ImportError:
         screenshot = models.FileField(upload_to="screenshot_archive/",blank=True,null=True)
-       
+        thumbnail = models.FileField(upload_to="thumbnail_archive/",blank=True,null=True)
+
 
     objects = SoftwareManager()
 
@@ -300,6 +333,7 @@ class Software(models.Model):
         self.os_license = strip_tags(self.os_license)
         self.paper_bib = strip_tags(self.paper_bib)
         self.operating_systems = strip_tags(self.operating_systems)
+        self.dataformats = strip_tags(self.dataformats)
         super(Software, self).save()
 
         # Update authorlist, taglist, licenselist, langaugelist, opsyslist
@@ -308,6 +342,7 @@ class Software(models.Model):
         self.update_list('licenselist','License','os_license')
         self.update_list('languagelist','Language','language')
         self.update_list('opsyslist','OpSys','operating_systems')
+        self.update_list('dataformatlist','DataFormat','dataformats')
 
         # do not send out notifications for number of views/download updates
         if new_software:
@@ -346,7 +381,7 @@ you are receiving this email as you have subscribed to the "'''
 which has just been updated.
 
 Feel free to visit mloss.org to see what has changed.
-    
+
         '''
         message+='http://%s%s' % (Site.objects.get_current().domain, self.get_absolute_url())
         message+='''
@@ -367,6 +402,8 @@ Friendly,
         return [ x for x in self.languagelist.all() ]
     def get_opsyslist(self):
         return [ x for x in self.opsyslist.all() ]
+    def get_dataformatlist(self):
+        return [ x for x in self.dataformatlist.all() ]
     def get_num_comments(self):
         ctype = ContentType.objects.get_for_model(self)
         return Comment.objects.filter(content_type=ctype, object_pk=self.pk).count()
@@ -472,7 +509,7 @@ class SoftwareStatistics(models.Model):
     def update_downloads(self):
         self.number_of_downloads += 1
         self.save()
-    
+
 def comment_notification(**kwargs):
     """
          instance is the comment object

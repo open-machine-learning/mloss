@@ -2,7 +2,7 @@
 
 {% block extrahead %}
 <script type="text/javascript">
-<!--
+	<!--
 function addStringToElement(element_id, combo_id)
 {
 	var out_field = document.getElementById(element_id);
@@ -51,10 +51,10 @@ function addStringToElement(element_id, combo_id)
 
 {% block content-related %}
 <dl>
-    <dt>
-    Submitting/Updating software project as user
+	<dt>
+	Submitting/Updating software project as user
 	<a href="/software{{ user.get_absolute_url|escape }}">{{ user.username }}</a>.
-    </dt>
+	</dt>
 </dl>
 <dl>
 	<dt>
@@ -74,44 +74,44 @@ function addStringToElement(element_id, combo_id)
 
 {% if form.is_multipart %}
 <form enctype="multipart/form-data" method="POST" action="">
-{% else %}
-<form method="POST" action="">
-	{% endif %}
-	<dl>
-		<dd>
-		<table width="100%">
-			<tr>
-				<td>
-					<b>{{ form.title.label }}</b><br></br> <span class="help">{{ form.title.help_text }}</span>
-					{% if form.title.errors %}<br></br>
-					<span class="error">
-						{{ form.title.errors|join:", " }}
-					</span>
-					{% endif %}
-					<dd>{{ form.title|safe }}</dd>
-				</td>
-				<td>
-					<b>{{ form.version.label }}</b><br></br> <span class="help">{{ form.version.help_text }}</span>
-					{% if form.version.errors %}<br></br>
-					<span class="error">
-						{{ form.version.errors|join:", " }}
-					</span>
-					{% endif %}
-					<dd>{{ form.version|safe }}</dd>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<b>{{ form.authors.label }}</b><br></br> <span class="help">{{ form.authors.help_text }}</span>
-					{% if form.authors.errors %}<br></br>
-					<span class="error">
-						{{ form.authors.errors|join:", " }}
-					</span>
-					{% endif %}
-					<dd>{{ form.authors_choice|safe }}{{ form.authors|safe }}</dd>
-					<script type="text/javascript">
-						<!--
-						document.getElementById('{{ form.authors_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.authors.auto_id }}', '{{ form.authors_choice.auto_id }}');};
+	{% else %}
+	<form method="POST" action="">
+		{% endif %}
+		<dl>
+			<dd>
+			<table width="100%">
+				<tr>
+					<td>
+						<b>{{ form.title.label }}</b><br></br> <span class="help">{{ form.title.help_text }}</span>
+						{% if form.title.errors %}<br></br>
+						<span class="error">
+							{{ form.title.errors|join:", " }}
+						</span>
+						{% endif %}
+						<dd>{{ form.title|safe }}</dd>
+					</td>
+					<td>
+						<b>{{ form.version.label }}</b><br></br> <span class="help">{{ form.version.help_text }}</span>
+						{% if form.version.errors %}<br></br>
+						<span class="error">
+							{{ form.version.errors|join:", " }}
+						</span>
+						{% endif %}
+						<dd>{{ form.version|safe }}</dd>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<b>{{ form.authors.label }}</b><br></br> <span class="help">{{ form.authors.help_text }}</span>
+						{% if form.authors.errors %}<br></br>
+						<span class="error">
+							{{ form.authors.errors|join:", " }}
+						</span>
+						{% endif %}
+						<dd>{{ form.authors_choice|safe }}{{ form.authors|safe }}</dd>
+						<script type="text/javascript">
+							<!--
+							document.getElementById('{{ form.authors_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.authors.auto_id }}', '{{ form.authors_choice.auto_id }}');};
 //-->
 </script>
 			</td>
@@ -187,6 +187,20 @@ function addStringToElement(element_id, combo_id)
 		</tr>
 		<tr>
 			<td>
+				<b>{{ form.dataformats.label }}</b><br></br> <span class="help">{{ form.dataformats.help_text }}</span>
+				{% if form.dataformats.errors %}<br></br>
+				<span class="error">
+					{{ form.dataformats.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.dataformats_choice|safe }}{{ form.dataformats|safe }}</dd>
+				<script type="text/javascript">
+					<!--
+					document.getElementById('{{ form.dataformats_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.dataformats.auto_id }}', '{{ form.dataformats_choice.auto_id }}');};
+//-->
+</script>
+			</td>
+			<td>
 				{{ form.project_url.label }}<br></br> <span class="help">{{ form.project_url.help_text }}</span>
 				{% if form.project_url.errors %}<br></br>
 				<span class="error">
@@ -194,6 +208,17 @@ function addStringToElement(element_id, combo_id)
 				</span>
 				{% endif %}
 				<dd>{{ form.project_url|safe }}</dd>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				{{ form.thumbnail.label }}<br></br> <span class="help">{{ form.thumbnail.help_text }}</span>
+				{% if form.thumbnail.errors %}<br></br>
+				<span class="error">
+					{{ form.thumbnail.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.thumbnail|safe }} {{ form.thumbnail_file|safe }}</dd>
 			</td>
 			<td>
 				{{ form.screenshot.label }}<br></br> <span class="help">{{ form.screenshot.help_text }}</span>
@@ -203,52 +228,75 @@ function addStringToElement(element_id, combo_id)
 				</span>
 				{% endif %}
 				<dd>{{ form.screenshot|safe }} {{ form.screenshot_file|safe }}</dd>
-			</tr>
-			<tr>
-				<td>
-					{{ form.tarball.label }}<br></br> <span class="help">{{ form.tarball.help_text }}</span>
-					{% if form.tarball.errors %}<br></br>
-					<span class="error">
-						{{ form.tarball.errors|join:", " }}
-					</span>
-					{% endif %}
-					<dd>{{ form.tarball|safe }} {{ form.tarball_file|safe }}</dd>
-				</td>
-				<td>
-					{{ form.download_url.label }}<br></br> <span class="help">{{ form.download_url.help_text }}</span>
-					{% if form.download_url.errors %}<br></br>
-					<span class="error">
-						{{ form.download_url.errors|join:", " }}
-					</span>
-					{% endif %}
-					<dd>{{ form.download_url|safe }}</dd>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					{{ form.paper_bib.label }}<br></br> <span class="help">{{ form.paper_bib.help_text }}</span>
-					{% if form.paper_bib.errors %}<br></br>
-					<span class="error">
-						{{ form.paper_bib.errors|join:", " }}
-					</span>
-					{% endif %}
-					<dd>{{ form.paper_bib|safe }}</dd>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<b>{{ form.description.label }}</b><br></br> <span class="help">{{ form.description.help_text }}</span>
-					{% if form.description.errors %}<br></br>
-					<span class="error">
-						{{ form.description.errors|join:", " }}
-					</span>
-					{% endif %}
-					<dd>{{ form.description|safe }}</dd>
-				</td>
-			</tr>
-		</table>
-		</dd>
-		<dt><input type="submit" value="Save" /></dt>
-	</dl>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				{{ form.tarball.label }}<br></br> <span class="help">{{ form.tarball.help_text }}</span>
+				{% if form.tarball.errors %}<br></br>
+				<span class="error">
+					{{ form.tarball.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.tarball|safe }} {{ form.tarball_file|safe }}</dd>
+			</td>
+			<td>
+				{{ form.download_url.label }}<br></br> <span class="help">{{ form.download_url.help_text }}</span>
+				{% if form.download_url.errors %}<br></br>
+				<span class="error">
+					{{ form.download_url.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.download_url|safe }}</dd>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				{{ form.paper_bib.label }}<br></br> <span class="help">{{ form.paper_bib.help_text }}</span>
+				{% if form.paper_bib.errors %}<br></br>
+				<span class="error">
+					{{ form.paper_bib.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.paper_bib|safe }}</dd>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<b>{{ form.short_description.label }}</b><br></br> <span class="help">{{ form.short_description.help_text }}</span>
+				{% if form.short_description.errors %}<br></br>
+				<span class="error">
+					{{ form.short_description.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.short_description|safe }}</dd>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<b>{{ form.description.label }}</b><br></br> <span class="help">{{ form.description.help_text }}</span>
+				{% if form.description.errors %}<br></br>
+				<span class="error">
+					{{ form.description.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.description|safe }}</dd>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<b>{{ form.changes.label }}</b><br></br> <span class="help">{{ form.changes.help_text }}</span>
+				{% if form.changes.errors %}<br></br>
+				<span class="error">
+					{{ form.changes.errors|join:", " }}
+				</span>
+				{% endif %}
+				<dd>{{ form.changes|safe }}</dd>
+			</td>
+		</tr>
+	</table>
+	</dd>
+	<dt><input type="submit" value="Save" /></dt>
+</dl>
 </form>
 {% endblock %}

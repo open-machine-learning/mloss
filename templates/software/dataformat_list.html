@@ -1,0 +1,18 @@
+{% extends "software/base_software.html" %}
+{% load paginator %}
+
+{% block title %}Data Formats{% endblock %}
+
+{% block billboard %}Data Formats{% endblock %}
+
+{% block content %}
+    {% paginator 5 %}
+    <ul>
+    {% for o in object_list %}
+        <li><a href="/software/dataformat/{{ o.slug }}/">
+	    {{ o.name|title }}</a>
+	</li>
+    {% endfor %}
+    </ul>
+    {% paginator 5 %}
+{% endblock %}

@@ -22,10 +22,11 @@ class SoftwareAdmin(admin.ModelAdmin):
         ('Metadata', {
         'fields': ('user', 'title', 'version', 'authors')}),
         ('None', {
-        'fields': ( 'contact', 'description',
-            'project_url', 'jmlr_mloss_url', 'tags', 'language', 'os_license', 
-            'updated_date', 'tarball', 'screenshot', 'operating_systems',
-            'paper_bib', 'total_number_of_views', 'total_number_of_downloads')}),
+            'fields': ( 'contact', 'short_description', 'description', 'changes',
+            'project_url', 'jmlr_mloss_url', 'tags', 'language', 'os_license',
+            'revision', 'updated_date', 'tarball', 'thumbnail', 'screenshot',
+            'operating_systems', 'dataformats', 'paper_bib',
+            'total_number_of_views', 'total_number_of_downloads')}),
         )
     list_filter = ['pub_date']
     date_hierarchy = 'pub_date'

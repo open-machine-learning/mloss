@@ -111,7 +111,12 @@ All entries
 				</tr></table>
 			</div>
 			<div class="description">
-				{{ object.description|firstwords:"cut=200"|markdown:"safe" }}
+				<p>
+				<b>About:</b>
+				{{ object.short_description }}
+				</p>
+				<b>Changes:</b>
+				{{ object.changes }}
 				<hr></hr>
 				<table class="swdetails">
 					<tr><td>
@@ -150,6 +155,14 @@ All entries
 								<li><b>Operating System:</b>
 								{% for o in object.get_opsyslist %}
 								<a href="/software/opsys/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
+								{% endif %}
+								{% endfor %}
+								</li>
+								{% endif %}
+								{% if object.get_dataformatlist %}
+								<li><b>Data Formats:</b>
+								{% for o in object.get_dataformatlist %}
+								<a href="/software/dataformat/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
 								{% endif %}
 								{% endfor %}
 								</li>

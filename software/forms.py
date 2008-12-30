@@ -11,7 +11,8 @@ from django.views.generic.create_update import update_object
 from django.forms.widgets import RadioSelect
 from django.utils.html import strip_tags
 from StringIO import StringIO  
-from software.models import Software, Language, License, Tag, Author, OpSys
+from software.models import Software
+from software.models import Language, License, Tag, Author, OpSys, DataFormat
 import software.views.list
 import re
 
@@ -39,8 +40,9 @@ class UpdateSoftwareForm(forms.Form):
                 (x.id, x.name) for x in License.objects.all().order_by('name')]
         self.fields['operating_systems_choice'].choices = [('', '')] + [
                 (x.id, x.name) for x in OpSys.objects.all().order_by('name')]
+        self.fields['dataformats_choice'].choices = [('', '')] + [
+                (x.id, x.name) for x in DataFormat.objects.all().order_by('name')]
 
-    #title = forms.CharField(widget=forms.HiddenInput(), label=u'')
     title = forms.CharField(max_length=80,
             widget=forms.TextInput(attrs={'size' : '30', 'readonly' : 'readonly'}),
             label=u'Title', required=True, help_text=u'(read only)')
@@ -55,9 +57,15 @@ class UpdateSoftwareForm(forms.Form):
     contact = forms.EmailField(max_length=80, 
             widget=forms.TextInput(attrs={'size' : '30'}), label=u"Main Author's Email Address",
             help_text=u'(required)')
+    short_description = forms.CharField(
+            widget=forms.Textarea(attrs={"rows":2, "cols":70}), label=u'Short Description',
+            help_text=u'(required) A brief summary.')
     description = forms.CharField(
             widget=forms.Textarea(attrs={"rows":15, "cols":70}), label=u'Description',
-            help_text=u'(required) The first paragraph, truncated at 200 characters, is displayed as the summary')
+            help_text=u'(required) An extended description of the software')
+    changes = forms.CharField(
+            widget=forms.Textarea(attrs={"rows":5, "cols":70}), label=u'Changes since last revision',
+            help_text=u'(required) A summary of the changes since the previous release.')
     project_url = forms.URLField(
             widget=forms.TextInput(attrs={'size' : '30'}),
             label=u'Project Homepage', required=False,
@@ -84,6 +92,9 @@ class UpdateSoftwareForm(forms.Form):
             widget=forms.TextInput(attrs={'size' : '30'}),
             label=u'Download URL', required=False,
             help_text=u'(required) Archive or direct download link')
+    thumbnail = forms.ImageField(widget=forms.FileInput(attrs={'size' : '20'}),
+            label=u'Thumbnail', required=False,
+            help_text=u'Icon shown in software list; 30x32 pixels; .png, .jpg or .gif only.')
     screenshot = forms.ImageField(widget=forms.FileInput(attrs={'size' : '20'}),
             label=u'Screenshot', required=False,
             help_text=u'Limited to 1280x1024 pixels and less than 200K; .png, .jpg or .gif only.')
@@ -95,6 +106,10 @@ class UpdateSoftwareForm(forms.Form):
             label=u'Operating Systems',
             help_text=u'(required) A comma seperated list of supported OSes')
     operating_systems_choice = forms.ChoiceField(widget=forms.Select(attrs={'size' : 1}), required=False)
+    dataformats = forms.CharField(widget=forms.TextInput(attrs={'size' : '20'}),
+            label=u'Data Formats',
+            help_text=u'(required) A comma seperated list of supported Data Formats')
+    dataformats_choice = forms.ChoiceField(widget=forms.Select(attrs={'size' : 1}), required=False)
 
     def clean_version(self):
         """
@@ -164,6 +179,34 @@ class UpdateSoftwareForm(forms.Form):
 
         return self.cleaned_data['tarball']
 
+    def clean_thumbnail(self):
+        """
+        Check that thumbnail is only jpeg/png/gif
+        """
+        if 'thumbnail' in self.data and len(self.data['thumbnail']):
+            thumbnail = self.data['thumbnail']
+
+            if thumbnail and thumbnail.content_type not in ('image/jpeg',
+                    'image/gif', 'image/png', 'image/x-png', 'image/pjpeg'):
+                raise forms.ValidationError(u'Only images of type png, gif or jpeg allowed.')
+
+            if thumbnail.size > settings.MAX_IMAGE_UPLOAD_SIZE * 1024:
+                raise forms.ValidationError(u'Image too big, max allowed size is %d KB' % settings.MAX_IMAGE_UPLOAD_SIZE)
+
+            try:
+                from PIL import Image  
+                img = Image.open(StringIO(thumbnail.read()))
+                thumbnail.open() # seek to beginning of file
+                width, height = img.size
+                if width != 30:
+                    raise forms.ValidationError('Image must be 30 pixels wide')
+                if height != 32:
+                    raise forms.ValidationError('Image must be 32 pixels in height')
+            except ImportError:
+                pass
+
+        return self.cleaned_data['thumbnail']
+
     def clean_screenshot(self):
         """
         Check that screenshot is only jpeg/png/gif
@@ -201,6 +244,15 @@ class UpdateSoftwareForm(forms.Form):
                 raise forms.ValidationError(u'Operating system must be comma separated names and may only contain letters and spaces.')
         return self.cleaned_data['operating_systems']
 
+    def clean_dataformats(self):
+        """
+        Validates that dataformats are alphanumeric, comma, whitespace
+        """
+        if 'dataformats' in self.cleaned_data:
+            if not os_re.search(self.cleaned_data['dataformats']):
+                raise forms.ValidationError(u'Data Formats must be comma separated names and may only contain letters and spaces.')
+        return self.cleaned_data['dataformats']
+
     def clean(self):
         """
         Make sure that download url or tarball are given
@@ -235,6 +287,11 @@ class SoftwareForm(UpdateSoftwareForm):
     title = forms.CharField(max_length=80,
             widget=forms.TextInput(attrs={'size' : '30'}),
             label=u'Title', required=True, help_text=u'(required) Up to 80 characters long')
+    changes = forms.CharField(
+            widget=forms.Textarea(attrs={"rows":5, "cols":70,}), 
+            initial=u'Initial Announcement on mloss.org',
+            label=u'Changes since last revision',
+            help_text=u'(required) A summary of the changes since the previous release.')
 
     def clean_title(self):
         """
@@ -257,6 +314,13 @@ def save_tarball(request, object):
         filename = request.FILES['tarball'].name
         object.tarball.save(filename, request.FILES['tarball'], save=False)
 
+def save_thumbnail(request, object):
+    """
+    Retrieve filename and save the file
+    """
+    if request.FILES.has_key('thumbnail'):
+        filename = request.FILES['thumbnail'].name
+        object.thumbnail.save(filename, content=request.FILES['thumbnail'], save=False)
 
 def save_screenshot(request, object):
     """
@@ -286,26 +350,31 @@ def add_software(request):
                                     version=form.cleaned_data['version'],
                                     authors=form.cleaned_data['authors'],
                                     contact=form.cleaned_data['contact'],
+                                    short_description=form.cleaned_data['short_description'],
                                     description=form.cleaned_data['description'],
+                                    changes='Initial Announcement on mloss.org',
                                     project_url=form.cleaned_data['project_url'],
                                     tags=form.cleaned_data['tags'],
                                     language=form.cleaned_data['language'],
                                     operating_systems = form.cleaned_data['operating_systems'],
+                                    dataformats = form.cleaned_data['dataformats'],
                                     os_license=form.cleaned_data['os_license'],
                                     paper_bib = form.cleaned_data['paper_bib'],
                                     download_url=form.cleaned_data['download_url'],
                                     tarball=form.cleaned_data['tarball'],
+                                    thumbnail=form.cleaned_data['thumbnail'],
                                     screenshot=form.cleaned_data['screenshot'],
                                     )
             if original_id:
                 new_software.original_id = original_id
 
             save_tarball(request, new_software)
+            save_thumbnail(request, new_software)
             save_screenshot(request, new_software)
             new_software.save()
             return HttpResponseRedirect(new_software.get_absolute_url())
     else:
-        form = SoftwareForm(initial={'user':request.user})
+        form = SoftwareForm(initial={'user':request.user, 'changes':'Initial Announcement on mloss.org'})
 
     return render_to_response('software/software_add.html',
                               { 'form': form },
@@ -355,15 +424,19 @@ def edit_software(request, software_id):
                                     version=form.cleaned_data['version'],
                                     authors=form.cleaned_data['authors'],
                                     contact=form.cleaned_data['contact'],
+                                    short_description=form.cleaned_data['short_description'],
                                     description=form.cleaned_data['description'],
+                                    changes=form.cleaned_data['changes'],
                                     project_url=form.cleaned_data['project_url'],
                                     tags=form.cleaned_data['tags'],
                                     language=form.cleaned_data['language'],
                                     operating_systems = form.cleaned_data['operating_systems'],
+                                    dataformats = form.cleaned_data['dataformats'],
                                     os_license=form.cleaned_data['os_license'],
                                     paper_bib = form.cleaned_data['paper_bib'],
                                     download_url=form.cleaned_data['download_url'],
                                     tarball=form.cleaned_data['tarball'],
+                                    thumbnail=form.cleaned_data['thumbnail'],
                                     screenshot=form.cleaned_data['screenshot'],
                                     )
             if original_id:
@@ -375,7 +448,14 @@ def edit_software(request, software_id):
             if new_software.version != software.version:
                 for field in noneditables:
                     setattr(new_software, field, getattr(software, field))
+                allsoft = Software.objects.filter(title__exact=software.title);
+
+                for s in allsoft:
+                    s.revision+=1
+                    s.save()
+
                 save_tarball(request, new_software)
+                save_thumbnail(request, new_software)
                 save_screenshot(request, new_software)
                 new_software.save()
                 return HttpResponseRedirect(new_software.get_absolute_url())
@@ -388,6 +468,8 @@ def edit_software(request, software_id):
                     software.tarball = None
                 else:
                     save_tarball(request, software)
+
+                save_thumbnail(request, software)
                 save_screenshot(request, software)
                 software.save()
                 return HttpResponseRedirect(software.get_absolute_url())

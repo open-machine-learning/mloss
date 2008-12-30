@@ -59,5 +59,7 @@ urlpatterns = patterns('',
     (r'^tags/(?P<slug>[^/]+)/$', 'software.views.list.software_by_tag'),
     (r'^opsys/$', 'software.views.entry.software_all_opsyss'),
     (r'^opsys/(?P<slug>[^/]+)/$', 'software.views.list.software_by_opsys'),
+    (r'^dataformat/$', 'software.views.entry.software_all_dataformats'),
+    (r'^dataformat/(?P<slug>[^/]+)/$', 'software.views.list.software_by_dataformats'),
     (r'^forum/$', 'django.views.generic.list_detail.object_list', forum_dict),
 )
