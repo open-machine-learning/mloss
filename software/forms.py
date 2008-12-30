@@ -6,7 +6,7 @@ from django.conf import settings
 from django import forms
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.views.generic.create_update import update_object
 from django.forms.widgets import RadioSelect
 from django.utils.html import strip_tags
@@ -24,7 +24,7 @@ language_re = re.compile(r'^[a-zA-Z\+ ,]+$')
 os_re = re.compile(r'^[a-zA-Z ,]+$')
 bib_re = re.compile(r'^[a-zA-Z{}@, \+ ,]+$')
 
-from models import Software, editables, dontupdateifempty
+from models import Software, editables, noneditables, dontupdateifempty
 
 class UpdateSoftwareForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -217,7 +217,7 @@ class UpdateSoftwareForm(forms.Form):
         has_tarball = False
         if 'title' in self.data:
             try:
-                sw = Software.objects.get(title__exact=self.data['title'])
+                sw = Software.objects.get(title__exact=self.data['title'], version__exact=self.data['version'])
                 has_tarball = sw.tarball and not ('download_url' in self.data and self.data['download_url'])
             except Software.DoesNotExist:
                 pass
@@ -318,11 +318,11 @@ def search_software(request):
     searchform = SearchForm()
 
     if request.method == 'GET':
-		try:
-			q = request.GET['searchterm'];
-			return software.views.list.search_description(request, q)
-		except:
-			return HttpResponseRedirect('/software')
+        try:
+            q = request.GET['searchterm'];
+            return software.views.list.search_description(request, q)
+        except:
+            return HttpResponseRedirect('/software')
     else:
         return HttpResponseRedirect('/software')
 
@@ -331,9 +331,10 @@ def edit_software(request, software_id):
     Show the software form, and capture the information
     """
 
-
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
+
+    original_id = request.GET.get('oid', None)
 
     if request.user.is_superuser:
         software = get_object_or_404(Software,
@@ -349,17 +350,47 @@ def edit_software(request, software_id):
         form = UpdateSoftwareForm(new_data)
 
         if form.is_valid():
-            for field in editables:
-                if not field in dontupdateifempty or form.cleaned_data[field]:
-                    setattr(software, field, form.cleaned_data[field])
+            new_software = Software(user=request.user,
+                                    title=form.cleaned_data['title'],
+                                    version=form.cleaned_data['version'],
+                                    authors=form.cleaned_data['authors'],
+                                    contact=form.cleaned_data['contact'],
+                                    description=form.cleaned_data['description'],
+                                    project_url=form.cleaned_data['project_url'],
+                                    tags=form.cleaned_data['tags'],
+                                    language=form.cleaned_data['language'],
+                                    operating_systems = form.cleaned_data['operating_systems'],
+                                    os_license=form.cleaned_data['os_license'],
+                                    paper_bib = form.cleaned_data['paper_bib'],
+                                    download_url=form.cleaned_data['download_url'],
+                                    tarball=form.cleaned_data['tarball'],
+                                    screenshot=form.cleaned_data['screenshot'],
+                                    )
+            if original_id:
+                new_software.original_id = original_id
 
-            if form.cleaned_data['download_url'] and len(form.cleaned_data['download_url'])>0:
-                software.tarball = None
+            if new_software.title != software.title:
+                return HttpResponseForbidden()
+
+            if new_software.version != software.version:
+                for field in noneditables:
+                    setattr(new_software, field, getattr(software, field))
+                save_tarball(request, new_software)
+                save_screenshot(request, new_software)
+                new_software.save()
+                return HttpResponseRedirect(new_software.get_absolute_url())
             else:
-                save_tarball(request, software)
-            save_screenshot(request, software)
-            software.save()
-            return HttpResponseRedirect(software.get_absolute_url())
+                for field in editables:
+                    if not field in dontupdateifempty or form.cleaned_data[field]:
+                        setattr(software, field, form.cleaned_data[field])
+
+                if form.cleaned_data['download_url'] and len(form.cleaned_data['download_url'])>0:
+                    software.tarball = None
+                else:
+                    save_tarball(request, software)
+                save_screenshot(request, software)
+                software.save()
+                return HttpResponseRedirect(software.get_absolute_url())
     else:
         form = UpdateSoftwareForm(software)
 

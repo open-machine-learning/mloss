@@ -15,13 +15,16 @@ from markdown import markdown
 from utils import parsewords, slugify, send_mails
 from subscriptions.models import Subscriptions
 
-# make sure this list of variables is up-to-date (i.e. matches
+# make sure these lists of variables are up-to-date (i.e. match
 # the fields in the Software object
 editables=('version','authors',
         'contact', 'description', 'project_url', 'tags', 'language',
         'os_license', 'tarball', 'download_url', 'screenshot', 'operating_systems',
         'paper_bib')
 
+noneditables=('user','title', 'description_html', 'jmlr_mloss_url', 'pub_date', 'average_rating', 'average_features_rating', 'average_usability_rating', 'average_documentation_rating', 'total_number_of_votes', 'total_number_of_views', 'total_number_of_downloads') 
+
+#'authorlist', 'taglist', 'languagelist', 'licenselist', 'opsyslist', 
 # don't change db of the following fields if they are empty
 dontupdateifempty=['tarball', 'screenshot']
 
