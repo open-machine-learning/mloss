@@ -1,0 +1,22 @@
+{% extends "base_2col.html" %}
+{% block title %}Contact the authors of a package.{% endblock %}
+{% block billboard %}Contact the authors of a package.{% endblock %}
+{% block sectionid %}contact{% endblock %}
+{% block content %}
+
+{% if form.errors %}
+	<p class="error">Please correct the errors below:</p>
+{% endif %}
+
+<form action="" method="POST">
+	<dl>
+		
+	{% for field in form %}
+		<dt class="fieldWrapper">{{ field.errors }}{{ field.label_tag }}</dt>
+		<dd>{{ field }}</dd>
+    {% endfor %}
+	
+
+<input type="submit" value="Submit" />
+</form>
+{% endblock %}

@@ -63,4 +63,5 @@ urlpatterns = patterns('',
     (r'^dataformat/$', 'software.views.entry.software_all_dataformats'),
     (r'^dataformat/(?P<slug>[^/]+)/$', 'software.views.list.software_by_dataformats'),
     (r'^forum/$', 'django.views.generic.list_detail.object_list', forum_dict),
+    (r'^mail/(?P<software_id>\d+)/$', 'software.forms.contact_author'), 
 )
