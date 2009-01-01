@@ -28,6 +28,9 @@
 </dl>
 
 {% if user.is_authenticated %}
+<dl>
+	<dd><a href="/software/mail/{{ object.id}}">Email Author</a></dd>
+</dl>
 {% if user.is_superuser %}
 <dl>
 	<dd><a href="/software/update/{{ object.id}}">Update Project</a></dd>

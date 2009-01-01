@@ -490,7 +490,6 @@ class RatingForm(forms.Form):
 
 
 class AuthorContactForm(forms.Form):
-    sender    = forms.EmailField(label='Your email address')
     subject   = forms.CharField(max_length=100, label='Subject')
     message   = forms.CharField(label='Your message', widget=Textarea)
     cc_myself = forms.BooleanField(required=False, label='Send email CC: to you')
@@ -505,7 +504,7 @@ def contact_author(request, software_id):
         if form.is_valid(): # All validation rules pass
             subject    = form.cleaned_data['subject']
             message    = form.cleaned_data['message']
-            sender     = form.cleaned_data['sender']
+            sender     = request.user.email
             cc_myself  = form.cleaned_data['cc_myself']
             recipients = [software.contact,]
             if cc_myself:
@@ -516,5 +515,4 @@ def contact_author(request, software_id):
     else:
         form = AuthorContactForm() # An unbound form
 
-    return render_to_response('software/software_contact_author.html', { 'form': form })
-    # return render_to_response('software/software_contact_author.html', { 'form': form }, context_instance=RequestContext(request))    
+    return render_to_response('software/software_contact_author.html', { 'form': form }, context_instance=RequestContext(request))    
