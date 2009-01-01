@@ -18,7 +18,8 @@ forum_dict = {
 # General softwares views.
 urlpatterns = patterns('',
     #catch all view/<num>/1.2.3 urls, change later when we support versions
-    (r'^view/(?P<software_id>\d+)/', 'software.views.entry.software_detail'), 
+    (r'^view/(?P<software_id>\d+)/$', 'software.views.entry.software_detail'), 
+    (r'^view/(?P<software_id>\d+)/(?P<revision>\d+)/$', 'software.views.entry.software_detail'), 
     (r'^$', 'software.views.list.software_by_updated_date'),
     (r'^date/$', 'software.views.list.software_by_updated_date'),
     (r'^pubdate/$', 'software.views.list.software_by_pub_date'),

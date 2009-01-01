@@ -20,7 +20,7 @@ from community.views import get_latest_news
 
 import settings
 
-def software_detail(request, software_id):
+def software_detail(request, software_id, revision=0):
     """
     Detail view of a Software.
     
@@ -32,8 +32,13 @@ def software_detail(request, software_id):
         software_detail.html
     
     """
-    entry = get_object_or_404(Software, pk=software_id)
+    tmp = get_object_or_404(Software, pk=software_id)
+    revisions = Software.objects.filter(title=tmp.title)
+    entry = get_object_or_404(revisions, revision=revision)
     todays_stats = entry.update_views()
+
+    if revisions.count() <= 1:
+        revisions = None
 
     ratingform = None
 
@@ -50,7 +55,8 @@ def software_detail(request, software_id):
     return render_to_response('software/software_detail.html',
             { 'object': entry,
                 'ratingform': ratingform,
-                'todays_stats' : todays_stats},
+                'todays_stats' : todays_stats,
+                'revisions' : revisions },
             context_instance=RequestContext(request))
 
 

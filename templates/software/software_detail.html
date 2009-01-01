@@ -147,26 +147,34 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 		<tr>
 			<td>
 				<dl>
-					<dt>BibTeX Entry:</dt>
-					<dd><a href="/software/bib/{{ object.id }}">Download</a></dd>
+					<dt>Changes to previous version:</dt>
+					<dd>{{ object.changes }}</dd>
+				</dl>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<dl>
+					<dd><b>BibTeX Entry:</b>
+					<a href="/software/bib/{{ object.id }}">Download</a></dd>
 
 					{% if object.paper_bib %}
-					<dt>Corresponding Paper BibTeX Entry:</dt>
-					<dd><a href="/software/paperbib/{{ object.id }}">Download</a></dd>
+					<dd><b>Corresponding Paper BibTeX Entry:</b>
+					<a href="/software/paperbib/{{ object.id }}">Download</a></dd>
 					{% endif %}
 
 					{% if object.project_url %}
-					<dt>URL:</dt>
-					<dd> <a href="{{ object.project_url|escape }}">Project Homepage</a></dd>
+					<dd><b>URL:</b>
+					<a href="{{ object.project_url|escape }}">Project Homepage</a></dd>
 					{% endif %}
 
 					{% if object.jmlr_mloss_url %}
-					<dt>JMLR MLOSS PaperURL:</dt>
-					<dd> <a href="/software/jmlrhomepage/{{ object.id }}">JMLR-MLOSS Paper Homepage</a></dd>
+					<dd><b>JMLR MLOSS PaperURL:</b>
+					<a href="/software/jmlrhomepage/{{ object.id }}">JMLR-MLOSS Paper Homepage</a></dd>
 					{% endif %}
 
 					{% if object.get_opsyslist %}
-					<dt>Supported Operating Systems:</dt><dd>
+					<dd><b>Supported Operating Systems:</b>
 					{% for o in object.get_opsyslist %}
 					<a href="/software/opsys/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
 					{% endif %}
@@ -174,8 +182,16 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 					</dd>
 					{% endif %}
 
+					{% if object.get_dataformatlist %}
+					<dd><b>Data Formats:</b>
+					{% for o in object.get_dataformatlist %}
+					<a href="/software/dataformat/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},{% endif %}
+					{% endfor %}
+					</dd>
+					{% endif %}
+
 					{% if object.get_taglist %}
-					<dt>Tags:</dt><dd>
+					<dd><b>Tags:</b>
 					{% for o in object.get_taglist %}
 					<a href="/software/tags/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
 					{% endif %}
@@ -184,12 +200,42 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 					{% endif %}
 
 					{% if object.is_downloadable %}
-					<dt>Archive:</dt>
-					<dd><a href='/software/download/{{ object.id }}'>download here</a></dd>
+					<dd><b>Archive:</b>
+					<a href='/software/download/{{ object.id }}'>download here</a></dd>
 					{% endif %}
 				</dl>
 			</td>
 		</tr>
+		{% if revisions %}
+		<tr>
+			<td>
+				<dl>
+					<dt><h2>Other available revisons</h2></dt>
+					<dd>
+					<table>
+						<tr>
+							<th><b>Version</b></th>
+							<th><b>Changelog</b></th>
+							<th><b>Date</b></th>
+						</tr>
+						{% for r in revisions %}
+						<tr>
+							<td>
+								<a href="/software/view/{{ r.id }}/{{ r.revision}}/">{{ r.version }}</a>
+							</td>
+							<td>
+								{{ r.changes }}
+							</td>
+							<td>
+								{{ r.pub_date|date:"F j, Y, H:i:s" }}
+							</td>
+						</tr>
+						{% endfor %}
+					</table>
+				</dl>
+			</td>
+		</tr>
+		{% endif %}
 		{% if ratingform %}
 		<tr>
 			<td>
