@@ -1,6 +1,8 @@
 import re
 from django.template.defaultfilters import stringfilter
 from django.core.mail import send_mail
+from django.utils.html import strip_tags
+from django.contrib.comments.signals import comment_will_be_posted
 import settings
 import datetime
 
@@ -46,12 +48,23 @@ def send_mails(subscribers, subject, message):
     for s in subscribers:
         if not s.bookmark:
             now=datetime.datetime.now()
-            # only send out things once every 60 seconds 
-            if now-s.last_updated > datetime.timedelta(0, 60):
-                print subject
-                print s.user.email
-                print message
-                print settings.DEFAULT_FROM_EMAIL
+            # only send out things once every 600 seconds 
+            if now-s.last_updated > datetime.timedelta(0, 600):
                 send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [ s.user.email ],fail_silently=True)
                 s.last_updated=now
                 s.save()
+
+def comment_spam_test(**kwargs):
+    """
+         instance is the comment object
+    """
+
+    comment=kwargs['comment'].comment
+    request=kwargs['request']
+
+    if strip_tags(comment) != comment:
+        return False
+
+    return True;
+
+comment_will_be_posted.connect(comment_spam_test)
