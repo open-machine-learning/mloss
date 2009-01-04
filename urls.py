@@ -10,8 +10,9 @@ urlpatterns = patterns('',
     # administration
     (r'^admin/(.*)', admin.site.root),
 
-    # Using cab to browse software
+    # software and revision
     (r'^software/', include('software.urls')),
+    (r'^revision/', include('revision.urls')),
 
     # Using registration
     (r'^accounts/', include('registration.urls')),

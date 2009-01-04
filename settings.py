@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'mloss',
     'mloss.software',
+    'mloss.revision',
     'mloss.registration',
     'mloss.community',
     'mloss.forshow',

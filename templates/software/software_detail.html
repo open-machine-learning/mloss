@@ -6,9 +6,9 @@
 
 {% block sectionid %}browse{% endblock %}
 
-{% block title %}Project details:{{ object.title }}{% endblock %}
+{% block title %}Project details:{{ object.software.title }}{% endblock %}
 
-{% block billboard %}Project details for {{ object.title }}{% endblock %}
+{% block billboard %}Project details for {{ object.software.title }}{% endblock %}
 
 {% block content-related %}
 
@@ -29,16 +29,16 @@
 
 {% if user.is_authenticated %}
 <dl>
-	<dd><a href="/software/mail/{{ object.id}}">Email Author</a></dd>
+	<dd><a href="/software/mail/{{ object.software.id }}">Email Author</a></dd>
 </dl>
 {% if user.is_superuser %}
 <dl>
-	<dd><a href="/software/update/{{ object.id}}">Update Project</a></dd>
+	<dd><a href="/software/update/{{ object.software.id }}{{ revision }}">Update Project</a></dd>
 </dl>
 {% else %}
 {% ifequal user.id object.user_id %} 
 <dl>
-	<dd><a href="/software/update/{{ object.id}}">Update Project</a></dd>
+	<dd><a href="/software/update/{{ object.software.id }}{{ revision }}">Update Project</a></dd>
 </dl>
 {% endifequal %}
 {% endif %}
@@ -49,7 +49,7 @@
 	<dt>Version:</dt>
 	<dd>{{ object.version }}</dd>
 	<dt>Submitter:</dt>
-	<dd>{{ object.user.username }}</dd>
+	<dd>{{ object.software.user.username }}</dd>
 	<dt>Author(s):</dt>
 	<dd>{{ object.authors }}</dd>
 	<dt>Posted:</dt>
@@ -65,7 +65,7 @@
 </dl>
 <dl>
     <dd>
-    <h3><a href="/software/rss/merged/{{object.id}}/"><img src="/media/images/rss.png" alt="RSS Feed" border="0" width="16" height="16" align="top"></img> RSS Feed for "{{ object.title }}"</a></h3>
+    <h3><a href="/software/rss/merged/{{object.id}}/"><img src="/media/images/rss.png" alt="RSS Feed" border="0" width="16" height="16" align="top"></img> RSS Feed for "{{ object.software.title }}"</a></h3>
     </dd>
 </dl>
 {% endblock %}
@@ -84,7 +84,7 @@
 									{% if object.screenshot %}
 									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="128" height="80" alt='Screenshot' title='Screenshot'></img></a>
 									{% else %}
-									{% ifequal object.user.username "r-cran-robot" %}
+									{% ifequal object.software.user.username "r-cran-robot" %}
 									<img src="/media/images/rlogo.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
 									{% else %}
 									<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
@@ -93,44 +93,44 @@
 									{% if object.jmlr_mloss_url %}
 									<img src="/media/images/jmlr.jpg" width="60" height="32" align="top" alt="JMLR"></img>
 									{% endif %}
-									<a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}</a>
+									<a href="{{ object.software.get_absolute_url }}"> {{ object.software.title }} {{ object.version }}</a>
 								</h2>
 								<p class="more">
-								by <a href="/software{{ object.user.get_absolute_url|escape }}">{{ object.user.username }}</a> 
+								by <a href="/software{{ object.software.user.get_absolute_url|escape }}">{{ object.software.user.username }}</a> 
 								- {{ object.updated_date|date:"F j, Y, H:i:s" }} CET
 								[
-								{% if object.project_url|escape %}<a href="{{ object.project_url|escape }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage" title="Project Homepage"></img></a> {% endif %}
-								<a href="/software/bib/{{ object.id }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX" title="BibTeX"></img></a>
-								{% if object.paper_bib %}<a href="/software/paperbib/{{ object.id }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper" title="BibTeX for corresponding Paper"></img></a>{% endif %}
-								{% if object.is_downloadable %}<a href="/software/download/{{ object.id }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download" title="Download"></img></a>{% endif %}
+								{% if object.project_url|escape %}<a href="{{ object.get_absolute_homepage_url }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage" title="Project Homepage"></img></a> {% endif %}
+								<a href="{{ object.get_absolute_bib_url }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX" title="BibTeX"></img></a>
+								{% if object.paper_bib %}<a href="{{ object.get_absolute_paperbib_url }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper" title="BibTeX for corresponding Paper"></img></a>{% endif %}
+								{% if object.is_downloadable %}<a href="{{ object.get_absolute_download_url }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download" title="Download"></img></a>{% endif %}
                                 {% if user.is_authenticated %}<a href="/software/subscribe/{{ object.id }}"><img src="/media/images/subscribe.png" width="14" height="14" alt="Subscribe" title="Subscribe"></img></a>{% endif %}
                                 {% if user.is_authenticated %}<a href="/software/bookmark/{{ object.id }}"><img src="/media/images/bookmark.png" width="14" height="14" alt="Bookmark" title="Bookmark"></img></a>{% endif %}
 								]
 								</p>
 
                                 <p class="more">
-								<a href="/software/viewstats/{{ object.id }}">{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize}}</a> ({{ todays_stats.number_of_views }} today),
-<a href="/software/downloadstats/{{ object.id }}">{{ object.total_number_of_downloads }} 
+								<a href="/software/viewstats/{{ object.software.id }}">{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize}}</a> ({{ todays_stats.number_of_views }} today),
+<a href="/software/downloadstats/{{ object.software.id }}">{{ object.total_number_of_downloads }} 
 download{{ object.total_number_of_downloads|pluralize}}</a> 
-( {{ todays_stats.number_of_downloads }} today ){% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, 
-  {% get_comment_count for object as comment_count %}
-  {{ comment_count }} comment{{ comment_count|pluralize }}{% endif %}, {{ object.get_subscription_count }} subscription{{ object.get_subscription_count|pluralize }}
+( {{ todays_stats.number_of_downloads }} today ){% get_comment_list for software.software object.software.id as comment_list %}{% if comment_list %}, 
+  {% get_comment_count for object.software as comment_count %}
+  {{ comment_count }} comment{{ comment_count|pluralize }}{% endif %}, {{ object.software.get_subscription_count }} subscription{{ object.software.get_subscription_count|pluralize }}
 
 
                                 </p>
                                 <p class="more">
-								<a href="/software/viewstats/{{ object.id }}"><img src="/software/viewstatspreview/{{object.id}}/"></img></a>
-								<a href="/software/downloadstats/{{ object.id }}"><img src="/software/downloadstatspreview/{{object.id}}/"></img></a>
+								<a href="/software/viewstats/{{ object.software.id }}"><img src="/software/viewstatspreview/{{object.software.id}}/"></img></a>
+								<a href="/software/downloadstats/{{ object.software.id }}"><img src="/software/downloadstatspreview/{{object.software.id}}/"></img></a>
                                 </p>
 							</td>
-							{% if object.total_number_of_votes %}
+							{% if object.software.total_number_of_votes %}
 							<td class="rating">
 								<table class="starlab">
-									<tr><td class="starlab">Overall</td><td class="stars"><nobr>{% show_stars object.average_rating of 5 round to half %}</nobr></td></tr>
-									<tr><td class="starlab">Features</td><td class="stars"><nobr>{% show_stars object.average_features_rating of 5 round to half %}</nobr></td></tr>
-									<tr><td class="starlab">Usability</td><td class="stars"><nobr>{% show_stars object.average_usability_rating of 5 round to half %}</nobr></td></tr>
-									<tr><td class="starlab">Documentation</td><td class="stars"><nobr>{% show_stars object.average_documentation_rating of 5 round to half %}</nobr></td></tr>
-									<tr><td colspan="2" class="starlab" align="center">(based on {{ object.total_number_of_votes }} vote{{ object.total_number_of_votes|pluralize }})</td></tr>
+									<tr><td class="starlab">Overall</td><td class="stars"><nobr>{% show_stars object.software.average_rating of 5 round to half %}</nobr></td></tr>
+									<tr><td class="starlab">Features</td><td class="stars"><nobr>{% show_stars object.software.average_features_rating of 5 round to half %}</nobr></td></tr>
+									<tr><td class="starlab">Usability</td><td class="stars"><nobr>{% show_stars object.software.average_usability_rating of 5 round to half %}</nobr></td></tr>
+									<tr><td class="starlab">Documentation</td><td class="stars"><nobr>{% show_stars object.software.average_documentation_rating of 5 round to half %}</nobr></td></tr>
+									<tr><td colspan="2" class="starlab" align="center">(based on {{ object.software.total_number_of_votes }} vote{{ object.software.total_number_of_votes|pluralize }})</td></tr>
 								</table>
 							</td>
 							{% endif %}
@@ -139,6 +139,8 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 				</div>
 			</td>
 		</tr>
+	</table>
+	<table class="swlist">
 		<tr>
 			<td>
 				<dl>
@@ -159,11 +161,11 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 			<td>
 				<dl>
 					<dd><b>BibTeX Entry:</b>
-					<a href="/software/bib/{{ object.id }}">Download</a></dd>
+					<a href="{{ object.get_absolute_bib_url }}">Download</a></dd>
 
 					{% if object.paper_bib %}
 					<dd><b>Corresponding Paper BibTeX Entry:</b>
-					<a href="/software/paperbib/{{ object.id }}">Download</a></dd>
+					<a href="{{ object.get_absolute_paperbib_url }}">Download</a></dd>
 					{% endif %}
 
 					{% if object.project_url %}
@@ -173,7 +175,7 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 
 					{% if object.jmlr_mloss_url %}
 					<dd><b>JMLR MLOSS PaperURL:</b>
-					<a href="/software/jmlrhomepage/{{ object.id }}">JMLR-MLOSS Paper Homepage</a></dd>
+					<a href="{{ object.get_absolute_jmlr_homepage_url }}">JMLR-MLOSS Paper Homepage</a></dd>
 					{% endif %}
 
 					{% if object.get_opsyslist %}
@@ -204,7 +206,7 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 
 					{% if object.is_downloadable %}
 					<dd><b>Archive:</b>
-					<a href='/software/download/{{ object.id }}'>download here</a></dd>
+					<a href='{{ object.get_absolute_download_url }}'>download here</a></dd>
 					{% endif %}
 				</dl>
 			</td>
@@ -224,7 +226,7 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 						{% for r in revisions %}
 						<tr>
 							<td>
-								<a href="/software/view/{{ r.id }}/{{ r.revision}}/">{{ r.version }}</a>
+								<a href="{{ r.get_absolute_url }}">{{ r.version }}</a>
 							</td>
 							<td>
 								{{ r.changes }}
@@ -247,7 +249,7 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 
 					<p>Rate this software. "0" means poor and "5" means excellent. Ratings can
 					be changed later on.</p>
-					<form method="post" action="/software/rate/{{ object.id }}/">
+					<form method="post" action="/software/rate/{{ object.software.id }}/">
 						<table>
 							{{ ratingform|safe }}
 						</table>
@@ -261,7 +263,7 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 			<td>
 				<h2>Comments</h2>
 
-				{% get_comment_list for software.software object.id as comment_list %}
+				{% get_comment_list for software.software object.software.id as comment_list %}
 
 				{% if comment_list %}
 				{% for comment in comment_list %}
@@ -281,7 +283,7 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 				{% endif %}
 
 				<h2>Leave a comment</h2>
-				{% render_comment_form for object %}
+				{% render_comment_form for object.software %}
 			</td>
 		</tr>
 	</table>

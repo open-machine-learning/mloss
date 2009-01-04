@@ -17,10 +17,30 @@ Projects that use the {{ os_license }} license.
 {% if language %}
 Projects that use {{ language }} as the programming language.
 {% else %}
-{% if object.username %}
-Projects submitted by {{ object.username }}
+{% if username %}
+Projects submitted by {{ username }}.
+{% else %}
+{% if dataformat %}
+Projects supporting the {{ dataformat }} data format.
+{% else %}
+{% if opsys %}
+Projects running under {{ opsys }}.
+{% else %}
+{% if author %}
+Projects authored by {{ author }}.
+{% else %}
+{% if tags %}
+Projects that are tagged with {{ tags }}.
+{% else %}
+{% if jmlr %}
+Projects that also appeared in JMLR.
 {% else %}
 All entries
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
 {% endif %}
 {% endif %}
 {% endif %}
@@ -39,15 +59,35 @@ Projects matching {{ search_term|escape }}.
 {% if language %}
 {{ object_list.count }} projects found that use {{ language }} as the programming language.
 {% else %}
-{% if object.username %}
-{% ifequal user.username object.username %}
+{% if username %}
+{% ifequal user.username username %}
 You've
 {% else %}
-{{ object.username }} has
+{{ username }} has
 {% endifequal %}
 posted {{ object_list.count }} project{{ object_list.count|pluralize }}.
 {% else %}
-All entries
+{% if dataformat %}
+Projects supporting the {{ dataformat }} data format.
+{% else %}
+{% if opsys %}
+Projects running under {{ opsys }}.
+{% else %}
+{% if author %}
+Projects authored by {{ author }}.
+{% else %}
+{% if tags %}
+Projects that are tagged with {{ tags }}.
+{% else %}
+{% if jmlr %}
+Projects that also appeared in JMLR.
+{% else %}
+All entries.
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
 {% endif %}
 {% endif %}
 {% endif %}
@@ -70,7 +110,7 @@ All entries
 								{% if object.screenshot %}
 									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="30" height="32" align="top" alt="Logo"></img></a>
 								{% else %}
-								{% ifequal object.user.username "r-cran-robot" %}
+								{% ifequal object.software.user.username "r-cran-robot" %}
 								<img src="/media/images/rlogo.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
 								{% else %}
 								<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
@@ -79,32 +119,32 @@ All entries
 								{% if object.jmlr_mloss_url %}
 								<img src="/media/images/jmlr.jpg" width="60" height="32" align="top" alt="JMLR"></img>
 								{% endif %}
-								<a href="{{ object.get_absolute_url|escape }}"> {{ object.title }} {{ object.version }}</a>
+								<a href="{{ object.software.get_absolute_url|escape }}"> {{ object.software.title }} {{ object.version }}</a>
 							</h2>
 							<p class="more">
-							by <a href="/software{{ object.user.get_absolute_url|escape }}">{{ object.user.username }}</a> 
+							by <a href="/software{{ object.software.user.get_absolute_url|escape }}">{{ object.software.user.username }}</a> 
 							- {{ object.updated_date|date:"F j, Y, H:i:s" }} CET
 							[
-							{% if object.project_url %}<a href="/software/homepage/{{ object.id }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage" title="Project Homepage"></img></a> {% endif %}
-							<a href="/software/bib/{{ object.id }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX" title="BibTeX"></img></a>
-							{% if object.paper_bib %}<a href="/software/paperbib/{{ object.id }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper" title="Paper BibTeX for corresponding Paper"></img></a>{% endif %}
-							{% if object.is_downloadable %}<a href="/software/download/{{ object.id }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download" title="Download"></img></a>{% endif %}
+							{% if object.project_url %}<a href="{{ object.get_absolute_homepage_url }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage" title="Project Homepage"></img></a> {% endif %}
+							<a href="{{ object.get_absolute_bib_url }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX" title="BibTeX"></img></a>
+							{% if object.paper_bib %}<a href="{{ object.get_absolute_paperbib_url }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper" title="Paper BibTeX for corresponding Paper"></img></a>{% endif %}
+							{% if object.is_downloadable %}<a href="{{ object.get_absolute_download_url }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download" title="Download"></img></a>{% endif %}
                             {% if user.is_authenticated %}<a href="/software/subscribe/{{ object.id }}"><img src="/media/images/subscribe.png" width="14" height="14" alt="Subscribe" title="Subscribe"></img></a>{% endif %}
 							{% if user.is_authenticated %}<a href="/software/bookmark/{{ object.id }}"><img src="/media/images/bookmark.png" width="14" height="14" alt="Bookmark" title="Bookmark"></img></a>{% endif %}
 							]
 
-{% if object.total_number_of_views %}
-	<a href="/software/viewstats/{{ object.id }}">{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize }}</a>{% endif %}{% if object.total_number_of_downloads %},
-	 <a href="/software/downloadstats/{{ object.id }}">{{ object.total_number_of_downloads }} download{{ object.total_number_of_downloads|pluralize }}</a>{% endif %}{% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, 
+{% if object.software.total_number_of_views %}
+	<a href="/software/viewstats/{{ object.software.id }}">{{ object.software.total_number_of_views }} view{{ object.software.total_number_of_views|pluralize }}</a>{% endif %}{% if object.software.total_number_of_downloads %},
+	 <a href="/software/downloadstats/{{ object.software.id }}">{{ object.software.total_number_of_downloads }} download{{ object.software.total_number_of_downloads|pluralize }}</a>{% endif %}{% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, 
 	{% get_comment_count for object as comment_count %}
-	<a href="{{ object.get_last_comments_url }}">{{ comment_count }} comment{{ comment_count|pluralize }}</a>{% endif %}, {{ object.get_subscription_count }} subscription{{ object.get_subscription_count|pluralize }}
+	<a href="{{ object.get_last_comments_url }}">{{ comment_count }} comment{{ comment_count|pluralize }}</a>{% endif %}, {{ object.software.get_subscription_count }} subscription{{ object.software.get_subscription_count|pluralize }}
 							</p>
 						</td>
-						{% if object.total_number_of_votes %}
+						{% if object.software.total_number_of_votes %}
 						<td class="rating">
 							<table class="starlab">
-								<tr><td class="starlab">Rating <nobr>{% show_stars object.average_rating of 5 round to half %}</nobr></td></tr>
-								<tr><td class="starlab">(based on {{ object.total_number_of_votes }} vote{{ object.total_number_of_votes|pluralize }})</td></tr>
+								<tr><td class="starlab">Rating <nobr>{% show_stars object.software.average_rating of 5 round to half %}</nobr></td></tr>
+								<tr><td class="starlab">(based on {{ object.software.total_number_of_votes }} vote{{ object.software.total_number_of_votes|pluralize }})</td></tr>
 							</table>
 						</td>
 						{% endif %}
@@ -170,7 +210,7 @@ All entries
 
 								{% if object.jmlr_mloss_url %}
 								<li><b>JMLR-MLOSS Publication:</b>
-								<a href="/software/jmlrhomepage/{{ object.id }}">JMLR Page</a>
+								<a href="{{ object.get_absolute_jmlr_homepage_url }}">JMLR Page</a>
 								</li>
 								{% endif %}
 

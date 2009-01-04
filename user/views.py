@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 
-from software.models import Software
+from revision.models import Revision
 from subscriptions.models import Subscriptions
 import re
 
@@ -125,7 +125,7 @@ def show_user(request, user_id):
 
         return render_to_response('users/user_detail.html',
                 { 'object': entry,
-                    'softwares' : Software.objects.get_by_submitter(entry.username),
+                    'softwares' : Revision.objects.get_by_submitter(entry.username),
                     'swsubscriptions' : swsubscriptions,
                     'swbookmarks' : swbookmarks,
                     'forumsubscriptions' : forumsubscriptions,
@@ -160,7 +160,7 @@ def update_user(request, user_id):
 
         return render_to_response('users/user_detail.html',
                 { 'object': entry,
-                    'softwares' : Software.objects.get_by_submitter(entry.username),
+                    'softwares' : Revision.objects.get_by_submitter(entry.username),
                     'form' : form,
                     },
                 context_instance=RequestContext(request))

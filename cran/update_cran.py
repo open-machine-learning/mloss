@@ -16,6 +16,8 @@ os.environ['DJANGO_SETTINGS_MODULE']='mloss.settings'
 
 from xml.dom import minidom
 from software.models import Software
+from revision.models import Revision
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 import settings
 
@@ -174,6 +176,8 @@ class CRANPackage:
         else:
             self.description = cran_dict['Bundle'] + ': ' + cran_dict['BundleDescription']
 
+        self.short_description = self.description.split(':')[0]
+
     def insert_into_database(self):
         """
         For a given CRANPackage construct Software object and insert it into database
@@ -181,7 +185,11 @@ class CRANPackage:
         try:
             me = User.objects.get(username=settings.R_CRAN_BOT)
         except User.DoesNotExist:
-            user = User.objects.create_user(settings.R_CRAN_BOT, settings.R_CRAN_BOT + '@mloss.org', 'xdf46i07XGTASGDTGEIjtrt')
+            import string
+            from random import Random
+            newpasswd = ''.join( Random().sample(string.letters+string.digits, 32) ) 
+
+            user = User.objects.create_user(settings.R_CRAN_BOT, settings.R_CRAN_BOT + '@mloss.org', newpasswd)
             user.save()
             me = User.objects.get(username=settings.R_CRAN_BOT)
 
@@ -197,27 +205,49 @@ class CRANPackage:
             dbpkg = Software.objects.filter(user=me, title=self.prefix+self.name)
             if dbpkg.count() == 0:
                 # if not create a new Software project
-                spkg = Software(user=me, title=self.prefix+self.name, version=self.version,
-                                description=self.description, os_license=self.os_license,
-                                language='R', operating_systems='agnostic',
-                                download_url=self.url, project_url=self.url, tags='r-cran',
-                                pub_date=self.date, updated_date=self.date, authors=self.author)
-                spkg.save(False)
+                spkg = Software(user=me, title=self.prefix+self.name)
+                spkg.save(silent_update=True)
+                try:
+                    srev = Revision(software=spkg, version=self.version, short_description=self.short_description,
+                                    description=self.description, os_license=self.os_license,
+                                    language='R', operating_systems='agnostic',
+                                    download_url=self.url, project_url=self.url, tags='r-cran',
+                                    pub_date=self.date, updated_date=self.date, authors=self.author,
+                                    changes="Initial Announcement on mloss.org by r-cran-robot")
+                    srev.save(silent_update=True)
+                except:
+                    spkg.delete()
             else:
                 #print 'Package ' + self.name + ' found, UPDATING...'
                 assert(dbpkg.count() == 1)
                 spkg = dbpkg[0]
-                # Don't mess around with manual entries.
-                if spkg.tags != 'r-cran':
-                    return
-                spkg.version = self.version
-                spkg.description = self.description
-                spkg.os_license = self.os_license
-                spkg.download_url = self.url
-                spkg.project_url = self.url
-                spkg.updated_date=self.date
-                spkg.authors=self.author
-                spkg.save(False)
+
+                try:
+                    srev = Revision.objects.get(software=spkg, revision=0)
+                    # Don't mess around with manual entries.
+                    if srev.tags != 'r-cran':
+                        return
+                except ObjectDoesNotExist:
+                    srev = None
+
+                if srev and srev.version == self.version:
+                    srev.short_description=self.short_description
+                    srev.description=self.description
+                    srev.os_license=self.os_license
+                    srev.download_url=self.url
+                    srev.project_url=self.url
+                    srev.updated_date=self.date
+                    srev.authors=self.author
+                    srev.changes="Fetched by r-cran-robot on %s" % str(datetime.datetime.now())
+                else:
+                    srev = Revision(software=spkg, version=self.version, short_description=self.short_description,
+                                    description=self.description, os_license=self.os_license,
+                                    language='R', operating_systems='agnostic',
+                                    download_url=self.url, project_url=self.url, tags='r-cran',
+                                    pub_date=self.date, updated_date=self.date, authors=self.author,
+                                    changes="Fetched by r-cran-robot on %s" % str(datetime.datetime.now()))
+                    spkg.increment_revisions()
+                srev.save(silent_update=True)
 
 
 def parse_ctv():

@@ -10,9 +10,13 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.views.generic.create_update import update_object
 from django.forms.widgets import RadioSelect, Textarea
 from django.utils.html import strip_tags
+from django.core.mail import send_mail
+
 from StringIO import StringIO  
 from software.models import Software
-from software.models import Language, License, Tag, Author, OpSys, DataFormat
+from revision.models import Revision
+from revision.models import Language, License, Tag, Author, OpSys, DataFormat
+from revision.models import editables, dontupdateifempty
 import software.views.list
 import re
 
@@ -24,8 +28,6 @@ os_license_re = re.compile(r'^[a-zA-Z0-9\. ,]+$')
 language_re = re.compile(r'^[a-zA-Z\+ ,]+$')
 os_re = re.compile(r'^[a-zA-Z ,]+$')
 bib_re = re.compile(r'^[a-zA-Z{}@, \+ ,]+$')
-
-from models import Software, editables, noneditables, dontupdateifempty
 
 class UpdateSoftwareForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -53,13 +55,13 @@ class UpdateSoftwareForm(forms.Form):
             widget=forms.TextInput(attrs={'size' : '20'}), label=u'Authors',
             help_text=u'(required) A comma seperated list, up to 200 characters long')
     authors_choice = forms.ChoiceField(widget=forms.Select(attrs={'size' : 1}), required=False)
-    
+
     contact = forms.EmailField(max_length=80, 
             widget=forms.TextInput(attrs={'size' : '30'}), label=u"Main Author's Email Address",
             help_text=u'(required)')
     short_description = forms.CharField(
             widget=forms.Textarea(attrs={"rows":2, "cols":70}), label=u'Short Description',
-            help_text=u'(required) A brief summary.')
+            help_text=u'(required) A brief summary that will be displayed in the software listing.')
     description = forms.CharField(
             widget=forms.Textarea(attrs={"rows":15, "cols":70}), label=u'Description',
             help_text=u'(required) An extended description of the software')
@@ -269,9 +271,12 @@ class UpdateSoftwareForm(forms.Form):
         has_tarball = False
         if 'title' in self.data:
             try:
-                sw = Software.objects.get(title__exact=self.data['title'], version__exact=self.data['version'])
-                has_tarball = sw.tarball and not ('download_url' in self.data and self.data['download_url'])
+                sw = Software.objects.get(title__exact=self.data['title'])
+                rev= Revision.objects.get(software__exact=sw, revision=0)
+                has_tarball = rev.tarball and not ('download_url' in self.data and self.data['download_url'])
             except Software.DoesNotExist:
+                pass
+            except Revision.DoesNotExist:
                 pass
 
         # if neither current software has a tarball nor has a tarball in the form nor has a 
@@ -283,15 +288,15 @@ class UpdateSoftwareForm(forms.Form):
 
         return self.cleaned_data
 
+class RevisionForm(UpdateSoftwareForm):
+    version = forms.CharField(max_length=80,
+            widget=forms.TextInput(attrs={'size' : '20', 'readonly' : 'readonly'}),
+            label=u'Version', help_text=u'(required)')
+
 class SoftwareForm(UpdateSoftwareForm):
     title = forms.CharField(max_length=80,
             widget=forms.TextInput(attrs={'size' : '30'}),
             label=u'Title', required=True, help_text=u'(required) Up to 80 characters long')
-    changes = forms.CharField(
-            widget=forms.Textarea(attrs={"rows":5, "cols":70,}), 
-            initial=u'Initial Announcement on mloss.org',
-            label=u'Changes since last revision',
-            help_text=u'(required) A summary of the changes since the previous release.')
 
     def clean_title(self):
         """
@@ -344,37 +349,47 @@ def add_software(request):
         new_data = request.POST.copy()
         new_data.update(request.FILES)
         form = SoftwareForm(new_data)
+
         if form.is_valid():
             new_software = Software(user=request.user,
-                                    title=form.cleaned_data['title'],
-                                    version=form.cleaned_data['version'],
-                                    authors=form.cleaned_data['authors'],
-                                    contact=form.cleaned_data['contact'],
-                                    short_description=form.cleaned_data['short_description'],
-                                    description=form.cleaned_data['description'],
-                                    changes='Initial Announcement on mloss.org',
-                                    project_url=form.cleaned_data['project_url'],
-                                    tags=form.cleaned_data['tags'],
-                                    language=form.cleaned_data['language'],
-                                    operating_systems = form.cleaned_data['operating_systems'],
-                                    dataformats = form.cleaned_data['dataformats'],
-                                    os_license=form.cleaned_data['os_license'],
-                                    paper_bib = form.cleaned_data['paper_bib'],
-                                    download_url=form.cleaned_data['download_url'],
-                                    tarball=form.cleaned_data['tarball'],
-                                    thumbnail=form.cleaned_data['thumbnail'],
-                                    screenshot=form.cleaned_data['screenshot'],
-                                    )
+                                    title=form.cleaned_data['title'])
             if original_id:
                 new_software.original_id = original_id
-
-            save_tarball(request, new_software)
-            save_thumbnail(request, new_software)
-            save_screenshot(request, new_software)
             new_software.save()
-            return HttpResponseRedirect(new_software.get_absolute_url())
+
+            try:
+                new_revision = Revision(software=new_software,
+                                        version=form.cleaned_data['version'],
+                                        authors=form.cleaned_data['authors'],
+                                        contact=form.cleaned_data['contact'],
+                                        short_description=form.cleaned_data['short_description'],
+                                        description=form.cleaned_data['description'],
+                                        changes='Initial Announcement on mloss.org',
+                                        project_url=form.cleaned_data['project_url'],
+                                        tags=form.cleaned_data['tags'],
+                                        language=form.cleaned_data['language'],
+                                        operating_systems = form.cleaned_data['operating_systems'],
+                                        dataformats = form.cleaned_data['dataformats'],
+                                        os_license=form.cleaned_data['os_license'],
+                                        paper_bib = form.cleaned_data['paper_bib'],
+                                        download_url=form.cleaned_data['download_url'],
+                                        tarball=form.cleaned_data['tarball'],
+                                        thumbnail=form.cleaned_data['thumbnail'],
+                                        screenshot=form.cleaned_data['screenshot'],
+                                        )
+                if original_id:
+                    new_revision.original_id = original_id
+
+                save_tarball(request, new_revision)
+                save_thumbnail(request, new_revision)
+                save_screenshot(request, new_revision)
+                new_revision.save()
+                return HttpResponseRedirect(new_revision.get_absolute_url())
+            except:
+                new_software.delete()
     else:
-        form = SoftwareForm(initial={'user':request.user, 'changes':'Initial Announcement on mloss.org'})
+        form = SoftwareForm(initial={'user':request.user,
+            'changes':'Initial Announcement on mloss.org'})
 
     return render_to_response('software/software_add.html',
                               { 'form': form },
@@ -387,15 +402,15 @@ def search_software(request):
     searchform = SearchForm()
 
     if request.method == 'GET':
-        try:
+        #try:
             q = request.GET['searchterm'];
             return software.views.list.search_description(request, q)
-        except:
-            return HttpResponseRedirect('/software')
+        #except:
+        #    return HttpResponseRedirect('/software')
     else:
         return HttpResponseRedirect('/software')
 
-def edit_software(request, software_id):
+def edit_software(request, software_id, revision_id=0):
     """
     Show the software form, and capture the information
     """
@@ -413,14 +428,25 @@ def edit_software(request, software_id):
                 pk=software_id,
                 user__pk=request.user.id)
 
+    if revision_id:
+        revision = get_object_or_404(Revision,
+                pk=revision_id, software = software)
+        form_class = RevisionForm
+    else:
+        revision = software.get_latest_revision()
+        form_class = UpdateSoftwareForm
+
     if request.method == 'POST':
         new_data = request.POST.copy()
         new_data.update(request.FILES)
-        form = UpdateSoftwareForm(new_data)
+        form = form_class(new_data)
 
         if form.is_valid():
-            new_software = Software(user=request.user,
-                                    title=form.cleaned_data['title'],
+            if form.cleaned_data['title'] != software.title or ( revision_id
+                    and form.cleaned_data['version'] != revision.version ):
+                return HttpResponseForbidden()
+
+            new_revision = Revision(software=software,
                                     version=form.cleaned_data['version'],
                                     authors=form.cleaned_data['authors'],
                                     contact=form.cleaned_data['contact'],
@@ -440,41 +466,39 @@ def edit_software(request, software_id):
                                     screenshot=form.cleaned_data['screenshot'],
                                     )
             if original_id:
-                new_software.original_id = original_id
+                new_revision.original_id = original_id
 
-            if new_software.title != software.title:
-                return HttpResponseForbidden()
+            if new_revision.version != revision.version:
+                for field in editables:
+                    if not field in dontupdateifempty or form.cleaned_data[field]:
+                        setattr(new_revision, field, form.cleaned_data[field])
 
-            if new_software.version != software.version:
-                for field in noneditables:
-                    setattr(new_software, field, getattr(software, field))
-                allsoft = Software.objects.filter(title__exact=software.title);
+                if form.cleaned_data['download_url'] and len(form.cleaned_data['download_url'])>0:
+                    new_revision.tarball = None
+                else:
+                    save_tarball(request, new_revision)
 
-                for s in allsoft:
-                    s.revision+=1
-                    s.save()
-
-                save_tarball(request, new_software)
-                save_thumbnail(request, new_software)
-                save_screenshot(request, new_software)
-                new_software.save()
-                return HttpResponseRedirect(new_software.get_absolute_url())
+                save_thumbnail(request, new_revision)
+                save_screenshot(request, new_revision)
+                software.increment_revisions()
+                new_revision.save()
+                return HttpResponseRedirect(new_revision.get_absolute_url())
             else:
                 for field in editables:
                     if not field in dontupdateifempty or form.cleaned_data[field]:
-                        setattr(software, field, form.cleaned_data[field])
+                        setattr(revision, field, form.cleaned_data[field])
 
                 if form.cleaned_data['download_url'] and len(form.cleaned_data['download_url'])>0:
-                    software.tarball = None
+                    revision.tarball = None
                 else:
-                    save_tarball(request, software)
+                    save_tarball(request, revision)
 
-                save_thumbnail(request, software)
-                save_screenshot(request, software)
-                software.save()
-                return HttpResponseRedirect(software.get_absolute_url())
+                save_thumbnail(request, revision)
+                save_screenshot(request, revision)
+                revision.save(silent_update=True)
+                return HttpResponseRedirect(revision.get_absolute_url())
     else:
-        form = UpdateSoftwareForm(software)
+        form = form_class(revision)
 
     return render_to_response('software/software_add.html',
                               { 'form': form },
@@ -500,16 +524,15 @@ def contact_author(request, software_id):
         
     if request.method == 'POST': # If the form has been submitted...
         form = AuthorContactForm(request.POST) # A form bound to the POST data
-        software = get_object_or_404(Software, pk=software_id, user__pk=request.user.id)
+        software = get_object_or_404(Software, pk=software_id)
         if form.is_valid(): # All validation rules pass
             subject    = form.cleaned_data['subject']
             message    = form.cleaned_data['message']
             sender     = request.user.email
             cc_myself  = form.cleaned_data['cc_myself']
-            recipients = [software.contact,]
+            recipients = [software.get_latest_revision().contact,]
             if cc_myself:
                 recipients.append(sender)
-            from django.core.mail import send_mail
             send_mail(subject, message, sender, recipients)
             return HttpResponseRedirect(software.get_absolute_url())
     else:

@@ -44,7 +44,6 @@ slugify = stringfilter(slugify)
 
 def send_mails(subscribers, subject, message):
     # we don't use send_mass_mail as we don't want to leak other users email addresses
-    print subscribers
     for s in subscribers:
         if not s.bookmark:
             now=datetime.datetime.now()
