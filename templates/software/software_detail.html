@@ -36,7 +36,7 @@
 	<dd><a href="/software/update/{{ object.software.id }}{{ revision }}">Update Project</a></dd>
 </dl>
 {% else %}
-{% ifequal user.id object.user_id %} 
+{% ifequal user.id object.software.user_id %} 
 <dl>
 	<dd><a href="/software/update/{{ object.software.id }}{{ revision }}">Update Project</a></dd>
 </dl>
