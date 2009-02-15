@@ -364,7 +364,7 @@ def add_software(request):
                                         contact=form.cleaned_data['contact'],
                                         short_description=form.cleaned_data['short_description'],
                                         description=form.cleaned_data['description'],
-                                        changes='Initial Announcement on mloss.org',
+                                        changes='Initial Announcement on mloss.org.',
                                         project_url=form.cleaned_data['project_url'],
                                         tags=form.cleaned_data['tags'],
                                         language=form.cleaned_data['language'],
@@ -389,7 +389,7 @@ def add_software(request):
                 new_software.delete()
     else:
         form = SoftwareForm(initial={'user':request.user,
-            'changes':'Initial Announcement on mloss.org'})
+            'changes':'Initial Announcement on mloss.org.'})
 
     return render_to_response('software/software_add.html',
                               { 'form': form },
