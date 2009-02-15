@@ -281,6 +281,7 @@ class Revision(models.Model):
         # and strip all html tags from CharFields
         self.version = strip_tags(self.version)
         self.authors = strip_tags(self.authors)
+        self.changes_html = markdown(self.changes, safe_mode=True)
         self.description_html = markdown(self.description, safe_mode=True)
         self.tags = strip_tags(self.tags)
         self.language = strip_tags(self.language)
