@@ -107,17 +107,25 @@ All entries.
 			<div class="rating">
 				<table><tr><td valign="top">
 							<h2>
-								{% if object.screenshot %}
-									<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="30" height="32" align="top" alt="Logo"></img></a>
+								{% if object.thumbnail %}
+							    	{% if object.screenshot %}
+										<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.thumbnail }}" width="30" height="32" align="top" alt="Logo"></img></a>
+							    	{% else %}
+										<img src="/media/{{ object.thumbnail }}" width="30" height="32" align="top" alt="Logo"></img>
+								  	{% endif %}
 								{% else %}
-								{% ifequal object.software.user.username "r-cran-robot" %}
-								<img src="/media/images/rlogo.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
-								{% else %}
-								<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
-								{% endifequal %}
+									{% if object.screenshot %}
+										<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="30" height="32" align="top" alt="Logo"></img></a>
+									{% else %}
+										{% ifequal object.software.user.username "r-cran-robot" %}
+											<img src="/media/images/rlogo.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
+										{% else %}
+											<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
+										{% endifequal %}
+									{% endif %}
 								{% endif %}
 								{% if object.jmlr_mloss_url %}
-								<img src="/media/images/jmlr.jpg" width="60" height="32" align="top" alt="JMLR"></img>
+									<img src="/media/images/jmlr.jpg" width="60" height="32" align="top" alt="JMLR"></img>
 								{% endif %}
 								<a href="{{ object.software.get_absolute_url|escape }}"> {{ object.software.title }} {{ object.version }}</a>
 							</h2>
