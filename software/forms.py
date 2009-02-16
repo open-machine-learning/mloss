@@ -24,7 +24,6 @@ from PIL import Image
 import os.path
 
 
-
 version_re = re.compile(r'^[a-zA-Z0-9\.\- ]+$')
 authors_re = re.compile(r'^[a-zA-Z ,\.]+$')
 title_re = re.compile(r'^[a-zA-Z0-9 ,\.]+$')
@@ -324,23 +323,7 @@ def save_tarball(request, object):
         filename = request.FILES['tarball'].name
         object.tarball.save(filename, request.FILES['tarball'], save=False)
 
-# def save_thumbnail(request, object):
-#     """
-#     Retrieve filename and save the file
-#     """
-#     if request.FILES.has_key('thumbnail'):
-#         filename = request.FILES['thumbnail'].name
-#         object.thumbnail.save(filename, content=request.FILES['thumbnail'], save=False)
-# 
-# def save_screenshot(request, object):
-#     """
-#     Retrieve filename and save the file
-#     """
-#     if request.FILES.has_key('screenshot'):
-#         filename = request.FILES['screenshot'].name
-#         object.screenshot.save(filename, content=request.FILES['screenshot'], save=False)
-
-def make_thumbnail(buf, size=(50, 50)):
+def make_thumbnail(buf, size=(30, 32)):
     f = StringIO(buf)
     image = Image.open(buf)
     if image.mode not in ('L', 'RGB'):
@@ -350,23 +333,22 @@ def make_thumbnail(buf, size=(50, 50)):
     image.save(o, 'JPEG') 
     return o.getvalue()
 
-
 def save_images(request, object):
     '''
     Saves both screenshot and thumbnail. 
     '''
     if request.FILES.has_key('screenshot') and request.FILES.has_key('thumbnail'):
-        object.screenshot.save(request.FILES['screenshot'].name, content=request.FILES['screenshot'], save=True)
-        object.thumbnail.save(request.FILES['thumbnail'].name, content=request.FILES['thumbnail'], save=True)
+        object.screenshot.save(request.FILES['screenshot'].name, content=request.FILES['screenshot'], save=False)
+        object.thumbnail.save(request.FILES['thumbnail'].name, content=request.FILES['thumbnail'], save=False)
     elif request.FILES.has_key('thumbnail') and not request.FILES.has_key('screenshot'):
-        object.thumbnail.save(request.FILES['thumbnail'].name, content=request.FILES['thumbnail'], save=True)
+        object.thumbnail.save(request.FILES['thumbnail'].name, content=request.FILES['thumbnail'], save=False)
     elif request.FILES.has_key('screenshot') and not request.FILES.has_key('thumbnail'):
         screenshotName = request.FILES['screenshot'].name
         screenshot     = request.FILES['screenshot']
         thumbnailName  = '%s.thumb.jpg' % os.path.splitext(screenshotName)[0]
-        thumbnail      = django.core.files.base.ContentFile(make_thumbnail(screenshot, size=(32,32)))
-        object.screenshot.save(screenshotName, content=screenshot, save=True)
-        object.thumbnail.save(thumbnailName, content=thumbnail, save=True)
+        thumbnail      = django.core.files.base.ContentFile(make_thumbnail(screenshot, size=(30,32)))
+        object.screenshot.save(screenshotName, content=screenshot, save=False)
+        object.thumbnail.save(thumbnailName, content=thumbnail, save=False)
 
 def add_software(request):
     """
@@ -415,8 +397,6 @@ def add_software(request):
 
                 save_tarball(request, new_revision)
                 save_images(request, new_revision)
-                # save_thumbnail(request, new_revision)
-                # save_screenshot(request, new_revision)
                 new_revision.save()
                 return HttpResponseRedirect(new_revision.get_absolute_url())
             except:
@@ -436,11 +416,11 @@ def search_software(request):
     searchform = SearchForm()
 
     if request.method == 'GET':
-        #try:
+        try:
             q = request.GET['searchterm'];
             return software.views.list.search_description(request, q)
-        #except:
-        #    return HttpResponseRedirect('/software')
+        except:
+            return HttpResponseRedirect('/software')
     else:
         return HttpResponseRedirect('/software')
 
@@ -513,8 +493,6 @@ def edit_software(request, software_id, revision_id=0):
                     save_tarball(request, new_revision)
 
                 save_images(request, new_revision)
-                # save_thumbnail(request, new_revision)
-                # save_screenshot(request, new_revision)
                 software.increment_revisions()
                 new_revision.save()
                 return HttpResponseRedirect(new_revision.get_absolute_url())
@@ -528,9 +506,7 @@ def edit_software(request, software_id, revision_id=0):
                 else:
                     save_tarball(request, revision)
 
-                save_images(request, new_revision)
-                # save_thumbnail(request, revision)
-                # save_screenshot(request, revision)
+                save_images(request, revision)
                 revision.save(silent_update=True)
                 return HttpResponseRedirect(revision.get_absolute_url())
     else:
