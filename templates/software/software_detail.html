@@ -229,7 +229,7 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 								<a href="{{ r.get_absolute_url }}">{{ r.version }}</a>
 							</td>
 							<td>
-								{{ r.changes }}
+								{{ r.changes_html|safe }}
 							</td>
 							<td>
 								{{ r.pub_date|date:"F j, Y, H:i:s" }}
