@@ -153,7 +153,7 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 			<td>
 				<dl>
 					<dt>Changes to previous version:</dt>
-					<dd>{{ object.changes }}</dd>
+					<dd>{{ object.changes_html|safe }}</dd>
 				</dl>
 			</td>
 		</tr>
