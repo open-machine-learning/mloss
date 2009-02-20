@@ -333,22 +333,41 @@ def make_thumbnail(buf, size=(30, 32)):
     image.save(o, 'JPEG') 
     return o.getvalue()
 
-def save_images(request, object):
+def save_images(request, new_revision, old_revision=None):
     '''
     Saves both screenshot and thumbnail. 
     '''
-    if request.FILES.has_key('screenshot') and request.FILES.has_key('thumbnail'):
-        object.screenshot.save(request.FILES['screenshot'].name, content=request.FILES['screenshot'], save=False)
-        object.thumbnail.save(request.FILES['thumbnail'].name, content=request.FILES['thumbnail'], save=False)
-    elif request.FILES.has_key('thumbnail') and not request.FILES.has_key('screenshot'):
-        object.thumbnail.save(request.FILES['thumbnail'].name, content=request.FILES['thumbnail'], save=False)
-    elif request.FILES.has_key('screenshot') and not request.FILES.has_key('thumbnail'):
+    newThumb      = request.FILES.has_key('thumbnail')
+    newScreenshot = request.FILES.has_key('screenshot')
+    
+    if newThumb and not newScreenshot:
+        print("newThumb and not newScreenshot")
+        if old_revision != None:
+            print("Taking old screenshot")
+            new_revision.screenshot = old_revision.screenshot
+        new_revision.thumbnail.save(request.FILES['thumbnail'].name, content=request.FILES['thumbnail'], save=False)
+    elif not newThumb and newScreenshot:
+        print("not newThumb and newScreenshot")
+        new_revision.screenshot.save(request.FILES['screenshot'].name, content=request.FILES['screenshot'], save=False)
+        if old_revision != None:
+            new_revision.thumbnail = old_revision.thumbnail        
+    elif newThumb and newScreenshot:
+        print("newThumb and newScreenshot")
+        new_revision.screenshot.save(request.FILES['screenshot'].name, content=request.FILES['screenshot'], save=False)
+        new_revision.thumbnail.save(request.FILES['thumbnail'].name, content=request.FILES['thumbnail'], save=False)
+    else:
+        if old_revision != None:
+            new_revision.thumbnail = old_revision.thumbnail            
+            new_revision.screenshot = old_revision.screenshot
+            
+    if new_revision.thumbnail == None and new_revision.screenshot != None:
+        print("Generating thumbnail")            
         screenshotName = request.FILES['screenshot'].name
         screenshot     = request.FILES['screenshot']
         thumbnailName  = '%s.thumb.jpg' % os.path.splitext(screenshotName)[0]
         thumbnail      = django.core.files.base.ContentFile(make_thumbnail(screenshot, size=(30,32)))
-        object.screenshot.save(screenshotName, content=screenshot, save=False)
-        object.thumbnail.save(thumbnailName, content=thumbnail, save=False)
+        new_revision.thumbnail.save(thumbnailName, content=thumbnail, save=False)
+
 
 def add_software(request):
     """
@@ -396,7 +415,7 @@ def add_software(request):
                     new_revision.original_id = original_id
 
                 save_tarball(request, new_revision)
-                save_images(request, new_revision)
+                save_images(request, new_revision, old_revision = None)
                 new_revision.save()
                 return HttpResponseRedirect(new_revision.get_absolute_url())
             except:
@@ -476,8 +495,8 @@ def edit_software(request, software_id, revision_id=0):
                                     paper_bib = form.cleaned_data['paper_bib'],
                                     download_url=form.cleaned_data['download_url'],
                                     tarball=form.cleaned_data['tarball'],
-                                    thumbnail=revision.thumbnail,
-                                    screenshot=revision.screenshot,
+                                    thumbnail=form.cleaned_data['thumbnail'],
+                                    screenshot=form.cleaned_data['screenshot'],
                                     )
             if original_id:
                 new_revision.original_id = original_id
@@ -492,7 +511,7 @@ def edit_software(request, software_id, revision_id=0):
                 else:
                     save_tarball(request, new_revision)
 
-                save_images(request, new_revision)
+                save_images(request, new_revision, old_revision=revision)
                 software.increment_revisions()
                 new_revision.save()
                 return HttpResponseRedirect(new_revision.get_absolute_url())
@@ -506,7 +525,7 @@ def edit_software(request, software_id, revision_id=0):
                 else:
                     save_tarball(request, revision)
 
-                save_images(request, revision)
+                save_images(request, revision, old_revision = revision)
                 revision.save(silent_update=True)
                 return HttpResponseRedirect(revision.get_absolute_url())
     else:
