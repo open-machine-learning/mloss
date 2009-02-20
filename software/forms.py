@@ -476,8 +476,8 @@ def edit_software(request, software_id, revision_id=0):
                                     paper_bib = form.cleaned_data['paper_bib'],
                                     download_url=form.cleaned_data['download_url'],
                                     tarball=form.cleaned_data['tarball'],
-                                    thumbnail=form.cleaned_data['thumbnail'],
-                                    screenshot=form.cleaned_data['screenshot'],
+                                    thumbnail=revision.thumbnail,
+                                    screenshot=revision.screenshot,
                                     )
             if original_id:
                 new_revision.original_id = original_id
