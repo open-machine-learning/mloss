@@ -58,8 +58,18 @@ def comment_spam_test(**kwargs):
          instance is the comment object
     """
 
+    blacklist_identical=['', 'Nice article']
+    blacklist_contains=['[/URL]']
+
     comment=kwargs['comment'].comment
     request=kwargs['request']
+
+    if not comment or comment in blacklist_identical:
+        return False
+
+    for b in blacklist_contains:
+        if comment.find(b)!=-1:
+            return False
 
     if strip_tags(comment) != comment:
         return False
