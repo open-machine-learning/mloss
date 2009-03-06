@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from django.shortcuts import get_object_or_404
 from django.contrib.comments.signals import comment_was_posted
@@ -115,7 +115,21 @@ Friendly,
 
     def get_stats_for_today(self):
         t = datetime.date.today().strftime("%Y-%m-%d")
-        stats, flag = SoftwareStatistics.objects.get_or_create(software=self, date=t)
+        try:
+            stats, flag = SoftwareStatistics.objects.get_or_create(software=self, date=t)
+        except MultipleObjectsReturned:
+            objs = SoftwareStatistics.objects.filter(software=self, date=t)
+            first=True
+            for o in objs:
+                if first:
+                    stats=o
+                    first=False
+                else:
+                    stats.number_of_views += o.number_of_views
+                    stats.number_of_downloads += o.number_of_downloads
+                    o.delete()
+                    
+            stats.save()
         return stats
 
     def update_views(self):
