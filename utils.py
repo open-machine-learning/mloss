@@ -59,7 +59,7 @@ def comment_spam_test(**kwargs):
     """
 
     blacklist_identical=['', 'Nice article']
-    blacklist_contains=['[/URL]']
+    blacklist_contains=['[/URL]','http://www.internet-poker.de','http://www.vanessa-sucht.com/']
 
     comment=kwargs['comment'].comment
     request=kwargs['request']
