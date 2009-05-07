@@ -59,7 +59,16 @@ def comment_spam_test(**kwargs):
     """
 
     blacklist_identical=['', 'Nice article']
-    blacklist_contains=['[/URL]','http://www.internet-poker.de','http://www.vanessa-sucht.com/']
+    blacklist_contains=['[/URL]',
+			'http://www.internet-poker.de',
+			'http://www.vanessa-sucht.com/',
+			'http://www.planetresource.net',
+			'naked girls',
+			'Hi, interesting post. I have been pondering this issue,so thanks for sharing. I will definitely be subscribing to your blog.',
+			'Hello. And Bye.',
+			'http://quick-ways-to-earn-extra-cash.blogspot.com/'
+			'earn money online',
+			]
 
     comment=kwargs['comment'].comment
     request=kwargs['request']
