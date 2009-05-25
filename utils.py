@@ -58,12 +58,20 @@ def comment_spam_test(**kwargs):
          instance is the comment object
     """
 
-    blacklist_identical=['', 'Nice article']
+    blacklist_identical=['', 'Nice article','Wow! Thank you! I always wanted to write in my blog something like that. Can I take part of your post to my site? Of course, I will add backlink?']
     blacklist_contains=['[/URL]',
 			'http://www.internet-poker.de',
 			'http://www.vanessa-sucht.com/',
 			'http://www.planetresource.net',
+			'http://www.organic-farming.org',
+			'http://100-free-web-host.com',
 			'naked girls',
+			'organic farming',
+			'easiest ways to earn money',
+			'principal-nude',
+			'hot brunette',
+			'earn money online',
+			'adult-friend-finder',
 			'Hi, interesting post. I have been pondering this issue,so thanks for sharing. I will definitely be subscribing to your blog.',
 			'Hello. And Bye.',
 			'http://quick-ways-to-earn-extra-cash.blogspot.com/'
