@@ -76,10 +76,15 @@ def comment_spam_test(**kwargs):
 			'Hello. And Bye.',
 			'http://quick-ways-to-earn-extra-cash.blogspot.com/'
 			'earn money online',
+			'http://www.mydatelove.com',
+			'best buy and loss weight',
 			]
 
     comment=kwargs['comment'].comment
     request=kwargs['request']
+
+    if not request.user.is_authenticated():
+        return False
 
     if not comment or comment in blacklist_identical:
         return False
