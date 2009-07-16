@@ -32,6 +32,12 @@
         {% endif %}
 
         <h2>Leave a comment</h2>
-        {% render_comment_form for blog.blogitem object.id %}
+		{% if user.is_authenticated %}
+		{% render_comment_form for blog.blogitem object.id %}
+		{% else %}
+		<p>
+		You must be logged in to post comments.
+		</p>
+		{% endif %}
 </div>
 {% endblock %}

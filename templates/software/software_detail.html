@@ -287,7 +287,13 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 				{% endif %}
 
 				<h2>Leave a comment</h2>
+				{% if user.is_authenticated %}
 				{% render_comment_form for object.software %}
+				{% else %}
+				<p>
+				You must be logged in to post comments.
+				</p>
+				{% endif %}
 			</td>
 		</tr>
 	</table>
