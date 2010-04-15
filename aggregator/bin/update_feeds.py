@@ -13,6 +13,10 @@ def update_feeds():
     from aggregator.models import Feed, FeedItem
     for feed in Feed.objects.filter(is_defunct=False):
         parsed_feed = feedparser.parse(feed.feed_url)
+        print 'Reading ' + feed.title + ' with ' + str(len(parsed_feed.entries)) + ' entries.'
+        if len(parsed_feed.entries) == 0:
+            print 'No feed entries found, error is...'
+            print parsed_feed.bozo_exception
         for entry in parsed_feed.entries:
             title = entry.title.encode(parsed_feed.encoding, "xmlcharrefreplace")
             print 'Updating ' + title
