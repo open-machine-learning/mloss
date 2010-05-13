@@ -103,7 +103,7 @@ def rate(request, software_id):
 
 
 def software_all_authors(request):
-    authorlist = Author.objects.filter(name__isnull=False).distinct().order_by('slug')
+    authorlist = Author.objects.filter(name__isnull=False).distinct()
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=authorlist,
