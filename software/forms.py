@@ -170,12 +170,17 @@ class UpdateSoftwareForm(forms.Form):
         if 'tarball' in self.data and len(self.data['tarball']):
             tarball = self.data['tarball']
 
+
+
             if tarball and tarball.content_type not in ('application/zip',
+                    'application/x-zip',
+                    'application/x-zip-compressed',
+                    'application/x-compress',
+                    'application/x-compressed',
                     'application/gzip', 
                     'application/x-gzip', 
                     'application/tar', 
                     'application/x-tar', 
-                    'application/x-gzip', 
                     'application/x-bzip', 
                     'application/bzip2', 
                     'application/x-bzip-compressed-tar'):
