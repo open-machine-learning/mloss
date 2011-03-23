@@ -12,7 +12,7 @@ Also, be sure to see the note on ``RegistrationProfile`` about use of the
 """
 
 
-import datetime, random, re, sha
+import datetime, random, re, hashlib
 
 from django.conf import settings
 from django.db import models
@@ -109,8 +109,8 @@ class RegistrationManager(models.Manager):
         and a random salt.
         
         """
-        salt = sha.new(str(random.random())).hexdigest()[:5]
-        activation_key = sha.new(salt+user.username).hexdigest()
+        salt = hashlib.sha1.new(str(random.random())).hexdigest()[:5]
+        activation_key = hashlib.sha1.new(salt+user.username).hexdigest()
         return self.create(user=user,
                            activation_key=activation_key)
         

@@ -27,7 +27,7 @@
 	<table>
 		{% for sw in softwares %}
 		<tr>
-			<td> <a href="{{ sw.get_absolute_url }}"> {{ sw.software.title }} {{ sw.version }}</a></td>
+			<td> <a href="{{ sw.software.get_absolute_url }}"> {{ sw.software.title }} {{ sw.version }}</a></td>
 		</tr>
 		{% endfor %}
 	</table>
