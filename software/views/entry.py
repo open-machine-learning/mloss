@@ -103,7 +103,7 @@ def rate(request, software_id):
 
 
 def software_all_authors(request):
-    authorlist = Author.objects.filter(name__isnull=False).distinct()
+    authorlist = Author.objects.filter(name__isnull=False).distinct().order_by('slug')
     return list_detail.object_list(request,
                                    paginate_by=20,
                                    queryset=authorlist,
@@ -247,6 +247,9 @@ def stats_helper(request, software_id, type, dpi):
     canvas.draw()
     imdata=StringIO()
     fig.savefig(imdata,format='png', dpi=dpi, facecolor=bgcol)
+    del fig
+    del ax
+
     return HttpResponse(imdata.getvalue(), mimetype='image/png')
 
 def downloadstats(request, software_id):

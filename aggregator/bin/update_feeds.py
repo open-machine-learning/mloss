@@ -4,10 +4,16 @@ Universal Feed Parser (http://feedparser.org)
 """
 
 import os
+import sys
 import time
 import optparse
 import datetime
 import feedparser
+
+sys.path.insert(0,'/home/mloss/django/')
+sys.path.insert(0,'/home/mloss/django/mloss/')
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'mloss.settings'
 
 def update_feeds():
     from aggregator.models import Feed, FeedItem
@@ -51,7 +57,7 @@ def update_feeds():
             try:
                 feed.feeditem_set.get(guid=guid)
             except FeedItem.DoesNotExist:
-                feed.feeditem_set.create(title=title, link=link, summary=content, guid=guid, date_modified=date_modified)
+                feed.feeditem_set.create(title=title[:200], link=link, summary=content, guid=guid, date_modified=date_modified)
 
 if __name__ == '__main__':
     parser = optparse.OptionParser()

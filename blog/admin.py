@@ -6,4 +6,3 @@ class BlogItemAdmin(admin.ModelAdmin):
 
 
 admin.site.register(BlogItem, BlogItemAdmin)
-

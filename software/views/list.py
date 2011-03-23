@@ -199,7 +199,6 @@ def software_by_subscription(request):
 
 def search_description(request, q):
     qs=Revision.objects.get_by_searchterm(q)
-    print qs, qs.count()
     if qs.count()==0:
         return render_to_response('software/software_list.html',
                 get_latest_news({ 'search_term': q }),

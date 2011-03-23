@@ -5,13 +5,9 @@ import sys
 import os
 import re
 
-if os.environ['HOME'].endswith('/mloss'):
-    sys.path.insert(0, '/home/mloss')
-    sys.path.insert(0, '/home/mloss/mloss')
-    sys.path.insert(0, '/home/mloss/lib/python2.5/site-packages')
-else:
-    sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss')
-    sys.path.insert(0, '/home/sonne/Documents/work/first/repositories/mloss/website/mloss/mloss')
+sys.path.insert(0,'/home/mloss/django/')
+sys.path.insert(0,'/home/mloss/django/mloss/')
+
 os.environ['DJANGO_SETTINGS_MODULE']='mloss.settings'
 
 from xml.dom import minidom

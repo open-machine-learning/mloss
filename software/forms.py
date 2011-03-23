@@ -170,8 +170,6 @@ class UpdateSoftwareForm(forms.Form):
         if 'tarball' in self.data and len(self.data['tarball']):
             tarball = self.data['tarball']
 
-
-
             if tarball and tarball.content_type not in ('application/zip',
                     'application/x-zip',
                     'application/x-zip-compressed',
@@ -346,18 +344,14 @@ def save_images(request, new_revision, old_revision=None):
     newScreenshot = request.FILES.has_key('screenshot')
     
     if newThumb and not newScreenshot:
-        print("newThumb and not newScreenshot")
         if old_revision != None:
-            print("Taking old screenshot")
             new_revision.screenshot = old_revision.screenshot
         new_revision.thumbnail.save(request.FILES['thumbnail'].name, content=request.FILES['thumbnail'], save=False)
     elif not newThumb and newScreenshot:
-        print("not newThumb and newScreenshot")
         new_revision.screenshot.save(request.FILES['screenshot'].name, content=request.FILES['screenshot'], save=False)
         if old_revision != None:
             new_revision.thumbnail = old_revision.thumbnail        
     elif newThumb and newScreenshot:
-        print("newThumb and newScreenshot")
         new_revision.screenshot.save(request.FILES['screenshot'].name, content=request.FILES['screenshot'], save=False)
         new_revision.thumbnail.save(request.FILES['thumbnail'].name, content=request.FILES['thumbnail'], save=False)
     else:
@@ -366,7 +360,6 @@ def save_images(request, new_revision, old_revision=None):
             new_revision.screenshot = old_revision.screenshot
             
     if new_revision.thumbnail == None and new_revision.screenshot != None:
-        print("Generating thumbnail")            
         screenshotName = request.FILES['screenshot'].name
         screenshot     = request.FILES['screenshot']
         thumbnailName  = '%s.thumb.jpg' % os.path.splitext(screenshotName)[0]

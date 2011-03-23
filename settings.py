@@ -8,11 +8,10 @@ if not PRODUCTION:
 else:
     DEBUG = False
 
-    
 ADMINS = (
     ('Mikio Braun', 'mikio@cs.tu-berlin.de'),
     ('Cheng Soon Ong', 'chengsoon.ong@inf.ethz.ch'),
-    ('Soeren Sonnenburg', 'soeren.sonnenburg@first.fraunhofer.de'),
+    ('Soeren Sonnenburg', 'soeren.sonnenburg@tu-berlin.de'),
 )
 
 MANAGERS = ADMINS
@@ -41,6 +40,9 @@ LOGIN_REDIRECT_URL='/'
 ACCOUNT_ACTIVATION_DAYS=1
 DEFAULT_FROM_EMAIL='admin@mloss.org'
 
+# send email from this address
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
 # Local time zone for this installation. Choices can be found here:
 # http://www.postgresql.org/docs/8.1/static/datetime-keywords.html#DATETIME-TIMEZONE-SET-TABLE
 # although not all variations may be possible on all operating systems.
@@ -62,7 +64,7 @@ USE_I18N = True
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 if PRODUCTION:
-    MEDIA_ROOT = '/home/mloss/mloss/media/'
+    MEDIA_ROOT = '/home/mloss/static/media/'
 else:
     MEDIA_ROOT = 'media/'
 
@@ -79,11 +81,7 @@ MAX_IMAGE_UPLOAD_HEIGHT = 1024
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-if PRODUCTION:
-    ADMIN_MEDIA_PREFIX = 'http://zut.tuebingen.mpg.de/admin_media/'
-else:
-    ADMIN_MEDIA_PREFIX = '/media_admin/'
-
+ADMIN_MEDIA_PREFIX = '/media_admin/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'ccku5%_-8r2#*rb(yh)j!11ar12vx_tll5u(11%3l=^k8rfe=y'
@@ -98,6 +96,8 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
@@ -109,7 +109,7 @@ ROOT_URLCONF = 'mloss.urls'
 #import os.path
 if PRODUCTION:
     TEMPLATE_DIRS = (
-        '/home/mloss/mloss/templates/',
+        '/home/mloss/django/mloss/templates/',
         )
 else:    
     TEMPLATE_DIRS = (

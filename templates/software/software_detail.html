@@ -51,10 +51,7 @@
 	<dt>Submitter:</dt>
 	<dd>{{ object.software.user.username }}</dd>
 	<dt>Author(s):</dt>
-	{% for o in object.get_authorlist %}
-	<a href="/software/author/{{ o.slug }}">{{ o.name|title }}</a>{% if not forloop.last %},
-	{% endif %}
-	{% endfor %}
+	<dd>{{ object.authors }}</dd>
 	<dt>Posted:</dt>
 	<dd>{{ object.pub_date|date:"j F Y" }}</dd>
 	<dt>Last Updated:</dt>

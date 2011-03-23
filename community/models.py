@@ -83,8 +83,8 @@ class Thread(models.Model):
 	"""
 	forum = models.ForeignKey(Forum)
 	title = models.CharField(max_length=100)
-	sticky = models.NullBooleanField(blank=True, null=True)
-	closed = models.NullBooleanField(blank=True, null=True)
+	sticky = models.BooleanField(blank=True, null=True)
+	closed = models.BooleanField(blank=True, null=True)
 	posts = models.IntegerField(default=0)
 	views = models.IntegerField(default=0)
 	thread_latest_post = models.ForeignKey('Post', blank=True, null=True, related_name='thread_latest_post')

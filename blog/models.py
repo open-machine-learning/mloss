@@ -3,7 +3,7 @@ from utils import slugify
 
 class BlogItem(models.Model):
     pub_date = models.DateTimeField()
-    slug = models.SlugField(unique_for_date='pub_date', editable=False)
+    slug = models.SlugField(unique_for_date='pub_date', editable=True)
     headline = models.CharField(max_length=200)
     summary = models.TextField(help_text="Use markdown.")
     body = models.TextField(help_text="Use markdown.")
