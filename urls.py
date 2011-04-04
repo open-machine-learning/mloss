@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     (r'^revision/', include('revision.urls')),
 
     # Using registration
-    (r'^accounts/', include('registration.urls')),
+    (r'^accounts/', include('registration.backends.default.urls')),
     (r'^community/', include('community.urls')),
     (r'^user/', include('user.urls')),
 
@@ -32,4 +32,4 @@ urlpatterns = patterns('',
 )
 
 if settings.DEBUG and not settings.PRODUCTION:
-	urlpatterns += patterns('',(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'media'}),)
+    urlpatterns += patterns('',(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'media'}),)

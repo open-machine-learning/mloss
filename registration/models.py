@@ -1,24 +1,14 @@
-"""
-A registration profile model and associated manager.
-
-The ``RegistrationProfile`` model and especially its custom manager
-implement nearly all the logic needed to handle user registration and
-account activation, so before implementing something in a view or
-form, check here to see if they can take care of it for you.
-
-Also, be sure to see the note on ``RegistrationProfile`` about use of the
-``AUTH_PROFILE_MODULE`` setting.
-
-"""
-
-
-import datetime, random, re, hashlib
+import datetime
+import random
+import re
 
 from django.conf import settings
-from django.db import models
-from django.template import Context, loader
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
+from django.db import models
+from django.db import transaction
+from django.template.loader import render_to_string
+from django.utils.hashcompat import sha_constructor
+from django.utils.translation import ugettext_lazy as _
 
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
@@ -35,140 +25,233 @@ class RegistrationManager(models.Manager):
     """
     def activate_user(self, activation_key):
         """
-        Given the activation key, makes a ``User``'s account active if the
-        activation key is valid and has not expired.
+        Validate an activation key and activate the corresponding
+        ``User`` if valid.
         
-        Returns the ``User`` if successful, or False if the account was
-        not found or the key had expired.
+        If the key is valid and has not expired, return the ``User``
+        after activating.
         
+        If the key is not valid or has expired, return ``False``.
+        
+        If the key is valid but the ``User`` is already active,
+        return ``False``.
+        
+        To prevent reactivation of an account which has been
+        deactivated by site administrators, the activation key is
+        reset to the string constant ``RegistrationProfile.ACTIVATED``
+        after successful activation.
+
         """
         # Make sure the key we're trying conforms to the pattern of a
-        # SHA1 hash; if it doesn't, no point even trying to look it up
-        # in the DB.
+        # SHA1 hash; if it doesn't, no point trying to look it up in
+        # the database.
         if SHA1_RE.search(activation_key):
             try:
-                user_profile = self.get(activation_key=activation_key)
+                profile = self.get(activation_key=activation_key)
             except self.model.DoesNotExist:
                 return False
-            if not user_profile.activation_key_expired():
-                # Account exists and has a non-expired key. Activate it.
-                user = user_profile.user
+            if not profile.activation_key_expired():
+                user = profile.user
                 user.is_active = True
                 user.save()
+                profile.activation_key = self.model.ACTIVATED
+                profile.save()
                 return user
         return False
     
-    def create_inactive_user(self, firstname, lastname, username, password, email, send_email=True, profile_callback=None):
+    def create_inactive_user(self, username, email, password,
+                             site, send_email=True):
         """
-        Creates a new ``User`` and a new ``RegistrationProfile`` for that
-        ``User``, generates an activation key, and mails it.
-        
-        Pass ``send_email=False`` to disable sending the email.
+        Create a new, inactive ``User``, generate a
+        ``RegistrationProfile`` and email its activation key to the
+        ``User``, returning the new ``User``.
 
-        To enable creation of a custom user profile along with the
-        ``User`` (e.g., the model specified in the
-        ``AUTH_PROFILE_MODULE`` setting), define a function which
-        knows how to create and save an instance of that model with
-        appropriate default values, and pass it as the keyword
-        argument ``profile_callback``. This function should accept one
-        keyword argument: ``user``, the ``User`` to relate the profile
-        to.
+        By default, an activation email will be sent to the new
+        user. To disable this, pass ``send_email=False``.
         
         """
-        # Create the user.
         new_user = User.objects.create_user(username, email, password)
         new_user.is_active = False
-        new_user.first_name = firstname
-        new_user.last_name = lastname
         new_user.save()
-        
-        # And finally create the registration profile.
+
         registration_profile = self.create_profile(new_user)
-        
-        # Create site-specific profile, if specified.
-        if profile_callback is not None:
-            profile_callback(user=new_user)
-        
+
         if send_email:
-            from django.core.mail import send_mail
-            current_domain = Site.objects.get_current().domain
-            subject = "Activate your new account at %s" % current_domain
-            message_template = loader.get_template('registration/activation_email.txt')
-            message_context = Context({ 'site_url': 'http://%s/' % current_domain,
-                                        'activation_key': registration_profile.activation_key,
-                                        'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS })
-            message = message_template.render(message_context)
-            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [new_user.email])
+            registration_profile.send_activation_email(site)
+
         return new_user
-    
+    create_inactive_user = transaction.commit_on_success(create_inactive_user)
+
     def create_profile(self, user):
         """
-        Given a ``User``, creates, saves and returns a
-        ``RegistrationProfile`` for that ``User``, generating the
-        activation key from a combination of the ``User``'s username
-        and a random salt.
+        Create a ``RegistrationProfile`` for a given
+        ``User``, and return the ``RegistrationProfile``.
+        
+        The activation key for the ``RegistrationProfile`` will be a
+        SHA1 hash, generated from a combination of the ``User``'s
+        username and a random salt.
         
         """
-        salt = hashlib.sha1.new(str(random.random())).hexdigest()[:5]
-        activation_key = hashlib.sha1.new(salt+user.username).hexdigest()
+        salt = sha_constructor(str(random.random())).hexdigest()[:5]
+        username = user.username
+        if isinstance(username, unicode):
+            username = username.encode('utf-8')
+        activation_key = sha_constructor(salt+username).hexdigest()
         return self.create(user=user,
                            activation_key=activation_key)
         
     def delete_expired_users(self):
         """
-        Removes unused profiles and their associated accounts.
-
-        This is provided largely as a convenience for maintenance
-        purposes; if a ``RegistrationProfile``'s key expires without the
-        account being activated, then both the ``RegistrationProfile`` and
-        the associated ``User`` become clutter in the database, and (more
-        importantly) it won't be possible for anyone to ever come back
-        and claim the username. For best results, set this up to run
-        regularly as a cron job.
+        Remove expired instances of ``RegistrationProfile`` and their
+        associated ``User``s.
         
-        If you have a ``User`` whose account you want to keep in the
-        database even though it's inactive (say, to prevent a
-        troublemaker from accessing or re-creating his account), just
-        delete that ``User``'s ``RegistrationProfile`` and this method will
-        leave it alone.
+        Accounts to be deleted are identified by searching for
+        instances of ``RegistrationProfile`` with expired activation
+        keys, and then checking to see if their associated ``User``
+        instances have the field ``is_active`` set to ``False``; any
+        ``User`` who is both inactive and has an expired activation
+        key will be deleted.
+        
+        It is recommended that this method be executed regularly as
+        part of your routine site maintenance; this application
+        provides a custom management command which will call this
+        method, accessible as ``manage.py cleanupregistration``.
+        
+        Regularly clearing out accounts which have never been
+        activated serves two useful purposes:
+        
+        1. It alleviates the ocasional need to reset a
+           ``RegistrationProfile`` and/or re-send an activation email
+           when a user does not receive or does not act upon the
+           initial activation email; since the account will be
+           deleted, the user will be able to simply re-register and
+           receive a new activation key.
+        
+        2. It prevents the possibility of a malicious user registering
+           one or more accounts and never activating them (thus
+           denying the use of those usernames to anyone else); since
+           those accounts will be deleted, the usernames will become
+           available for use again.
+        
+        If you have a troublesome ``User`` and wish to disable their
+        account while keeping it in the database, simply delete the
+        associated ``RegistrationProfile``; an inactive ``User`` which
+        does not have an associated ``RegistrationProfile`` will not
+        be deleted.
         
         """
         for profile in self.all():
             if profile.activation_key_expired():
                 user = profile.user
                 if not user.is_active:
-                    user.delete() # Removing the ``User`` will remove the ``RegistrationProfile``, too.
+                    user.delete()
 
 
 class RegistrationProfile(models.Model):
     """
-    Simple profile model for a ``User``, storing an activation key for the
-    account.
+    A simple profile which stores an activation key for use during
+    user account registration.
+    
+    Generally, you will not want to interact directly with instances
+    of this model; the provided manager includes methods
+    for creating and activating new accounts, as well as for cleaning
+    out accounts which have never been activated.
     
     While it is possible to use this model as the value of the
     ``AUTH_PROFILE_MODULE`` setting, it's not recommended that you do
-    so. This model is intended solely to store some data needed for
-    user registration, and can do that regardless of what you set in
-    ``AUTH_PROFILE_MODULE``, so if you want to use user profiles in a
-    project, it's far better to develop a customized model for that
-    purpose and just let this one handle registration.
+    so. This model's sole purpose is to store data temporarily during
+    account registration and activation.
     
     """
-    user = models.ForeignKey(User, unique=True)
-    activation_key = models.CharField(max_length=40)
+    ACTIVATED = u"ALREADY_ACTIVATED"
+    
+    user = models.ForeignKey(User, unique=True, verbose_name=_('user'))
+    activation_key = models.CharField(_('activation key'), max_length=40)
     
     objects = RegistrationManager()
     
+    class Meta:
+        verbose_name = _('registration profile')
+        verbose_name_plural = _('registration profiles')
+    
     def __unicode__(self):
-        return u"Registration information for %s" % self.user.username
+        return u"Registration information for %s" % self.user
     
     def activation_key_expired(self):
         """
-        Determines whether this ``RegistrationProfile``'s activation
-        key has expired, based on the value of the setting
-        ``ACCOUNT_ACTIVATION_DAYS``.
+        Determine whether this ``RegistrationProfile``'s activation
+        key has expired, returning a boolean -- ``True`` if the key
+        has expired.
+        
+        Key expiration is determined by a two-step process:
+        
+        1. If the user has already activated, the key will have been
+           reset to the string constant ``ACTIVATED``. Re-activating
+           is not permitted, and so this method returns ``True`` in
+           this case.
+
+        2. Otherwise, the date the user signed up is incremented by
+           the number of days specified in the setting
+           ``ACCOUNT_ACTIVATION_DAYS`` (which should be the number of
+           days after signup during which a user is allowed to
+           activate their account); if the result is less than or
+           equal to the current date, the key has expired and this
+           method returns ``True``.
         
         """
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
-        return self.user.date_joined + expiration_date <= datetime.datetime.now()
+        return self.activation_key == self.ACTIVATED or \
+               (self.user.date_joined + expiration_date <= datetime.datetime.now())
     activation_key_expired.boolean = True
+
+    def send_activation_email(self, site):
+        """
+        Send an activation email to the user associated with this
+        ``RegistrationProfile``.
+        
+        The activation email will make use of two templates:
+
+        ``registration/activation_email_subject.txt``
+            This template will be used for the subject line of the
+            email. Because it is used as the subject line of an email,
+            this template's output **must** be only a single line of
+            text; output longer than one line will be forcibly joined
+            into only a single line.
+
+        ``registration/activation_email.txt``
+            This template will be used for the body of the email.
+
+        These templates will each receive the following context
+        variables:
+
+        ``activation_key``
+            The activation key for the new account.
+
+        ``expiration_days``
+            The number of days remaining during which the account may
+            be activated.
+
+        ``site``
+            An object representing the site on which the user
+            registered; depending on whether ``django.contrib.sites``
+            is installed, this may be an instance of either
+            ``django.contrib.sites.models.Site`` (if the sites
+            application is installed) or
+            ``django.contrib.sites.models.RequestSite`` (if
+            not). Consult the documentation for the Django sites
+            framework for details regarding these objects' interfaces.
+
+        """
+        ctx_dict = {'activation_key': self.activation_key,
+                    'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
+                    'site': site}
+        subject = render_to_string('registration/activation_email_subject.txt',
+                                   ctx_dict)
+        # Email subject *must not* contain newlines
+        subject = ''.join(subject.splitlines())
+        
+        message = render_to_string('registration/activation_email.txt',
+                                   ctx_dict)
+        
+        self.user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+    
