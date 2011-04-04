@@ -19,26 +19,21 @@ MANAGERS = ADMINS
 R_CRAN_BOT = 'r-cran-robot'
 
 if PRODUCTION:
-    SERVER_EMAIL = 'admin@mloss.org'
-    
-if PRODUCTION:
     DATABASE_USER = 'mloss'             # Not used with sqlite3.
     DATABASE_PASSWORD = 'XXXXXXXXX'     # Not used with sqlite3.
     DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
     DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
     DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
     DATABASE_NAME = 'mloss'             # Or path to database file if using sqlite3.
-    EMAIL_HOST='mailhost.tuebingen.mpg.de'
 else:
     DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
     DATABASE_NAME = 'mloss.db'             # Or path to database file if using sqlite3.
-    EMAIL_HOST='localhost'
 
 
 
 LOGIN_REDIRECT_URL='/'
 ACCOUNT_ACTIVATION_DAYS=1
-DEFAULT_FROM_EMAIL='admin@mloss.org'
+DEFAULT_FROM_EMAIL='mloss@mloss.org'
 
 # send email from this address
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
