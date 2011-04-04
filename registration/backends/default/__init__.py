@@ -71,11 +71,14 @@ class DefaultBackend(object):
 
         """
         username, email, password = kwargs['username'], kwargs['email'], kwargs['password1']
+        firstname, lastname = kwargs['firstname'], kwargs['lastname']
+
         if Site._meta.installed:
             site = Site.objects.get_current()
         else:
             site = RequestSite(request)
-        new_user = RegistrationProfile.objects.create_inactive_user(username, email,
+        new_user = RegistrationProfile.objects.create_inactive_user(firstname, lastname,
+                username, email,
                                                                     password, site)
         signals.user_registered.send(sender=self.__class__,
                                      user=new_user,
