@@ -9,6 +9,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # administration
     (r'^admin/(.*)', admin.site.root),
+    #(r'^admin/', include(admin.site.urls)),
 
     # software and revision
     (r'^software/', include('software.urls')),

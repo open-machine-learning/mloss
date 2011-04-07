@@ -41,6 +41,22 @@ def slugify(value):
     return re.sub('[\-\+\s]+', '-', value)
 slugify = stringfilter(slugify)
 
+def slugify_uniquely(model, value):
+    """
+    Generate a unique slug.
+    Based on:
+    http://code.djangoproject.com/wiki/SlugifyUniquely
+    """
+    suffix = 0
+    potential = base = slugify(value)
+    while True:
+        if suffix:
+            potential = "-".join([base, str(suffix)])
+        if not model.objects.filter(slug=potential).count():
+            return potential
+        # we hit a conflicting slug, so bump the suffix & try again
+        suffix += 1
+slugify_uniquely = stringfilter(slugify_uniquely)
 
 def send_mails(subscribers, subject, message):
     # we don't use send_mass_mail as we don't want to leak other users email addresses
