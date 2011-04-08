@@ -94,7 +94,14 @@ class CRANPackage:
                 'gpl version 2 or newer' : 'gpl version 2 or later',
                 'lgpl' : 'lgpl',
                 'pl (>=2)' : 'gpl version 2 or later',
-                'use under gpl2, or see file licence' : 'gpl version 2'}
+                'use under gpl2, or see file licence' : 'gpl version 2',
+                'gpl (>= 3)' : 'gpl version 3 or later',
+                'gpl (>=3)' : 'gpl version 3 or later',
+                'lgpl (>= 3)' : 'lgpl version 3 or later',
+                'lgpl (>=3)' : 'lgpl version 3 or later',
+                'lgpl (>= 2)' : 'lgpl version 2 or later',
+                'lgpl (>=2)' : 'lgpl version 2 or later',
+                }
         try:
             license=license_hash[license]
         except KeyError:

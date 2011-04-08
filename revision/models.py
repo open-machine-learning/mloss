@@ -5,7 +5,8 @@ from django.db.models import Q
 
 from software.models import Software
 from markdown import markdown
-from utils import parsewords, slugify, slugify_uniquely
+#from utils import parsewords, slugify, slugify_uniquely
+from utils import parsewords, slugify
 
 # make sure these lists of variables are up-to-date (i.e. match
 # the fields in the Software object
@@ -56,7 +57,8 @@ class License(models.Model):
 
     def save(self, **kwargs):
         if not self.id:
-            self.slug = slugify_uniquely(self.name)
+            #self.slug = slugify_uniquely(self.name)
+            self.slug = slugify(self.name)
         super(License,self).save(kwargs)
 
     def get_absolute_url(self):
