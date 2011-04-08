@@ -101,6 +101,10 @@ class CRANPackage:
                 'lgpl (>=3)' : 'lgpl version 3 or later',
                 'lgpl (>= 2)' : 'lgpl version 2 or later',
                 'lgpl (>=2)' : 'lgpl version 2 or later',
+                'lgpl version (>= 2)' : 'lgpl version 2 or later',
+                'lgpl version (>= 3)' : 'lgpl version 3 or later',
+                'gpl version (>= 2)' : 'gpl version 2 or later',
+                'gpl version (>= 3)' : 'gpl version 3 or later',
                 }
         try:
             license=license_hash[license]
