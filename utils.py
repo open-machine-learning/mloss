@@ -7,7 +7,7 @@ import settings
 import datetime
 
 # not quite sure where to put this code
-def parsewords(curobj,fieldname='language'):
+def parsewords(curobj,fieldname='language',is_sorted=True):
     """
     Returns a set of words contained in fieldname
     """
@@ -27,7 +27,8 @@ def parsewords(curobj,fieldname='language'):
         if (cleanword not in unique_words) and (cleanword not in STOPWORDS):
             unique_words.append(cleanword)
 
-    unique_words.sort()
+    if is_sorted:
+        unique_words.sort()
     return unique_words
 
 def slugify(value):

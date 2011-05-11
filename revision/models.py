@@ -306,7 +306,16 @@ class Revision(models.Model):
             self.software.notify_update()
 
     def get_authorlist(self):
+        """
         return [ x for x in self.authorlist.all() ]
+        but in the order of the text entry
+        """
+        text_list = parsewords(self, fieldname='authors', is_sorted=False)
+        all_authors = []
+        for author in text_list:
+            all_authors.append(Author.objects.get(name=author))
+        return all_authors
+    
     def get_taglist(self):
         return [ x for x in self.taglist.all() ]
     def get_licenselist(self):
