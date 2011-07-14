@@ -1,0 +1,100 @@
+svn co http://code.djangoproject.com/svn/django/trunk/ Django
+
+# sqlite3 is installed on my mac
+sudo port install py-sqlite py-pil py-readline
+
+# start a new project
+django-admin.py startproject mloss
+cd mloss
+python manage.py runserver
+
+# start a new app
+python manage.py startapp <name of project>
+# check whether ok
+python manage.py validate
+
+# list sql commands to CREATE TABLE
+python manage.py sqlall <name of project>
+# do CREATE TABLE
+python manage.py syncdb
+# for SQL freaks
+python manage.py dbshell
+
+
+# cab, the app on djangosnippets
+svn checkout http://cab.googlecode.com/svn/trunk/ cab
+# requires markdown
+http://sourceforge.net/project/showfiles.php?group_id=153041
+# requires pygments
+svn co http://trac.pocoo.org/repos/pygments/trunk pygments
+# get registration from googlecode http://code.google.com/p/django-registration/
+
+
+# How to set up a django server
+http://www.lethain.com/entry/2007/jul/17/dreamier-dream-server-nginx/
+
+
+
+# Some free style sheets
+http://www.freecsstemplates.org/
+
+
+# how to update tables
+python manage.py dumpdata software > software.json
+python manage.py sqlclear software > software_drop.sql
+python manage.py dbshell
+# -- inside the sqlite shell, paste the commands in software_drop.sql
+% -- to exit, type .exit
+# -- update your model after getting rid of the tables 
+python manage.py syncdb
+python manage.py loaddata software.json
+
+
+
+
+# how to export from svn to production
+make release
+
+
+# admin script to tidy up orphans
+python manage.py shell
+from software.models import clean_all
+clean_all()
+
+# sqlite -> mysql conversion
+PYTHONPATH=. python ../admintools/db_dump.py dump
+now switch to mysql (empty db)
+python manage.py syncdb
+PYTHONPATH=. python ../admintools/db_dump.py load
+
+#the manual way below does not work reliably!!!
+#
+#sqlite3 mloss.db .dump .quit >~/mloss_sqlite.dump
+#edit mloss_sqlite.dump
+#replace all " with ` ( grave backticks!)
+#remove "BEGIN TRANSACTION;"
+#remove "COMMIT;"
+#-> now switch to mysql
+#python manage.py syncdb
+#mysql -p mloss <mloss_sqlite.dump
+
+
+
+# another way
+# on zut
+PYTHONPATH=/home/mloss/mloss:/home/mloss \
+DJANGO_SETTINGS_MODULE=settings \
+./dbpickle.py --dump --file=mloss.pickle
+
+# on local
+./manage.py syncdb
+# reply no to superuser creation
+PYTHONPATH=$PYTHONPATH:.:.. DJANGO_SETTINGS_MODULE=settings \
+./../admintools/dbpickle.py --load --file=myproject.pickle
+
+
+
+
+# How to update feeds manually (from website/mloss/mloss)
+ln -s aggregator/bin/update_feeds.py .
+python update_feeds.py --settings='mloss.settings'
