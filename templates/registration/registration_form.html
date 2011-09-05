@@ -30,6 +30,8 @@
 <dd>{{ form.password1|safe }}</dd>
 <dt><label for="id_password2">Password (type again to catch any typos):</label>{% if form.password2.errors %} <span class="error">{{ form.password2.errors|join:", " }}</span>{% endif %}</dt>
 <dd>{{ form.password2|safe }}</dd>
+<dt><label for="id_captcha">Captcha:</label>{% if form.password2.errors %} <span class="error">{{ form.password2.errors|join:", " }}</span>{% endif %}</dt>
+<dd>{{ form.captcha }}</dd>
 <dt><label for="id_tos">I have read and agree to the <a href="/about/tos/">Terms of Service</a>:</label>{% if form.tos.errors %}&nbsp;<span class="error">{{ form.tos.errors|join:", " }}</span>{% endif %}&nbsp;&nbsp;{{ form.tos|safe }}</dt>
 <dt><input type="submit" value="Register" /></dt>
 </dl>
