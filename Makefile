@@ -25,6 +25,8 @@ release: clean
 		ssh mloss@${HOST} \
 		\( tar -xjvf - -C $(WEBSITEDIR) \; sync \; sync \; sync \; \
 		sed -i "s#XXXXXXXXX#\`cat /home/mloss/.mysql_password\`#" $(WEBSITEDIR)/$(RELEASENAME)/settings.py \; \
+		sed -i "s#RECAPTCHAPUBLIC#\`cat /home/mloss/.recaptcha_public\`#" $(WEBSITEDIR)/$(RELEASENAME)/settings.py \; \
+		sed -i "s#RECAPTCHAPRIVATE#\`cat /home/mloss/.recaptcha_private\`#" $(WEBSITEDIR)/$(RELEASENAME)/settings.py \; \
 		sed -i '"s/^PRODUCTION = False/PRODUCTION = True/g"' $(WEBSITEDIR)/$(RELEASENAME)/settings.py \; \
 		python -mcompileall $(WEBSITEDIR)/$(RELEASENAME)/ \; \
 		find $(WEBSITEDIR)/$(RELEASENAME) -type d -exec chmod 755 {} '\;' \; \
