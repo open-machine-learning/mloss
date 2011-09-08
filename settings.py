@@ -132,4 +132,9 @@ INSTALLED_APPS = (
     'mloss.subscriptions',
     'mloss.aggregator',
     'mloss.blog',
+    'mloss.captcha',
 )
+
+RECAPTCHA_PUBLIC_KEY = 'RECAPTCHAPUBLIC'
+RECAPTCHA_PRIVATE_KEY = 'RECAPTCHAPRIVATE'
+
