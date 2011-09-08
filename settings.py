@@ -1,5 +1,6 @@
 # Django settings for mloss project.
 
+VERSION = "r0000"
 PRODUCTION = False # set to True when project goes live
 
 if not PRODUCTION:

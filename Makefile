@@ -31,7 +31,7 @@ release: clean
 		sed -i "s#RECAPTCHAPUBLIC#\`cat /home/mloss/.recaptcha_public\`#" $(WEBSITEDIR)/$(RELEASENAME)/settings.py \; \
 		sed -i "s#RECAPTCHAPRIVATE#\`cat /home/mloss/.recaptcha_private\`#" $(WEBSITEDIR)/$(RELEASENAME)/settings.py \; \
 		sed -i '"s/^PRODUCTION = False/PRODUCTION = True/g"' $(WEBSITEDIR)/$(RELEASENAME)/settings.py \; \
-		python -mcompileall $(WEBSITEDIR)/$(RELEASENAME)/ \; \
+		sed -i '"s/^VERSION = \"r0000\"/VERSION = \"$(VER)\"/g"' $(WEBSITEDIR)/$(RELEASENAME)/settings.py \; \python -mcompileall $(WEBSITEDIR)/$(RELEASENAME)/ \; \
 		find $(WEBSITEDIR)/$(RELEASENAME) -type d -exec chmod 755 {} '\;' \; \
 		find $(WEBSITEDIR)/$(RELEASENAME) -type f -exec chmod 644 {} '\;' \; \
 		chmod 640 $(WEBSITEDIR)/$(RELEASENAME)/settings.py\* \; \
