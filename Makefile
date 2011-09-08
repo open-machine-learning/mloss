@@ -1,6 +1,7 @@
-VER=r$(shell svn info  | grep Revision | cut -f 2 -d ' ')
+#VER=r$(shell svn info  | grep Revision | cut -f 2 -d ' ')
+VER=$(shell git tag -l | tail -1)
 RELEASENAME:=mloss-$(VER)
-RELEASETAR:=mloss-r$(shell svn info  | grep Revision | cut -f 2 -d ' ').tar.bz2
+RELEASETAR:=mloss-$(VER).tar.gz
 RELEASEDIR:=releases
 
 WEBSITEDIR:=django
@@ -17,9 +18,11 @@ HOST=mloss.org
 #
 release: clean
 #	svn commit
-	svn update
+#	svn update
+	git pull
 	rm -rf $(RELEASEDIR)/$(RELEASENAME)
-	svn export mloss $(RELEASEDIR)/$(RELEASENAME)
+#	svn export mloss $(RELEASEDIR)/$(RELEASENAME)
+	git checkout-index -f -a --prefix=$(RELEASEDIR)/$(RELEASENAME)/
 	ssh mloss@${HOST} rm -rf $(WEBSITEDIR)/$(RELEASENAME) 
 	tar cjvf - -C releases --exclude 'mloss.db' $(RELEASENAME) | \
 		ssh mloss@${HOST} \
