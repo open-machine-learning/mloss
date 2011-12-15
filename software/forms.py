@@ -503,6 +503,7 @@ def edit_software(request, software_id, revision_id=0):
                 for field in editables:
                     if not field in dontupdateifempty or form.cleaned_data[field]:
                         setattr(new_revision, field, form.cleaned_data[field])
+                new_revision.jmlr_mloss_url = revision.jmlr_mloss_url
 
                 if form.cleaned_data['download_url'] and len(form.cleaned_data['download_url'])>0:
                     new_revision.tarball = None
