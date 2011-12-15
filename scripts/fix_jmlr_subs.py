@@ -15,6 +15,7 @@ for software in Software.objects.all():
 		if jmlr_mloss_url is not None:
 			if  rev.revision<has_jmlr_since_rev:
 				print "updating '%s' rev '%d' to have url '%s'" % (software.title, rev.revision, jmlr_mloss_url)
+				rev.jmlr_mloss_url=jmlr_mloss_url
 				rev.save(silent_update=True)
 			continue
 

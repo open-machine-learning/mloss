@@ -19,7 +19,7 @@ HOST=mloss.org
 release: clean
 #	svn commit
 #	svn update
-	git pull
+	#git pull
 	rm -rf $(RELEASEDIR)/$(RELEASENAME)
 #	svn export mloss $(RELEASEDIR)/$(RELEASENAME)
 	git checkout-index -f -a --prefix=$(RELEASEDIR)/$(RELEASENAME)/
