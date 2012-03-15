@@ -11,7 +11,7 @@ else:
 
 ADMINS = (
     ('Mikio Braun', 'mikio@cs.tu-berlin.de'),
-    ('Cheng Soon Ong', 'chengsoon.ong@inf.ethz.ch'),
+    ('Cheng Soon Ong', 'chengsoon.ong@unimelb.edu.au'),
     ('Soeren Sonnenburg', 'soeren.sonnenburg@tu-berlin.de'),
 )
 
