@@ -207,8 +207,8 @@ class Revision(models.Model):
     description_html = models.TextField(editable=False)
     changes = models.TextField()
     changes_html = models.TextField(editable=False)
-    project_url = models.URLField(verify_exists=False)
-    jmlr_mloss_url = models.URLField(verify_exists=False, blank=True)
+    project_url = models.URLField()
+    jmlr_mloss_url = models.URLField(blank=True)
     tags = models.CharField(max_length=200,blank=True)
     taglist = models.ManyToManyField(Tag, editable=False)
     language = models.CharField(max_length=200,blank=True)
@@ -223,7 +223,7 @@ class Revision(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField()
 
-    download_url = models.URLField(verify_exists=False, blank=True, null=True)
+    download_url = models.URLField(blank=True, null=True)
     tarball = models.FileField(upload_to="code_archive/",blank=True,null=True)
 
     # revision number, where 0 means latest

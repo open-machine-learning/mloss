@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect, Http404
 from django.contrib.auth.models import User
 from django.contrib.comments.forms import CommentForm
-from django.views.generic import list_detail
+from django.views.generic.detail import DetailView
 
 from revision.models import Revision, Author, Tag, License, Language, OpSys, DataFormat
 from software.models import Software, SoftwareRating, SoftwareStatistics
@@ -104,7 +104,7 @@ def rate(request, software_id):
 
 def software_all_authors(request):
     authorlist = Author.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=authorlist,
                                    template_name='software/author_list.html',
@@ -114,7 +114,7 @@ def software_all_authors(request):
 
 def software_all_tags(request):
     taglist = Tag.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=taglist,
                                    template_name='software/tag_list.html',
@@ -124,7 +124,7 @@ def software_all_tags(request):
 
 def software_all_licenses(request):
     licenselist = License.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=licenselist,
                                    template_name='software/license_list.html',
@@ -134,7 +134,7 @@ def software_all_licenses(request):
 
 def software_all_languages(request):
     languagelist = Language.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=languagelist,
                                    template_name='software/language_list.html',
@@ -144,7 +144,7 @@ def software_all_languages(request):
 
 def software_all_opsyss(request):
     opsyslist = OpSys.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=opsyslist,
                                    template_name='software/opsys_list.html',
@@ -153,7 +153,7 @@ def software_all_opsyss(request):
 
 def software_all_dataformats(request):
     dataformatlist = DataFormat.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=dataformatlist,
                                    template_name='software/dataformat_list.html',
@@ -162,7 +162,7 @@ def software_all_dataformats(request):
 
 def user_with_software(request):
     userlist = User.objects.filter(software__isnull=False).distinct().order_by('username')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=userlist,
                                    template_name='software/user_list.html',

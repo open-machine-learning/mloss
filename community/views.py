@@ -10,7 +10,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django import forms
 from django.contrib.auth import authenticate, login
-from django.views.generic import list_detail
+from django.views.generic.detail import DetailView
 from community.summary import get_latest_news
 
 class NewPostForm(forms.Form):
@@ -142,7 +142,7 @@ def thread(request, forum, thread):
 	extra['thread']=t
 	extra['form_action']='reply/'
 
-	return list_detail.object_list(request,
+	return DetailView.as_view(request,
 			paginate_by=10,
 			queryset=p,
 			template_name='community/thread.html',
@@ -233,7 +233,7 @@ def reply(request, forum, thread):
 	else:
 		form = create_newpostform(request)
 
-	return list_detail.object_list(request,
+	return DetailView.as_view(request,
 			paginate_by=10,
 			queryset=p,
 			template_name='community/thread.html',
@@ -245,7 +245,7 @@ def reply(request, forum, thread):
 
 
 def community_base(request):
-		return list_detail.object_list(request,
+		return DetailView.as_view(request,
 					template_name='community_base.html',)
 
 def get_summary_page(request):

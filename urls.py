@@ -1,15 +1,15 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, include
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib import admin
-from django.views.generic.list_detail import object_list
+from django.views.generic import RedirectView
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
     # administration
-    (r'^admin/(.*)', admin.site.root),
-    #(r'^admin/', include(admin.site.urls)),
+    #(r'^admin/(.*)', admin.site.root),
+    (r'^admin/', include(admin.site.urls)),
 
     # software and revision
     (r'^software/', include('software.urls')),
@@ -26,7 +26,7 @@ urlpatterns = patterns('',
 
     # redirect the root to news
     #('^$', 'forshow.views.newsindex'),
-    ('^$', 'django.views.generic.simple.redirect_to', {'url':'/software/'}),
+    ('^$', RedirectView.as_view(url='/software/')),
 
     # Enable comments
     (r'^comments/', include('django.contrib.comments.urls')),

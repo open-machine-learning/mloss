@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns
 from blog.models import BlogItem
 from blog.feeds import RssBlogFeed
 from community.summary import get_latest_news

@@ -33,6 +33,19 @@ you which method takes care of the request.
 
 CHANGELOG
 
+June 2013
+
+  * Moving to Django 1.5.1:
+   - Remove verify_exists from URLField (deprecated in Django 1.5)
+   - Replace from django.utils.hashcompat import sha_constructor with hashlib.sha1
+   - Update settings.py to set DATABASES
+   - Removed django.middleware.csrf.CsrfResponseMiddleware
+   - Updated django.conf.urls
+   - Replace django.views.generic.list_detail.object_list with django.views.generic.list.ListView
+   - Replace django.views.generic.simple.direct_to_template with django.views.generic.base.TemplateView
+   - Update django.contrib.syndication.feed
+   - Replace django.views.generic.list_detail.object_detail with django.views.generic.detail.DetailView
+
 mloss.org svn-r482-September-2008
 
   * Several bugfixes and adjustments related to last minute
