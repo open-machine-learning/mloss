@@ -46,6 +46,15 @@ June 2013
    - Update django.contrib.syndication.feed
    - Replace django.views.generic.list_detail.object_detail with django.views.generic.detail.DetailView
 
+   - Added {% csrf_token %} to templates
+   - Replace django.views.generic.date_based with django.views.generic.dates
+   - Use django.core.paginator
+
+  * Needed to install
+   - recaptcha-client-1.0.6
+   - Markdown-2.3.1
+
+
 mloss.org svn-r482-September-2008
 
   * Several bugfixes and adjustments related to last minute

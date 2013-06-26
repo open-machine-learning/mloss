@@ -73,7 +73,7 @@ function addStringToElement(element_id, combo_id)
 {% endif %}
 
 {% if form.is_multipart %}
-<form enctype="multipart/form-data" method="POST" action="">
+<form enctype="multipart/form-data" method="POST" action="">{% csrf_token %}
 	{% else %}
 	<form method="POST" action="">
 		{% endif %}

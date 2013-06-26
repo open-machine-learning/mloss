@@ -36,7 +36,7 @@ comm2_dict = {
 
 urlpatterns = patterns('',
 	(r'^$', 'community.views.get_summary_page'),
-	(r'^forum/$', 'ListView.as_view', forum_dict),
+	(r'^forum/$', ListView.as_view(), forum_dict),
 	(r'^blog/', include('blog.urls')),
 	(r'^(?P<slug>[A-Za-z0-9-_]+)/$', 'community.views.forum'),
 	(r'^rss/(?P<forum>[A-Za-z0-9-_]+)/$', 'community.feeds.ForumFeed'),

@@ -140,7 +140,7 @@
 <p class="error">Please correct the errors below:</p>
 {% endif %}
 
-<form method="post" action="/user/update/{{object.pk}}/">
+<form method="post" action="/user/update/{{object.pk}}/">{% csrf_token %}
 <dl>
 <dt><label for="id_firstname">First Name:</label>{% if form.firstname.errors %} <span class="error">{{ form.firstname.errors|join:", " }}</span>{% endif %}</dt>
 <dd>{{ form.firstname|safe }}</dd>

@@ -45,7 +45,7 @@
 
 <p> &nbsp; </p><p> &nbsp; </p>
 <h2>Create a new Thread</h2>
-<form method='post' action='{{form_action}}'>
+<form method='post' action='{{form_action}}'>{% csrf_token %}
     <dl>
         {% if not user.is_authenticated %}
         <dd><h3>Please login to create a thread.</h3></dd>

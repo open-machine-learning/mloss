@@ -14,7 +14,7 @@ class RevisionView(ListView):
     """
     #context_object_name = 'revision'
     template_name = 'software/software_list.html'
-    paginate_py = 20
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super(RevisionView, self).get_context_data(**kwargs)

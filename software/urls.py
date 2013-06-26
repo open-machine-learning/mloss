@@ -13,7 +13,8 @@ from software.views.list import SoftwareInJMLRView, SoftwareByUpdatedDateView
 from software.views.list import SoftwareByUserView, SoftwareByPubdateView
 from software.views.list import SoftwareByTitleView, SoftwareByRatingView
 from software.views.list import SoftwareByViewsView, SoftwareByDownloadsView
-from django.views.generic.detail import DetailView
+from software.views.entry import AuthorsView, UsersView
+from software.views.entry import TagsView, LicensesView, LanguagesView, OpSysView, DataFormatView
 from revision.models import Revision
 
 
@@ -48,22 +49,22 @@ urlpatterns = patterns('',
     (r'^rss/latest/$', 'software.feeds.RssSoftwareFeed'),
     (r'^rss/merged/(?P<software_id>\d+)/$', 'software.feeds.RssSoftwareAndCommentsFeed'),
     (r'^rss/comments/(?P<software_id>\d+)/$', 'software.feeds.RssCommentsFeed'),
-    (r'^author/$', 'software.views.entry.software_all_authors'),
+    (r'^author/$', AuthorsView.as_view()),
     (r'^author/(?P<slug>[^/]+)/$', 'software.views.list.software_by_author'),
-    (r'^users/$', 'software.views.entry.user_with_software'),
+    (r'^users/$', UsersView.as_view()),
     (r'^users/(?P<username>[^/]+)/$', SoftwareByUserView.as_view()),
-    (r'^license/$', 'software.views.entry.software_all_licenses'),
+    (r'^license/$', LicensesView.as_view()),
     (r'^license/(?P<slug>[^/]+)/$', 'software.views.list.software_by_license'),
-    (r'^language/$', 'software.views.entry.software_all_languages'),
+    (r'^language/$', LanguagesView.as_view()),
     (r'^language/(?P<slug>[^/]+)/$', 'software.views.list.software_by_language'),
     (r'^search/$', 'software.forms.search_software'),
     (r'^rate/(?P<software_id>\d+)/$', 'software.views.entry.rate'),
-    (r'^tags/$', 'software.views.entry.software_all_tags'),
+    (r'^tags/$', TagsView.as_view()),
     (r'^tags/(?P<slug>[^/]+)/$', 'software.views.list.software_by_tag'),
-    (r'^opsys/$', 'software.views.entry.software_all_opsyss'),
+    (r'^opsys/$', OpSysView.as_view()),
     (r'^opsys/(?P<slug>[^/]+)/$', 'software.views.list.software_by_opsys'),
-    (r'^dataformat/$', 'software.views.entry.software_all_dataformats'),
+    (r'^dataformat/$', DataFormatView.as_view()),
     (r'^dataformat/(?P<slug>[^/]+)/$', 'software.views.list.software_by_dataformats'),
-    (r'^forum/$', 'ListView.as_view', forum_dict),
+    (r'^forum/$', ListView.as_view(), forum_dict),
     (r'^mail/(?P<software_id>\d+)/$', 'software.forms.contact_author'), 
 )
