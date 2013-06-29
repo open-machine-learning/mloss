@@ -1,0 +1,6 @@
+*.pyc
+mloss.db
+.Python
+bin/
+include/
+lib/

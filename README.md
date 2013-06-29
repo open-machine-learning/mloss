@@ -1,12 +1,14 @@
-This is the source code of the mloss.org website. It was written by the
+# mloss.org
+
+This is the source code of the [mloss.org](http://mloss.org) website. It was written by the
 mloss team, which currently is (in alphabetical order)
 
-Mikio Braun <mikio@cs.tu-berlin.de>
-Cheng Soon Ong <chengsoon.ong@inf.ethz.ch>
-Soeren Sonnenburg <soeren.sonnenburg@first.fraunhofer.de>
+[Mikio Braun](mikio@cs.tu-berlin.de)
+[Cheng Soon Ong](mailto:chengsoon.ong@inf.ethz.ch)
+[Soeren Sonnenburg](mailto:soeren.sonnenburg@first.fraunhofer.de)
 
 
-FEATURES
+##Features
 
 The website contains quite a few features and is also quite specific,
 so you may or may not find it useful for your means. The features include:
@@ -27,13 +29,13 @@ so you may or may not find it useful for your means. The features include:
 The source code is organized into several sub-directories, so called
 "applications". Each directory is organized more or less according to
 the django standard, at least containing a definition of the models in
-models.py, and of the url mappings in urls.py. If you want to find out
-how a specific url is processed, have a look at the urls.py which tell
+models.py, and of the url mappings in `urls.py`. If you want to find out
+how a specific url is processed, have a look at the `urls.py` which tell
 you which method takes care of the request.
 
-CHANGELOG
+##Changelog
 
-June 2013
+###June 2013
 
   * Moving to Django 1.5.1:
    - Remove verify_exists from URLField (deprecated in Django 1.5)
@@ -55,7 +57,7 @@ June 2013
    - Markdown-2.3.1
 
 
-mloss.org svn-r482-September-2008
+###mloss.org svn-r482-September-2008
 
   * Several bugfixes and adjustments related to last minute
     changes in django 1.0:
@@ -69,38 +71,33 @@ mloss.org svn-r482-September-2008
    - minor style changes
    - change sorting order in forum (new threads first)
 
-mloss.org svn-r470-August-2008
+###mloss.org svn-r470-August-2008
 
  * Initial Release
 
-LICENSE
+
+##License
 
 The source code is licensed under GPLv3, and incorporates the work of
 a number of projects, cf. LICENSE for details.
 
 
-INSTALLING
+##Installing
 
-This website is built using the django framework
-(http://www.djangoproject.com). Refer to that website for general
-information about the framework. An online version of a very nice book
-on django can be found at http://www.djangobook.com/ . 
+You can get the mloss website development server set up as follows:
 
-Download Django 1.0 or a recent svn snapshot
+* Make sure you have virtualenv installed: `pip install virtualenv`.
+* Clone the mloss website sources: `git clone TODO`.
+* Run `virtualenv mloss` to setup virtualenv for the mloss code repository.
+* Install all the required packages:
 
-svn co http://code.djangoproject.com/svn/django/trunk/ Django
+    cd mloss
+    pip install -r requirements.txt
 
-and install it via the usual python setup.py install.
+* The development system should now be ready. Finally, to setup the database and run the
+  webserver you need to call the following commands:
 
-To locally test out the mloss.org webpage untar the source and run
+    python manage.py syncdb
+    python manage.py runserver
 
-python manage.py syncdb
-python manage.py runserver
-
-then open http://127.0.0.1:8000 in a web browser and have fun.
-
-In case you want to put things live follow the steps described at
-http://www.djangoproject.com/documentation/modpython/.
-
-Sincerely,
-	your mloss team.
+* Open http://127.0.0.1:8000 in a web browser.
