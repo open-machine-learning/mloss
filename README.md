@@ -94,8 +94,15 @@ You can get the mloss website development server set up as follows:
     cd mloss
     pip install -r requirements.txt
 
-* The development system should now be ready. Finally, to setup the database and run the
-  webserver you need to call the following commands:
+* The development system should now be ready. In each console that you want call
+  some of the mloss python code first initialize the environment:
+
+    source bin/activate
+
+* Captcha TODO
+
+* Finally, to setup the database and run the
+  webserver you need to call the following two commands:
 
     python manage.py syncdb
     python manage.py runserver
