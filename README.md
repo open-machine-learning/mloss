@@ -87,24 +87,13 @@ a number of projects, cf. LICENSE for details.
 You can get the mloss website development server set up as follows:
 
 * Make sure you have virtualenv installed: `pip install virtualenv`.
-* Clone the mloss website sources: `git clone TODO`.
+* Clone the mloss website sources: `git clone git@github.com:open-machine-learning/mloss.git`.
 * Run `virtualenv mloss` to setup virtualenv for the mloss code repository.
-* Install all the required packages:
-
-    cd mloss
-    pip install -r requirements.txt
-
-* The development system should now be ready. In each console that you want call
-  some of the mloss python code first initialize the environment:
-
-    source bin/activate
-
+* Install all the required packages: `cd mloss; pip install -r
+  requirements.txt`.
+* The development system should now be ready. In each console that you want to call
+  some of the mloss python code first initialize the environment: `source bin/activate`.
 * Captcha TODO
-
-* Finally, to setup the database and run the
-  webserver you need to call the following two commands:
-
-    python manage.py syncdb
-    python manage.py runserver
-
-* Open http://127.0.0.1:8000 in a web browser.
+* To setup the database, run `python manage.py syncdb`.
+* Finally, to start the webserver, run: `python manage.py runserver`.
+* Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in a web browser.
