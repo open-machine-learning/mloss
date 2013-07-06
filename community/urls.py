@@ -17,26 +17,26 @@ from django.views.generic.list import ListView
 
 forum_dict = {
     'queryset' : Forum.objects.all(),
-    'extra_context' : get_latest_news()
+#    'extra_context' : get_latest_news()
 }
 
 comm1_dict = {
     'template_name' : 'community/community1.html',
     'queryset' : Forum.objects.all(),
-    'extra_context' : get_latest_news()
+#    'extra_context' : get_latest_news()
 }
 
 comm2_dict = {
     'template_name' : 'community/community2.html',
     'queryset' : FeedItem.objects.all(),
-    'extra_context' : get_latest_news()
+#    'extra_context' : get_latest_news()
 }
 
 
 
 urlpatterns = patterns('',
 	(r'^$', 'community.views.get_summary_page'),
-	(r'^forum/$', ListView.as_view(), forum_dict),
+	(r'^forum/$', ListView.as_view(**forum_dict)),
 	(r'^blog/', include('blog.urls')),
 	(r'^(?P<slug>[A-Za-z0-9-_]+)/$', 'community.views.forum'),
 	(r'^rss/(?P<forum>[A-Za-z0-9-_]+)/$', 'community.feeds.ForumFeed'),
