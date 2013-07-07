@@ -3,9 +3,9 @@
 This is the source code of the [mloss.org](http://mloss.org) website. It was written by the
 mloss team, which currently is (in alphabetical order)
 
-[Mikio Braun](mikio@cs.tu-berlin.de)
-[Cheng Soon Ong](mailto:chengsoon.ong@inf.ethz.ch)
-[Soeren Sonnenburg](mailto:soeren.sonnenburg@first.fraunhofer.de)
+* [Mikio Braun](mailto:mikio@cs.tu-berlin.de)
+* [Cheng Soon Ong](mailto:chengsoon.ong@unimelb.edu.au)
+* [Soeren Sonnenburg](mailto:soeren.sonnenburg@first.fraunhofer.de)
 
 
 ##Features
@@ -38,19 +38,19 @@ you which method takes care of the request.
 ###June 2013
 
   * Moving to Django 1.5.1:
-   - Remove verify_exists from URLField (deprecated in Django 1.5)
-   - Replace from django.utils.hashcompat import sha_constructor with hashlib.sha1
-   - Update settings.py to set DATABASES
-   - Removed django.middleware.csrf.CsrfResponseMiddleware
-   - Updated django.conf.urls
-   - Replace django.views.generic.list_detail.object_list with django.views.generic.list.ListView
-   - Replace django.views.generic.simple.direct_to_template with django.views.generic.base.TemplateView
-   - Update django.contrib.syndication.feed
-   - Replace django.views.generic.list_detail.object_detail with django.views.generic.detail.DetailView
+   - Remove `verify_exists` from `URLField` (deprecated in Django 1.5)
+   - Replace `from django.utils.hashcompat import sha_constructor` with `hashlib.sha1`
+   - Update `settings.py` to set `DATABASES`
+   - Removed `django.middleware.csrf.CsrfResponseMiddleware`
+   - Updated `django.conf.urls`
+   - Replace `django.views.generic.list_detail.object_list` with `django.views.generic.list.ListView`
+   - Replace `django.views.generic.simple.direct_to_template` with `django.views.generic.base.TemplateView`
+   - Update `django.contrib.syndication.feed`
+   - Replace `django.views.generic.list_detail.object_detail` with `django.views.generic.detail.DetailView`
 
-   - Added {% csrf_token %} to templates
-   - Replace django.views.generic.date_based with django.views.generic.dates
-   - Use django.core.paginator
+   - Added `{% csrf_token %}` to templates
+   - Replace `django.views.generic.date_based` with `django.views.generic.dates`
+   - Use `django.core.paginator`
 
   * Needed to install
    - recaptcha-client-1.0.6
