@@ -93,7 +93,8 @@ You can get the mloss website development server set up as follows:
   requirements.txt`.
 * The development system should now be ready. In each console that you want to call
   some of the mloss python code first initialize the environment: `source bin/activate`.
-* Captcha TODO
+* Generate a [recaptcha public/private key](https://www.google.com/recaptcha) and update
+  the `RECAPTCHA_PUBLIC_KEY` and `RECAPTCHA_PRIVATE_KEY` variables in `settings.py`.
 * To setup the database, run `python manage.py syncdb`.
 * Finally, to start the webserver, run: `python manage.py runserver`.
 * Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in a web browser.
