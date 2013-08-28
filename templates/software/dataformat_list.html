@@ -1,12 +1,11 @@
 {% extends "software/base_software.html" %}
-{% load paginator %}
 
 {% block title %}Data Formats{% endblock %}
 
 {% block billboard %}Data Formats{% endblock %}
 
 {% block content %}
-    {% paginator 5 %}
+
     <ul>
     {% for o in object_list %}
         <li><a href="/software/dataformat/{{ o.slug }}/">
@@ -14,5 +13,21 @@
 	</li>
     {% endfor %}
     </ul>
-    {% paginator 5 %}
+
+{% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+{% endif %}
+
 {% endblock %}

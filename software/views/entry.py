@@ -9,13 +9,14 @@ from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect, Http404
 from django.contrib.auth.models import User
 from django.contrib.comments.forms import CommentForm
-from django.views.generic import list_detail
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
+from community.summary import get_latest_news
 
 from revision.models import Revision, Author, Tag, License, Language, OpSys, DataFormat
 from software.models import Software, SoftwareRating, SoftwareStatistics
 from software.forms import RatingForm
 from subscriptions.models import Subscriptions
-from community.views import get_latest_news
 
 import settings
 
@@ -100,11 +101,34 @@ def rate(request, software_id):
 
     return software_detail(request, software_id)
 
+class BaseItemView(ListView):
+    """
+    List of items with latest news included
+    """
+    paginate_by = 50
 
+    def get_context_data(self, **kwargs):
+        context = super(BaseItemView, self).get_context_data(**kwargs)
+        all_context = get_latest_news(context)
+        return all_context
+
+
+class AuthorsView(BaseItemView):
+    """
+    List of all authors
+    """
+    #context_object_name = 'author'
+    template_name = 'software/author_list.html'
+
+    def get_queryset(self):
+        return Author.objects.filter(name__isnull=False).distinct().order_by('slug')
+
+ 
 
 def software_all_authors(request):
+    """Deprecated"""
     authorlist = Author.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=authorlist,
                                    template_name='software/author_list.html',
@@ -112,19 +136,41 @@ def software_all_authors(request):
                                    )
 
 
+
+class TagsView(BaseItemView):
+    """
+    List of all tags
+    """
+    #context_object_name = 'tag'
+    template_name = 'software/tag_list.html'
+
+    def get_queryset(self):
+        return Tag.objects.filter(name__isnull=False).distinct().order_by('slug')
+
 def software_all_tags(request):
+    """Deprecated"""
     taglist = Tag.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=taglist,
                                    template_name='software/tag_list.html',
                                    extra_context=get_latest_news(),
                                    )
 
+class LicensesView(BaseItemView):
+    """
+    List of all licenses
+    """
+    #context_object_name = 'license'
+    template_name = 'software/license_list.html'
+
+    def get_queryset(self):
+        return License.objects.filter(name__isnull=False).distinct().order_by('slug')
 
 def software_all_licenses(request):
+    """Deprecated"""
     licenselist = License.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=licenselist,
                                    template_name='software/license_list.html',
@@ -132,9 +178,21 @@ def software_all_licenses(request):
                                    )
 
 
+
+class LanguagesView(BaseItemView):
+    """
+    List of all languages
+    """
+    #context_object_name = 'language'
+    template_name = 'software/language_list.html'
+
+    def get_queryset(self):
+        return Language.objects.filter(name__isnull=False).distinct().order_by('slug')
+
 def software_all_languages(request):
+    """Deprecated"""
     languagelist = Language.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=languagelist,
                                    template_name='software/language_list.html',
@@ -142,27 +200,63 @@ def software_all_languages(request):
                                    )
 
 
+class OpSysView(BaseItemView):
+    """
+    List of all Operating Systems
+    """
+    #context_object_name = 'opsys'
+    template_name = 'software/opsys_list.html'
+
+    def get_queryset(self):
+        return OpSys.objects.filter(name__isnull=False).distinct().order_by('slug')
+
 def software_all_opsyss(request):
+    """Deprecated"""
     opsyslist = OpSys.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=opsyslist,
                                    template_name='software/opsys_list.html',
                                    extra_context=get_latest_news(),
                                    )
 
+
+class DataFormatView(BaseItemView):
+    """
+    List of all Data Formats
+    """
+    #context_object_name = 'dataformat'
+    template_name = 'software/dataformat_list.html'
+
+    def get_queryset(self):
+        return DataFormat.objects.filter(name__isnull=False).distinct().order_by('slug')
+
 def software_all_dataformats(request):
+    """Deprecated"""
     dataformatlist = DataFormat.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=dataformatlist,
                                    template_name='software/dataformat_list.html',
                                    extra_context=get_latest_news(),
                                    )
 
+
+class UsersView(BaseItemView):
+    """
+    List of all Users
+    """
+    #context_object_name = 'user'
+    template_name = 'software/user_list.html'
+
+    def get_queryset(self):
+        return User.objects.filter(software__isnull=False).distinct().order_by('username')
+
+
 def user_with_software(request):
+    """Deprecated"""
     userlist = User.objects.filter(software__isnull=False).distinct().order_by('username')
-    return list_detail.object_list(request,
+    return DetailView.as_view(request,
                                    paginate_by=20,
                                    queryset=userlist,
                                    template_name='software/user_list.html',

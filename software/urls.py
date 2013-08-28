@@ -7,7 +7,18 @@ root URLConf to include this URLConf for any URL beginning with
 
 """
 
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns
+from django.views.generic.list import ListView
+from software.views.list import SoftwareInJMLRView, SoftwareByUpdatedDateView
+from software.views.list import SoftwareByUserView, SoftwareByPubdateView
+from software.views.list import SoftwareByTitleView, SoftwareByRatingView
+from software.views.list import SoftwareByViewsView, SoftwareByDownloadsView
+from software.views.list import SoftwareByTagView, SoftwareByAuthorView, SoftwareByLicenseView
+from software.views.list import SoftwareByLanguageView, SoftwareByOpSysView, SoftwareByDataFormatView
+from software.views.entry import AuthorsView, UsersView
+from software.views.entry import TagsView, LicensesView, LanguagesView, OpSysView, DataFormatView
+from revision.models import Revision
+
 
 from community.models import Forum
 forum_dict = {
@@ -17,19 +28,19 @@ forum_dict = {
 
 # General softwares views.
 urlpatterns = patterns('',
+    (r'^$', SoftwareByUpdatedDateView.as_view()),
+    (r'^date/$', SoftwareByUpdatedDateView.as_view()),
+    (r'^pubdate/$', SoftwareByPubdateView.as_view()),
+    (r'^title/$', SoftwareByTitleView.as_view()),
+    (r'^jmlr/$', SoftwareInJMLRView.as_view()),
+    (r'^views/$', SoftwareByViewsView.as_view()),
+    (r'^downloads/$', SoftwareByDownloadsView.as_view()),
+    (r'^rating/$', SoftwareByRatingView.as_view()),
     (r'^view/(?P<software_id>\d+)/$', 'software.views.entry.software_detail'), 
-    (r'^$', 'software.views.list.software_by_updated_date'),
-    (r'^date/$', 'software.views.list.software_by_updated_date'),
-    (r'^pubdate/$', 'software.views.list.software_by_pub_date'),
-    (r'^title/$', 'software.views.list.software_by_title'),
-    (r'^jmlr/$', 'software.views.list.software_in_jmlr'),
-    (r'^views/$', 'software.views.list.software_by_views'),
     (r'^viewstats/(?P<software_id>\d+)/$', 'software.views.entry.viewstats'),
     (r'^downloadstats/(?P<software_id>\d+)/$', 'software.views.entry.downloadstats'),
     (r'^viewstatspreview/(?P<software_id>\d+)/$', 'software.views.entry.viewstatspreview'),
     (r'^downloadstatspreview/(?P<software_id>\d+)/$', 'software.views.entry.downloadstatspreview'),
-    (r'^downloads/$', 'software.views.list.software_by_downloads'),
-    (r'^rating/$', 'software.views.list.software_by_rating'),
     (r'^submit/', 'software.forms.add_software'),
     (r'^update/(?P<software_id>\d+)/$', 'software.forms.edit_software'),
     (r'^update/(?P<software_id>\d+)/(?P<revision_id>\d+)$', 'software.forms.edit_software'),
@@ -40,22 +51,22 @@ urlpatterns = patterns('',
     (r'^rss/latest/$', 'software.feeds.RssSoftwareFeed'),
     (r'^rss/merged/(?P<software_id>\d+)/$', 'software.feeds.RssSoftwareAndCommentsFeed'),
     (r'^rss/comments/(?P<software_id>\d+)/$', 'software.feeds.RssCommentsFeed'),
-    (r'^author/$', 'software.views.entry.software_all_authors'),
-    (r'^author/(?P<slug>[^/]+)/$', 'software.views.list.software_by_author'),
-    (r'^users/$', 'software.views.entry.user_with_software'),
-    (r'^users/(?P<username>[^/]+)/$', 'software.views.list.software_by_user'),
-    (r'^license/$', 'software.views.entry.software_all_licenses'),
-    (r'^license/(?P<slug>[^/]+)/$', 'software.views.list.software_by_license'),
-    (r'^language/$', 'software.views.entry.software_all_languages'),
-    (r'^language/(?P<slug>[^/]+)/$', 'software.views.list.software_by_language'),
+    (r'^author/$', AuthorsView.as_view()),
+    (r'^author/(?P<slug>[^/]+)/$', SoftwareByAuthorView.as_view()),
+    (r'^users/$', UsersView.as_view()),
+    (r'^users/(?P<username>[^/]+)/$', SoftwareByUserView.as_view()),
+    (r'^license/$', LicensesView.as_view()),
+    (r'^license/(?P<slug>[^/]+)/$', SoftwareByLicenseView.as_view()),
+    (r'^language/$', LanguagesView.as_view()),
+    (r'^language/(?P<slug>[^/]+)/$', SoftwareByLanguageView.as_view()),
     (r'^search/$', 'software.forms.search_software'),
     (r'^rate/(?P<software_id>\d+)/$', 'software.views.entry.rate'),
-    (r'^tags/$', 'software.views.entry.software_all_tags'),
-    (r'^tags/(?P<slug>[^/]+)/$', 'software.views.list.software_by_tag'),
-    (r'^opsys/$', 'software.views.entry.software_all_opsyss'),
-    (r'^opsys/(?P<slug>[^/]+)/$', 'software.views.list.software_by_opsys'),
-    (r'^dataformat/$', 'software.views.entry.software_all_dataformats'),
-    (r'^dataformat/(?P<slug>[^/]+)/$', 'software.views.list.software_by_dataformats'),
-    (r'^forum/$', 'django.views.generic.list_detail.object_list', forum_dict),
+    (r'^tags/$', TagsView.as_view()),
+    (r'^tags/(?P<slug>[^/]+)/$', SoftwareByTagView.as_view()),
+    (r'^opsys/$', OpSysView.as_view()),
+    (r'^opsys/(?P<slug>[^/]+)/$', SoftwareByOpSysView.as_view()),
+    (r'^dataformat/$', DataFormatView.as_view()),
+    (r'^dataformat/(?P<slug>[^/]+)/$', SoftwareByDataFormatView.as_view()),
+    (r'^forum/$', ListView.as_view(), forum_dict),
     (r'^mail/(?P<software_id>\d+)/$', 'software.forms.contact_author'), 
 )

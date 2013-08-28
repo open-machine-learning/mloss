@@ -1,6 +1,5 @@
 {% extends "community/forum_base.html" %}
 
-{% load paginator %}
 {% load markup %}
 
 {% block title %}{{ thread.title }} ({{ forum.title }}){% endblock %}
@@ -13,7 +12,7 @@
 
 {% block content %}
 <br></br>
-{% paginator 5 %}
+
 <dl>
 	<dd>
 	{% for post in object_list %}
@@ -35,7 +34,22 @@
 	</dd>
 </dl>
 
-{% paginator 5 %}
+{% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+{% endif %}
+
 
 {% if posting %}
 <h2>Preview</h2>
@@ -50,7 +64,7 @@
 {% if thread.closed %}
 <p>Sorry, this thread is closed. No further replies are permitted.</p>
 {% else %}
-<form method='post' action='{{form_action}}'>
+<form method='post' action='{{form_action}}'>{% csrf_token %}
 	<dl>
 		{% if not user.is_authenticated %}
 		<dd><h3>Please login to create a thread.</h3></dd>

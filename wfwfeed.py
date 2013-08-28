@@ -1,5 +1,5 @@
 from django.contrib.sites.models import Site
-from django.contrib.syndication.feeds import Feed
+from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import rfc2822_date, SyndicationFeed
 from django.utils.xmlutils import SimplerXMLGenerator
 

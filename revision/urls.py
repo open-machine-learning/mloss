@@ -7,7 +7,7 @@ root URLConf to include this URLConf for any URL beginning with
 
 """
 
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns
 
 
 # General revision views.

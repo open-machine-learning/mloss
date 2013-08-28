@@ -19,7 +19,7 @@ class Subscriptions(models.Model):
     # user, title, url
     user = models.ForeignKey(User)
     title = models.CharField(max_length=200)
-    url = models.URLField(verify_exists=False)
+    url = models.URLField()
     # if bookmark == true don't send out notifications
     bookmark = models.BooleanField(default=False)
 

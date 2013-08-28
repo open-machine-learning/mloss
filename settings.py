@@ -20,16 +20,23 @@ MANAGERS = ADMINS
 R_CRAN_BOT = 'r-cran-robot'
 
 if PRODUCTION:
-    DATABASE_USER = 'mloss'             # Not used with sqlite3.
-    DATABASE_PASSWORD = 'XXXXXXXXX'     # Not used with sqlite3.
-    DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-    DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
-    DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-    DATABASE_NAME = 'mloss'             # Or path to database file if using sqlite3.
+    DATABASES = {
+        'default': {
+            'USER': 'mloss',             # Not used with sqlite3.
+            'PASSWORD': 'XXXXXXXXX',     # Not used with sqlite3.
+            'HOST': '',             # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',             # Set to empty string for default. Not used with sqlite3.
+            'ENGINE': 'django.db.backends.mysql',           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
+            'NAME': 'mloss',             # Or path to database file if using sqlite3.
+        }
+    }
 else:
-    DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-    DATABASE_NAME = 'mloss.db'             # Or path to database file if using sqlite3.
-
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
+            'NAME': 'mloss.db',             # Or path to database file if using sqlite3.
+        }
+    }
 
 
 LOGIN_REDIRECT_URL='/'
@@ -77,27 +84,28 @@ MAX_IMAGE_UPLOAD_HEIGHT = 1024
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media_admin/'
+#ADMIN_MEDIA_PREFIX = '/media_admin/'
+STATIC_URL = '/media_admin/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'ccku5%_-8r2#*rb(yh)j!11ar12vx_tll5u(11%3l=^k8rfe=y'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-)
+    'django.contrib.messages.middleware.MessageMiddleware',
+    )
 
 ROOT_URLCONF = 'mloss.urls'
 

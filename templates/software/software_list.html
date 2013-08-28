@@ -1,7 +1,6 @@
 {% extends "software/base_software.html" %}
 {% load safe_markup %}
 {% load markup %}
-{% load paginator %}
 {% load show_stars %}
 {% load comments %}
 
@@ -97,8 +96,6 @@ All entries.
 {% block content %}
 
 {% if object_list %}
-
-{% paginator 5%} 
 
 {% for object in object_list %}
 
@@ -238,7 +235,22 @@ All entries.
 </td></tr></table>
 {% endfor %}
 
-{% paginator 5%} 
+{% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="/software?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="/software?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+{% endif %}
+
 
 {% else %}
 {% if search_term %}

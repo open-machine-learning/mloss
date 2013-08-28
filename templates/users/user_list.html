@@ -1,5 +1,4 @@
 {% extends "base_2col.html" %}
-{% load paginator %}
 
 {% block sectionid %}browse{% endblock %}
 
@@ -8,7 +7,6 @@
 {% block billboard %}User List{% endblock %}
 
 {% block content %}
-	{% paginator 5 %}
 	<table>
     {% for curuser in object_list %}
 	<tr>
@@ -18,8 +16,23 @@
 	</tr>
     {% endfor %}
 	</table>
-	{% paginator 5 %}
 {% endblock %}
+
+{% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+{% endif %}
 
 {% block content-related %}
 <dt>Viewing List of Users.</dt>

@@ -259,7 +259,7 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 
 					<p>Rate this software. "0" means poor and "5" means excellent. Ratings can
 					be changed later on.</p>
-					<form method="post" action="/software/rate/{{ object.software.id }}/">
+					<form method="post" action="/software/rate/{{ object.software.id }}/">{% csrf_token %}
 						<table>
 							{{ ratingform|safe }}
 						</table>

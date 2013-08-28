@@ -7,7 +7,6 @@ from django import forms
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.views.generic.create_update import update_object
 from django.forms.widgets import RadioSelect, Textarea
 from django.utils.html import strip_tags
 from django.core.mail import send_mail

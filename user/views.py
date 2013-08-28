@@ -1,4 +1,5 @@
-from django.views.generic.list_detail import object_list
+#from django.views.generic.list_detail import object_list
+from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django import forms
@@ -88,7 +89,7 @@ class ChangeUserDetailsForm(forms.Form):
 
 def show_user_list(request):
     if request.user.is_superuser:
-        return object_list(request,
+        return ListView.as_view(request,
                 paginate_by=10,
                 queryset=User.objects.all(),
                 template_name='users/user_list.html')

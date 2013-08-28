@@ -9,7 +9,7 @@
 	<p class="error">Please correct the errors below:</p>
 {% endif %}
 
-<form action="" method="POST">
+<form action="" method="POST">{% csrf_token %}
 	<dl>
 		
 	{% for field in form %}
