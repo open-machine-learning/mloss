@@ -35,4 +35,4 @@ class BlogTest(TestCase):
 
     def test_index(self):
         r = self.client.get(self.url['byyear'])
-        self.assertTemplateUsed(r, 'blog/post_archive.html')
+        self.assertTemplateUsed(r, 'blog/blogitem_archive_year.html')
