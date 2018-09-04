@@ -1,7 +1,7 @@
 # Django settings for mloss project.
 
-VERSION = "r0000"
-PRODUCTION = False # set to True when project goes live
+VERSION = "v0.1.1"
+PRODUCTION = True # set to True when project goes live
 
 if not PRODUCTION:
     DEBUG = True
@@ -20,15 +20,22 @@ MANAGERS = ADMINS
 R_CRAN_BOT = 'r-cran-robot'
 
 if PRODUCTION:
-    DATABASE_USER = 'mloss'             # Not used with sqlite3.
-    DATABASE_PASSWORD = 'XXXXXXXXX'     # Not used with sqlite3.
-    DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-    DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
-    DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-    DATABASE_NAME = 'mloss'             # Or path to database file if using sqlite3.
+    DATABASES = {
+    'default': {
+        'NAME': 'DB',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'DBUSER',
+        'PASSWORD': 'DBPW',
+    	}
+    }
 else:
-    DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
-    DATABASE_NAME = 'mloss.db'             # Or path to database file if using sqlite3.
+    DATABASES = {
+    'default': {
+        'NAME': 'mloss.db',
+        'ENGINE': 'sqlite3',
+    	}
+    }
+
 
 
 
@@ -84,20 +91,21 @@ SECRET_KEY = 'ccku5%_-8r2#*rb(yh)j!11ar12vx_tll5u(11%3l=^k8rfe=y'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader'
 )
+
+
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.middleware.csrf.CsrfResponseMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
+
 
 ROOT_URLCONF = 'mloss.urls'
 
@@ -136,6 +144,6 @@ INSTALLED_APPS = (
     'mloss.captcha',
 )
 
-RECAPTCHA_PUBLIC_KEY = 'RECAPTCHAPUBLIC'
-RECAPTCHA_PRIVATE_KEY = 'RECAPTCHAPRIVATE'
+RECAPTCHA_PUBLIC_KEY = 'KEY'
+RECAPTCHA_PRIVATE_KEY = 'KEY'
 
