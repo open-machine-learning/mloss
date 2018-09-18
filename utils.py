@@ -2,7 +2,7 @@ import re
 from django.template.defaultfilters import stringfilter
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
-from django.contrib.comments.signals import comment_will_be_posted
+from django_comments.signals import comment_will_be_posted
 import settings
 import datetime
 

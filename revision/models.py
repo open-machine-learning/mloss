@@ -4,8 +4,7 @@ from django.db import models
 from django.db.models import Q
 
 from software.models import Software
-from markdown import markdown
-#from utils import parsewords, slugify, slugify_uniquely
+from markdown2 import markdown
 from utils import parsewords, slugify
 
 # make sure these lists of variables are up-to-date (i.e. match
@@ -29,8 +28,8 @@ class Author(models.Model):
         super(Author,self).save(kwargs)
 
     def get_absolute_url(self):
-        return('mloss.software.views.list.software_by_author', (), { 'slug': self.slug })
-    get_absolute_url = models.permalink(get_absolute_url)
+        from django.urls import reverse
+        return reverse('sw_by_author', { 'slug': self.slug })
 
     def __unicode__(self):
         return unicode(self.name)
@@ -45,8 +44,8 @@ class Tag(models.Model):
         super(Tag,self).save(kwargs)
 
     def get_absolute_url(self):
-        return('mloss.software.views.list.software_by_tag', (), { 'slug': self.slug })
-    get_absolute_url = models.permalink(get_absolute_url)
+        from django.urls import reverse
+        return reverse('sw_by_tag', { 'slug': self.slug })
 
     def __unicode__(self):
         return unicode(self.name)
@@ -62,8 +61,8 @@ class License(models.Model):
         super(License,self).save(kwargs)
 
     def get_absolute_url(self):
-        return('mloss.software.views.list.software_by_license', (), { 'slug': self.slug })
-    get_absolute_url = models.permalink(get_absolute_url)
+        from django.urls import reverse
+        return reverse('sw_by_license', { 'slug': self.slug })
 
     def __unicode__(self):
         return unicode(self.name)
@@ -78,8 +77,8 @@ class Language(models.Model):
         super(Language,self).save(kwargs)
 
     def get_absolute_url(self):
-        return('mloss.software.views.list.software_by_language', (), { 'slug': self.slug })
-    get_absolute_url = models.permalink(get_absolute_url)
+        from django.urls import reverse
+        return reverse('sw_by_language', { 'slug': self.slug })
 
     def __unicode__(self):
         return unicode(self.name)
@@ -94,8 +93,8 @@ class OpSys(models.Model):
         super(OpSys,self).save(kwargs)
 
     def get_absolute_url(self):
-        return('mloss.software.views.list.software_by_opsys', (), { 'slug': self.slug })
-    get_absolute_url = models.permalink(get_absolute_url)
+        from django.urls import reverse
+        return reverse('sw_by_opsys', { 'slug': self.slug })
 
     def __unicode__(self):
         return unicode(self.name)
@@ -110,8 +109,8 @@ class DataFormat(models.Model):
         super(DataFormat,self).save(kwargs)
 
     def get_absolute_url(self):
-        return('mloss.software.views.list.software_by_dataformat', (), { 'slug': self.slug })
-    get_absolute_url = models.permalink(get_absolute_url)
+        from django.urls import reverse
+        return reverse('sw_by_dataformat', { 'slug': self.slug })
 
     def __unicode__(self):
         return unicode(self.name)
@@ -207,8 +206,8 @@ class Revision(models.Model):
     description_html = models.TextField(editable=False)
     changes = models.TextField()
     changes_html = models.TextField(editable=False)
-    project_url = models.URLField(verify_exists=False)
-    jmlr_mloss_url = models.URLField(verify_exists=False, blank=True)
+    project_url = models.URLField()
+    jmlr_mloss_url = models.URLField(blank=True)
     tags = models.CharField(max_length=200,blank=True)
     taglist = models.ManyToManyField(Tag, editable=False)
     language = models.CharField(max_length=200,blank=True)
@@ -223,7 +222,7 @@ class Revision(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField()
 
-    download_url = models.URLField(verify_exists=False, blank=True, null=True)
+    download_url = models.URLField(blank=True, null=True)
     tarball = models.FileField(upload_to="code_archive/",blank=True,null=True)
 
     # revision number, where 0 means latest
@@ -242,7 +241,7 @@ class Revision(models.Model):
     def is_downloadable(self):
         return self.tarball or self.download_url
 
-    def get(self, a, b):
+    def get(self, a):
         if a in self.__dict__:
             return self.__dict__[a]
         elif a == 'title':
@@ -335,28 +334,28 @@ class Revision(models.Model):
         return unicode(self.software.title)
 
     def get_absolute_url(self):
-        return('revision.views.revision_detail', [str(self.id)])
-    get_absolute_url = models.permalink(get_absolute_url)
+        from django.urls import reverse
+        return reverse('revision_detail', kwargs={'revision_id' : self.id})
 
     def get_absolute_homepage_url(self):
-        return('revision.views.view_homepage', [str(self.id)])
-    get_absolute_homepage_url = models.permalink(get_absolute_homepage_url)
+        from django.urls import reverse
+        return reverse('view_homepage', kwargs={'revision_id' : self.id})
 
     def get_absolute_jmlr_homepage_url(self):
-        return('revision.views.view_jmlr_homepage', [str(self.id)])
-    get_absolute_jmlr_homepage_url = models.permalink(get_absolute_jmlr_homepage_url)
+        from django.urls import reverse
+        return reverse('view_jmlr_homepage', kwargs={'revision_id' : self.id})
 
     def get_absolute_download_url(self):
-        return('revision.views.download_revision', [str(self.id)])
-    get_absolute_download_url = models.permalink(get_absolute_download_url)
+        from django.urls import reverse
+        return reverse('download_revision', kwargs={'revision_id' : self.id})
 
     def get_absolute_bib_url(self):
-        return('revision.views.get_bibitem', [str(self.id)])
-    get_absolute_bib_url = models.permalink(get_absolute_bib_url)
+        from django.urls import reverse
+        return reverse('get_bibitem', kwargs={'revision_id' : self.id})
 
     def get_absolute_paperbib_url(self):
-        return('revision.views.get_paperbibitem', [str(self.id)])
-    get_absolute_paperbib_url = models.permalink(get_absolute_paperbib_url)
+        from django.urls import reverse
+        return reverse('get_paperbibitem', kwargs={'revision_id' : self.id})
 
     class Meta:
         ordering = ('-pub_date',)

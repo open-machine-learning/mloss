@@ -98,7 +98,7 @@ All entries.
 
 {% if object_list %}
 
-{% paginator 5%} 
+{% paginator 5 %} 
 
 {% for object in object_list %}
 
@@ -130,7 +130,7 @@ All entries.
 								<a href="{{ object.software.get_absolute_url|escape }}"> {{ object.software.title }} {{ object.version }}</a>
 							</h2>
 							<p class="more">
-							by <a href="/software{{ object.software.user.get_absolute_url|escape }}">{{ object.software.user.username }}</a> 
+							by <a href="/software/users/{{ object.software.user|escape }}">{{ object.software.user.username }}</a> 
 							- {{ object.updated_date|date:"F j, Y, H:i:s" }} CET
 							[
 							{% if object.project_url %}<a href="{{ object.get_absolute_homepage_url }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage" title="Project Homepage"></img></a> {% endif %}
@@ -142,8 +142,8 @@ All entries.
 							]
 
 {% if object.software.total_number_of_views %}
-	<a href="/software/viewstats/{{ object.software.id }}">{{ object.software.total_number_of_views }} view{{ object.software.total_number_of_views|pluralize }}</a>{% endif %}{% if object.software.total_number_of_downloads %},
-	 <a href="/software/downloadstats/{{ object.software.id }}">{{ object.software.total_number_of_downloads }} download{{ object.software.total_number_of_downloads|pluralize }}</a>{% endif %}{% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, 
+	{{ object.software.total_number_of_views }} view{{ object.software.total_number_of_views|pluralize }}{% endif %}{% if object.software.total_number_of_downloads %},
+	 {{ object.software.total_number_of_downloads }} download{{ object.software.total_number_of_downloads|pluralize }}{% endif %}{% get_comment_list for software.software object.id as comment_list %}{% if comment_list %}, 
 	{% get_comment_count for object as comment_count %}
 	<a href="{{ object.get_last_comments_url }}">{{ comment_count }} comment{{ comment_count|pluralize }}</a>{% endif %}, {{ object.software.get_subscription_count }} subscription{{ object.software.get_subscription_count|pluralize }}
 							</p>
@@ -238,7 +238,7 @@ All entries.
 </td></tr></table>
 {% endfor %}
 
-{% paginator 5%} 
+{% paginator 5 %} 
 
 {% else %}
 {% if search_term %}

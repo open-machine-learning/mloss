@@ -4,13 +4,15 @@ and posts, adding new threads, and adding replies.
 """
 
 from community.models import Forum,Thread,Post
+from community.models import Forum
 from datetime import datetime
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django import forms
 from django.contrib.auth import authenticate, login
-from django.views.generic import list_detail
+
+from django.views.generic.list import ListView
 from community.summary import get_latest_news
 
 class NewPostForm(forms.Form):
@@ -106,47 +108,56 @@ def create_newthreadform(request):
 
 
 def forum(request, slug):
-	"""
-	Displays a list of threads within a forum.
-	Threads are sorted by their sticky flag, followed by their 
-	most recent post.
-	"""
-	f = get_object_or_404(Forum, slug=slug)
+ 	"""
+ 	Displays a list of threads within a forum.
+ 	Threads are sorted by their sticky flag, followed by their 
+ 	most recent post.
+ 	"""
+ 	f = get_object_or_404(Forum, slug=slug)
+ 	inputform = create_newthreadform(request)
+ 	extra= get_latest_news()
+ 	extra['forum']=f
+ 	extra['form']=inputform
+ 	extra['form_action']='new/'
+ 	extra['threads']=f.thread_set.all().order_by('thread_latest_post')
 
-	inputform = create_newthreadform(request)
-	extra= get_latest_news()
-	extra['forum']=f
-	extra['form']=inputform
-	extra['form_action']='new/'
-	extra['threads']=f.thread_set.all().order_by('thread_latest_post')
+ 	return render(request, 'community/thread_list.html',
+ 		{'context':  extra})
 
-	return render_to_response('community/thread_list.html',
-		RequestContext(request, extra))
+
+class ForumView(ListView):
+
+	def get_queryset(self, **kwargs):
+		return Forum.objects.all()
+	
+	def get_context_data(self, **kwargs):
+		return get_latest_news()
+
 
 def thread(request, forum, thread):
-	"""
-	Increments the viewed count on a thread then displays the 
-	posts for that thread, in chronological order.
-	"""
-	f = get_object_or_404(Forum, slug=forum)
-	t = get_object_or_404(Thread, pk=thread)
-	p = t.post_set.all().order_by('time')
+ 	"""
+ 	Increments the viewed count on a thread then displays the 
+ 	posts for that thread, in chronological order.
+ 	"""
+ 	f = get_object_or_404(Forum, slug=forum)
+ 	t = get_object_or_404(Thread, pk=thread)
+ 	p = t.post_set.all().order_by('time')
 
-	t.views += 1
-	t.save()
+ 	t.views += 1
+ 	t.save()
 
-	inputform = create_newpostform(request)
-	extra= get_latest_news()
-	extra['forum']=f
-	extra['form']=inputform
-	extra['thread']=t
-	extra['form_action']='reply/'
+ 	inputform = create_newpostform(request)
+ 	extra= get_latest_news()
+ 	extra['forum']=f
+ 	extra['form']=inputform
+ 	extra['thread']=t
+ 	extra['form_action']='reply/'
 
-	return list_detail.object_list(request,
-			paginate_by=10,
-			queryset=p,
-			template_name='community/thread.html',
-			extra_context=extra)
+ 	return ListView.as_view(request,
+ 			paginate_by=10,
+ 			queryset=p,
+ 			template_name='community/thread.html',
+ 			extra_context=extra)
 
 def newthread(request, forum):
 	"""
@@ -177,76 +188,85 @@ def newthread(request, forum):
 					p.save()
 					return HttpResponseRedirect(t.get_absolute_url())
 				else:
-					return render_to_response('community/thread_list.html',
-							RequestContext(request, {
+					return render(request, 'community/thread_list.html', {
 							'posting' : p,
 							'forum': f,
 							'form': form,
 							'form_action' : '',
 							'thread': t
-							}))
+							})
 	else:
 		form = create_newthreadform(request)
 	
-	return render_to_response('community/thread_list.html',
-			RequestContext(request, {
+	return render(request, 'community/thread_list.html', {
 			'forum': f,
 			'form': form,
 			'form_action' : '',
 			'threads': t
-			}))
+			})
 
-def reply(request, forum, thread):
-	"""
-	If a thread isn't closed, and the user is logged in, post a reply
-	to a thread. Note we don't have "nested" replies at this stage.
-	"""
-	f = get_object_or_404(Forum, slug=forum)
-	t = get_object_or_404(Thread, pk=thread)
-	p = t.post_set.all().order_by('-time')[:1]
 
-	if t.closed:
-		return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
 
-	if request.method == 'POST':
-		form = create_newpostform(request)
+class Reply(ListView):
+	def get_template_names(self):
+		return 'community/thread.html'
 
-		if form.is_valid():
-			if request.user.is_authenticated() or form.login(request):
-				p = Post(
-					thread=t, 
-					author=request.user,
-					body=form.cleaned_data['body'],
-					time=datetime.now(),
-					)
-				if form.data.has_key(u'post'):
-					p.save()
-					return HttpResponseRedirect(p.get_absolute_url())
-				else:
-					return render_to_response('community/thread.html',
-						RequestContext(request, {
-							'forum': f,
-							'form': form,
-							'thread': t,
-							'posting': p,
-							'form_action' : ''}))
-	else:
-		form = create_newpostform(request)
+	def get_queryset(self, **kwargs):
+		forum = self.kwargs['forum']
+                thread = self.kwargs['thread']
+		f = get_object_or_404(Forum, slug=forum)
+		t = get_object_or_404(Thread, pk=thread)
+		p = t.post_set.all().order_by('-time')[:1]
 
-	return list_detail.object_list(request,
-			paginate_by=10,
-			queryset=p,
-			template_name='community/thread.html',
+		if t.closed:
+			return HttpResponseRedirect('/accounts/login?next=%s' % request.path)
+
+		if request.method == 'POST':
+			form = create_newpostform(request)
+
+			if form.is_valid():
+				if request.user.is_authenticated() or form.login(request):
+					p = Post(
+						thread=t, 
+						author=request.user,
+						body=form.cleaned_data['body'],
+						time=datetime.now(),
+						)
+					if form.data.has_key(u'post'):
+						p.save()
+						return HttpResponseRedirect(p.get_absolute_url())
+					else:
+						return render(request, 'community/thread.html',{
+								'forum': f,
+								'form': form,
+								'thread': t,
+								'posting': p,
+								'form_action' : ''})
+		else:
+			form = create_newpostform(request)
+		return p
+	
+	def get_context_data(self, **kwargs):
+		forum = self.kwargs['forum']
+                thread = self.kwargs['thread']
+                f = get_object_or_404(Forum, slug=forum)
+                t = get_object_or_404(Thread, pk=thread)
+
 		extra_context= {
 			'forum': f,
 			'form': form,
 			'thread': t,
-			'form_action' : ''})
+			'form_action' : ''}
+		return extra_context
+	
+	def get_paginate_by(self):
+		return 10
 
 
 def community_base(request):
-		return list_detail.object_list(request,
+		return ListView.as_view(request,
 					template_name='community_base.html',)
+
 
 def get_summary_page(request):
 	"""
@@ -254,5 +274,5 @@ def get_summary_page(request):
 	- Latest forum posts
 	- Latest feeds from external sites
 	"""
-	return render_to_response('community/summary.html',
-			RequestContext(request, get_latest_news()))
+	return render(request, 'community/summary.html',
+			{'context': get_latest_news()})

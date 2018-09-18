@@ -106,7 +106,7 @@
 									<a href="{{ object.software.get_absolute_url }}"> {{ object.software.title }} {{ object.version }}</a>
 								</h2>
 								<p class="more">
-								by <a href="/software{{ object.software.user.get_absolute_url|escape }}">{{ object.software.user.username }}</a> 
+								by <a href="/software/users/{{ object.software.user|escape }}">{{ object.software.user.username }}</a> 
 								- {{ object.updated_date|date:"F j, Y, H:i:s" }} CET
 								[
 								{% if object.project_url|escape %}<a href="{{ object.get_absolute_homepage_url }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage" title="Project Homepage"></img></a> {% endif %}
@@ -119,18 +119,14 @@
 								</p>
 
                                 <p class="more">
-								<a href="/software/viewstats/{{ object.software.id }}">{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize}}</a> ({{ todays_stats.number_of_views }} today),
-<a href="/software/downloadstats/{{ object.software.id }}">{{ object.total_number_of_downloads }} 
-download{{ object.total_number_of_downloads|pluralize}}</a> 
+								{{ object.total_number_of_views }} view{{ object.total_number_of_views|pluralize}} ({{ todays_stats.number_of_views }} today),
+{{ object.total_number_of_downloads }} 
+download{{ object.total_number_of_downloads|pluralize}}
 ( {{ todays_stats.number_of_downloads }} today ){% get_comment_list for software.software object.software.id as comment_list %}{% if comment_list %}, 
   {% get_comment_count for object.software as comment_count %}
   {{ comment_count }} comment{{ comment_count|pluralize }}{% endif %}, {{ object.software.get_subscription_count }} subscription{{ object.software.get_subscription_count|pluralize }}
 
 
-                                </p>
-                                <p class="more">
-								<a href="/software/viewstats/{{ object.software.id }}"><img src="/software/viewstatspreview/{{object.software.id}}/"></img></a>
-								<a href="/software/downloadstats/{{ object.software.id }}"><img src="/software/downloadstatspreview/{{object.software.id}}/"></img></a>
                                 </p>
 							</td>
 							{% if object.software.total_number_of_votes %}
@@ -155,7 +151,8 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 			<td>
 				<dl>
 					<dt>Description:</dt>
-					<dd>{{ object.description|markdown:"safe" }}</dd>
+					
+					<dd>{{ object.description_html|safe }}</dd>
 				</dl>
 			</td>
 		</tr>
@@ -176,16 +173,7 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 					{% if object.paper_bib %}
 					<dd><b>Corresponding Paper BibTeX Entry:</b>
 					<a href="{{ object.get_absolute_paperbib_url }}">Download</a></dd>
-					{% endif %}
 
-					{% if object.project_url %}
-					<dd><b>URL:</b>
-					<a href="{{ object.project_url|escape }}">Project Homepage</a></dd>
-					{% endif %}
-
-					{% if object.jmlr_mloss_url %}
-					<dd><b>JMLR MLOSS PaperURL:</b>
-					<a href="{{ object.get_absolute_jmlr_homepage_url }}">JMLR-MLOSS Paper Homepage</a></dd>
 					{% endif %}
 
 					{% if object.get_opsyslist %}
@@ -259,7 +247,7 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 
 					<p>Rate this software. "0" means poor and "5" means excellent. Ratings can
 					be changed later on.</p>
-					<form method="post" action="/software/rate/{{ object.software.id }}/">
+					<form method="post" action="/software/rate/{{ object.software.id }}/">{% csrf_token %}
 						<table>
 							{{ ratingform|safe }}
 						</table>
@@ -281,7 +269,8 @@ download{{ object.total_number_of_downloads|pluralize}}</a>
 				<div class="comment">
 					<dl>
 						<dt id="c{{ comment.id }}">{{ comment.name }} (on {{ comment.submit_date|date:"F j, Y, H:i:s" }})</dt>
-						<dd>{{ comment.comment|markdown:"safe" }}</dd>
+						
+						<dd>{{ comment.comment|safe }}</dd>
 					</dl>
 				</div>
 				</dd></dl>

@@ -5,19 +5,59 @@ rated and viewed according to various criteria.
 """
 
 from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import render
+
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect, Http404
 from django.contrib.auth.models import User
-from django.contrib.comments.forms import CommentForm
-from django.views.generic import list_detail
+
+from django_comments.forms import CommentForm
+
+from django.views.generic.list import ListView
+from django.http import HttpResponse
+from django.views.generic import View
+
 
 from revision.models import Revision, Author, Tag, License, Language, OpSys, DataFormat
 from software.models import Software, SoftwareRating, SoftwareStatistics
 from software.forms import RatingForm
-from subscriptions.models import Subscriptions
+from subscriptions2.models import Subscriptions
 from community.views import get_latest_news
 
+from django.shortcuts import render
+
 import settings
+
+class SoftwareDetail(ListView):
+     def get_template_names(self):
+         return 'software_detail.html'
+   
+     def get_queryset(self):
+         software_id = self.kwargs['software_id']
+         software = get_object_or_404(Software, pk=software_id)
+         revisions = Revision.objects.filter(software=software)
+         entry = get_object_or_404(revisions, revision=0)
+         todays_stats = software.update_views()
+
+         if revisions.count() <= 1:
+             revisions = None
+
+         ratingform = None
+       
+         if self.request.user.is_authenticated() and not self.request.user == software.user:
+             try:
+                 r = SoftwareRating.objects.get(user__id = self.request.user.id, software=software)
+                 ratingform = RatingForm({'features': r.features,
+                     'usability': r.usability,
+                     'documentation': r.documentation})
+
+             except SoftwareRating.DoesNotExist:
+                 ratingform = RatingForm()
+         return render(self.request, 'software/software_detail.html',
+             { 'object': entry,
+                 'ratingform': ratingform,
+                 'todays_stats' : todays_stats,
+                 'revisions' : revisions })
 
 def software_detail(request, software_id):
     """
@@ -51,12 +91,11 @@ def software_detail(request, software_id):
         except SoftwareRating.DoesNotExist:
             ratingform = RatingForm()
     
-    return render_to_response('software/software_detail.html',
+    return render(request, 'software/software_detail.html',
             { 'object': entry,
                 'ratingform': ratingform,
                 'todays_stats' : todays_stats,
-                'revisions' : revisions },
-            context_instance=RequestContext(request))
+                'revisions' : revisions })
 
 
 def subscribe_software(request, software_id, bookmark=False):
@@ -81,6 +120,7 @@ def unsubscribe_software(request, software_id, bookmark=False):
 def remove_bookmark(request, software_id):
     return unsubscribe_software(request, software_id, bookmark=True)
 
+
 def rate(request, software_id):
     software = get_object_or_404(Software, pk=software_id)
     if request.user.is_authenticated() and not request.user == software.user:
@@ -101,73 +141,102 @@ def rate(request, software_id):
     return software_detail(request, software_id)
 
 
+class ClassListView(ListView):
+    """
+    Create Class-based View
+    """
+    context_object_name='object_list'
 
-def software_all_authors(request):
-    authorlist = Author.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=authorlist,
-                                   template_name='software/author_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
+    def get_paginate_by(self, dummy):
+        return 20
 
-
-def software_all_tags(request):
-    taglist = Tag.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=taglist,
-                                   template_name='software/tag_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
-
-
-def software_all_licenses(request):
-    licenselist = License.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=licenselist,
-                                   template_name='software/license_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
+class SoftwareAllAuthors(ClassListView):
+    def get_queryset(self, **kwargs):
+        return Author.objects.filter(name__isnull=False).distinct().order_by('slug')
+    
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareAllAuthors, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
+    
+    def get_template_names(self, **kwargs):
+        return 'software/author_list.html'
 
 
-def software_all_languages(request):
-    languagelist = Language.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=languagelist,
-                                   template_name='software/language_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
+class SoftwareAllTags(ClassListView):
+    def get_queryset(self, **kwargs):
+        return Tag.objects.filter(name__isnull=False).distinct().order_by('slug')
+    
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareAllTags, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
+    
+    def get_template_names(self, **kwargs):
+        return 'software/tag_list.html'
 
 
-def software_all_opsyss(request):
-    opsyslist = OpSys.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=opsyslist,
-                                   template_name='software/opsys_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
+class SoftwareAllLicenses(ClassListView):
+    def get_queryset(self, **kwargs):
+        return License.objects.filter(name__isnull=False).distinct().order_by('slug')
+    
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareAllLicenses, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
+    
+    def get_template_names(self, **kwargs):
+        return 'software/license_list.html'
 
-def software_all_dataformats(request):
-    dataformatlist = DataFormat.objects.filter(name__isnull=False).distinct().order_by('slug')
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=dataformatlist,
-                                   template_name='software/dataformat_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
+class SoftwareAllLanguages(ClassListView):
+    def get_queryset(self, **kwargs):
+        return Language.objects.filter(name__isnull=False).distinct().order_by('slug')
+    
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareAllLanguages, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
+    
+    def get_template_names(self, **kwargs):
+        return 'software/language_list.html'
 
-def user_with_software(request):
-    userlist = User.objects.filter(software__isnull=False).distinct().order_by('username')
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=userlist,
-                                   template_name='software/user_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
+class SoftwareAllOpSyss(ClassListView):
+    def get_queryset(self, **kwargs):
+        return OpSys.objects.filter(name__isnull=False).distinct().order_by('slug')
+
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareAllOpSyss, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
+    
+    def get_template_names(self, **kwargs):
+        return 'software/opsys_list.html'
+
+
+class SoftwareAllDataFormats(ClassListView):
+    def get_queryset(self, **kwargs):
+        return DataFormat.objects.filter(name__isnull=False).distinct().order_by('slug')
+
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareAllDataFormats, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
+    
+    def get_template_names(self, **kwargs):
+        return 'software/dataformat_list.html'
+
+class UserWithSoftware(ClassListView):
+    def get_queryset(self, **kwargs):
+        return User.objects.filter(software__isnull=False).distinct().order_by('username')
+
+    def get_context_data(self, **kwargs):
+        context=super(UserWithSoftware, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
+    
+    def get_template_names(self, **kwargs):
+        return 'software/user_list.html'
+
 
 def stats_helper(request, software_id, type, dpi):
     # matplotlib needs a writable home directory

@@ -1,17 +1,22 @@
 import datetime
 from django.utils.html import strip_tags
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.comments.models import Comment
+
+from django_comments.models import Comment
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from django.shortcuts import get_object_or_404
-from django.contrib.comments.signals import comment_was_posted
 
-from markdown import markdown
+from django_comments.signals import comment_was_posted
+
+
+from markdown2 import markdown
 from utils import send_mails
-from subscriptions.models import Subscriptions
+from subscriptions2.models import Subscriptions
+
+
 
 # Create your models here.
 class Software(models.Model):
@@ -109,9 +114,8 @@ Friendly,
         return unicode(self.title)
 
     def get_absolute_url(self):
-        return ('software.views.entry.software_detail', (), { 'software_id': str(self.id) })
-
-    get_absolute_url = models.permalink(get_absolute_url)
+        from django.urls import reverse
+        return reverse('sw_detail', kwargs={ 'software_id': str(self.id) })
 
     def get_stats_for_today(self):
         t = datetime.date.today().strftime("%Y-%m-%d")

@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.contrib.sites.models import Site
 
@@ -27,14 +27,9 @@ def revision_detail(request, revision_id):
 
         except SoftwareRating.DoesNotExist:
             ratingform = RatingForm()
-    
-    return render_to_response('software/software_detail.html',
-            { 'object': revision,
-                'ratingform': ratingform,
-                'todays_stats' : todays_stats,
-				'revision' : '/' + str(revision.id),
-                'revisions' : revisions },
-            context_instance=RequestContext(request))
+
+    return render(request, 'software/software_detail.html', {'object' : revision})
+
 
 def download_revision(request, revision_id):
     entry = get_object_or_404(Revision, pk=revision_id)
@@ -76,7 +71,8 @@ def get_bibitem(request, revision_id):
 
     key+= `entry.pub_date.year`[2:4]
 
-    response = HttpResponse(mimetype='application/text')
+    response = HttpResponse()
+    response['content_type']='application/text'
     response['Content-Disposition'] = 'attachment; filename=%s.bib' % key
     response.write(u"@misc{%s,\n author={%s},\n title={%s},\n year={%s},\n note={\\url{%s}}\n}" %
             (key,
@@ -98,7 +94,8 @@ def get_paperbibitem(request, revision_id):
 
     key+= `entry.pub_date.year`[2:4]
 
-    response = HttpResponse(mimetype='application/text')
+    response = HttpResponse()
+    response['content_type']='application/text'
     response['Content-Disposition'] = 'attachment; filename=%s_paper.bib' % key
     response.write("%s" % entry.paper_bib)
     return response

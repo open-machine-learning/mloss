@@ -1,13 +1,14 @@
 # Django settings for mloss project.
 
 VERSION = "v0.1.1"
-PRODUCTION = True # set to True when project goes live
+PRODUCTION = False # set to True when project goes live
 
 if not PRODUCTION:
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
 else:
     DEBUG = False
+DEBUG = True
 
 ADMINS = (
     ('Mikio Braun', 'mikio@cs.tu-berlin.de'),
@@ -31,17 +32,22 @@ if PRODUCTION:
 else:
     DATABASES = {
     'default': {
-        'NAME': 'mloss.db',
-        'ENGINE': 'sqlite3',
+        'NAME': 'mloss',
+	'ENGINE': 'django.db.backends.mysql',
+        #'ENGINE': 'django.db.backends.sqlite3',
+	'USER': 'mloss',
+	'PASSWORD': 'xxxxxxx',
+	'HOST': '',
+	'PORT': '',
     	}
     }
-
 
 
 
 LOGIN_REDIRECT_URL='/'
 ACCOUNT_ACTIVATION_DAYS=1
 DEFAULT_FROM_EMAIL='mloss@mloss.org'
+
 
 # send email from this address
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
@@ -87,14 +93,7 @@ MAX_IMAGE_UPLOAD_HEIGHT = 1024
 ADMIN_MEDIA_PREFIX = '/media_admin/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'ccku5%_-8r2#*rb(yh)j!11ar12vx_tll5u(11%3l=^k8rfe=y'
-
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader'
-)
-
+SECRET_KEY = 'secret_key'
 
 
 MIDDLEWARE_CLASSES = (
@@ -102,48 +101,83 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.middleware.doc.XViewMiddleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 
-ROOT_URLCONF = 'mloss.urls'
+ROOT_URLCONF = 'urls'
 
 
-#import os.path
+
+
+import os
+
 if PRODUCTION:
-    TEMPLATE_DIRS = (
-        '/home/mloss/django/mloss/templates/',
-        )
-else:    
-    TEMPLATE_DIRS = (
-        'templates/',
-        )
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': '/home/mloss/django/mloss/templates/',
+            'OPTIONS': {
+                'context_processors': [
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.request',
+                    'django.contrib.auth.context_processors.auth',
+                    'django.contrib.messages.context_processors.messages',
+
+                ],
+                'loaders': [
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                ]
+            },
+        },
+    ]
+else:
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [os.path.join(os.path.dirname(__file__), 'templates/')],
+            'OPTIONS': {
+                'debug': DEBUG,
+                'context_processors': [
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.request',
+                    'django.contrib.auth.context_processors.auth',
+                    'django.contrib.messages.context_processors.messages',
+                ],
+                'loaders': [
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                ]
+            },
+        },
+    ]
+
 
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'registration',
     'django.contrib.admin',
-    'django.contrib.comments',
-    'django.contrib.markup',
+    'django_comments',
     'django.contrib.syndication',
     'django.contrib.flatpages',
     'django.contrib.humanize',
-    'mloss',
-    'mloss.software',
-    'mloss.revision',
-    'mloss.registration',
-    'mloss.community',
-    'mloss.forshow',
-    'mloss.user',
-    'mloss.subscriptions',
-    'mloss.aggregator',
-    'mloss.blog',
-    'mloss.captcha',
+    'software',
+    'revision',
+    'community',
+    'forshow',
+    'user',
+    'subscriptions2',
+    'aggregator',
+    'blog',
+    'captcha',
+    'snowpenguin.django.recaptcha2',
+    'markup_deprecated',
 )
 
-RECAPTCHA_PUBLIC_KEY = 'KEY'
-RECAPTCHA_PRIVATE_KEY = 'KEY'
-
+RECAPTCHA_PUBLIC_KEY = 'recaptcha_public_key'
+RECAPTCHA_PRIVATE_KEY = 'recaptcha_private_key'
