@@ -4,10 +4,10 @@ Forms for adding Software
 """
 from django.conf import settings
 from django import forms
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render_to_response, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.views.generic.create_update import update_object
+
 from django.forms.widgets import RadioSelect, Textarea
 from django.utils.html import strip_tags
 from django.core.mail import send_mail
@@ -21,6 +21,9 @@ from revision.models import editables, dontupdateifempty
 import software.views.list
 import re
 from PIL import Image
+
+from django.shortcuts import render
+
 import os.path
 
 
@@ -167,8 +170,8 @@ class UpdateSoftwareForm(forms.Form):
         """
         Check that archive is only .tar.gz .tar.bz2 .zip 
         """
-        if 'tarball' in self.data and len(self.data['tarball']):
-            tarball = self.data['tarball']
+        if 'tarball' in self.cleaned_data and self.cleaned_data['tarball'] and len(self.cleaned_data['tarball']):
+            tarball = self.cleaned_data['tarball']
 
             if tarball and tarball.content_type not in ('application/zip',
                     'application/x-zip',
@@ -192,8 +195,8 @@ class UpdateSoftwareForm(forms.Form):
         """
         Check that thumbnail is only jpeg/png/gif
         """
-        if 'thumbnail' in self.data and len(self.data['thumbnail']):
-            thumbnail = self.data['thumbnail']
+        if 'thumbnail' in self.cleaned_data and self.cleaned_data['thumbnail'] and len(self.cleaned_data['thumbnail']):
+            thumbnail = self.cleaned_data['thumbnail']
 
             if thumbnail and thumbnail.content_type not in ('image/jpeg',
                     'image/gif', 'image/png', 'image/x-png', 'image/pjpeg'):
@@ -220,8 +223,8 @@ class UpdateSoftwareForm(forms.Form):
         """
         Check that screenshot is only jpeg/png/gif
         """
-        if 'screenshot' in self.data and len(self.data['screenshot']):
-            screenshot = self.data['screenshot']
+        if 'screenshot' in self.cleaned_data and self.cleaned_data['screenshot'] and len(self.cleaned_data['screenshot']):
+            screenshot = self.cleaned_data['screenshot']
 
             if screenshot and screenshot.content_type not in ('image/jpeg',
                     'image/gif', 'image/png', 'image/x-png', 'image/pjpeg'):
@@ -269,18 +272,18 @@ class UpdateSoftwareForm(forms.Form):
         err_msg=u'Either Project Archive or Download URL Required.'
 
         # when both items are given raise an error
-        if ('tarball' in self.data and self.data['tarball']) and ('download_url' in self.data and self.data['download_url']):
+        if ('tarball' in self.cleaned_data and self.cleaned_data['tarball']) and ('download_url' in self.cleaned_data and self.cleaned_data['download_url']):
             self._errors['tarball'] = [err_msg]
             self._errors['download_url'] = [err_msg]
             raise forms.ValidationError(err_msg)
 
         # check whether a tarball is already stored
         has_tarball = False
-        if 'title' in self.data:
+        if 'title' in self.cleaned_data:
             try:
-                sw = Software.objects.get(title__exact=self.data['title'])
+                sw = Software.objects.get(title__exact=self.cleaned_data['title'])
                 rev= Revision.objects.get(software__exact=sw, revision=0)
-                has_tarball = rev.tarball and not ('download_url' in self.data and self.data['download_url'])
+                has_tarball = rev.tarball and not ('download_url' in self.cleaned_data and self.cleaned_data['download_url'])
             except Software.DoesNotExist:
                 pass
             except Revision.DoesNotExist:
@@ -288,7 +291,7 @@ class UpdateSoftwareForm(forms.Form):
 
         # if neither current software has a tarball nor has a tarball in the form nor has a 
         # download url raise an error
-        if not ( has_tarball or ('tarball' in self.data and self.data['tarball']) or ('download_url' in self.data and self.data['download_url'])):
+        if not ( has_tarball or ('tarball' in self.cleaned_data and self.cleaned_data['tarball']) or ('download_url' in self.cleaned_data and self.cleaned_data['download_url'])):
             self._errors['tarball'] = [err_msg]
             self._errors['download_url'] = [err_msg]
             raise forms.ValidationError(err_msg)
@@ -422,9 +425,8 @@ def add_software(request):
         form = SoftwareForm(initial={'user':request.user,
             'changes':'Initial Announcement on mloss.org.'})
 
-    return render_to_response('software/software_add.html',
-                              { 'form': form },
-                              context_instance=RequestContext(request))
+    return render(request, 'software/software_add.html',
+                              { 'form': form })
 
 class SearchForm(forms.Form):
     searchterm = forms.CharField(max_length=40)
@@ -434,7 +436,7 @@ def search_software(request):
 
     if request.method == 'GET':
         try:
-            q = request.GET['searchterm'];
+            q = request.GET['searchterm']
             return software.views.list.search_description(request, q)
         except:
             return HttpResponseRedirect('/software')
@@ -466,6 +468,8 @@ def edit_software(request, software_id, revision_id=0):
     else:
         revision = software.get_latest_revision()
         form_class = UpdateSoftwareForm
+
+    form=form_class(revision)
 
     if request.method == 'POST':
         new_data = request.POST.copy()
@@ -530,9 +534,8 @@ def edit_software(request, software_id, revision_id=0):
     else:
         form = form_class(revision)
 
-    return render_to_response('software/software_add.html',
-                              { 'form': form },
-                              context_instance=RequestContext(request))
+    return render(request, 'software/software_add.html',
+                              { 'form': form })
 
 
 
@@ -568,4 +571,4 @@ def contact_author(request, software_id):
     else:
         form = AuthorContactForm() # An unbound form
 
-    return render_to_response('software/software_contact_author.html', { 'form': form }, context_instance=RequestContext(request))    
+    return render(request, 'software/software_contact_author.html', { 'form': form }) 

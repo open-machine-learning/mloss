@@ -3,7 +3,7 @@ from django.contrib.sites.models import Site
 from django.http import HttpResponse, Http404
 from django.utils.xmlutils import SimplerXMLGenerator
 from community.models import Forum,Thread,Post
-from markdown import markdown
+from markdown2 import markdown
 from wfwfeed import WellFormedWebRss
 
 def ForumFeed(request, forum):

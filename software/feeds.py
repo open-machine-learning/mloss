@@ -1,13 +1,14 @@
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
-from django.contrib.comments.models import Comment
+
+from django_comments.models import Comment
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.http import Http404
 from software.models import Software
 from revision.models import Revision
 from wfwfeed import WellFormedWebRss
-from markdown import markdown
+from markdown2 import markdown
 
 def RssSoftwareFeed(request):
     try:

@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
-from mloss.subscriptions.models import Subscriptions
+from subscriptions2.models import Subscriptions
 from utils import send_mails
 
 class Forum(models.Model):

@@ -72,7 +72,7 @@ and install it via the usual python setup.py install.
 
 To locally test out the mloss.org webpage untar the source and run
 
-python manage.py syncdb
+python manage.py migrate
 python manage.py runserver
 
 then open http://127.0.0.1:8000 in a web browser and have fun.

@@ -17,10 +17,11 @@ class BlogItem(models.Model):
         return unicode(self.headline)
 
     def get_absolute_url(self):
-        return "/community/blog/%s/%s/" % (self.pub_date.strftime("%Y/%b/%d").lower(), self.slug)
+	from django.urls import reverse
+	return reverse('get_blog', kwargs={'year': int(self.pub_date.strftime("%Y").lower()), 'month': self.pub_date.strftime("%b").lower(), 'day': self.pub_date.strftime("%d").lower(), 'slug': self.slug})
 
     def get_comment_url(self):
-        return "/community/blog/%s/%s/#comments" % (self.pub_date.strftime("%Y/%b/%d").lower(), self.slug)
+        return ("/community/blog/%s/%s/#comments", (self.pub_date.strftime("%Y/%b/%d").lower(), self.slug))
 
     def save(self):
         if not self.id:

@@ -1,4 +1,4 @@
-from django.views.generic.list_detail import object_list
+from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django import forms
@@ -8,7 +8,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 
 from revision.models import Revision
-from subscriptions.models import Subscriptions
+from subscriptions2.models import Subscriptions
+from community.views import Thread
 import re
 
 attrs_dict = { 'class': 'required' }
@@ -86,13 +87,23 @@ class ChangeUserDetailsForm(forms.Form):
         u.set_password(self.cleaned_data['password1'])
         u.save()
 
-def show_user_list(request):
-    if request.user.is_superuser:
-        return object_list(request,
-                paginate_by=10,
-                queryset=User.objects.all(),
-                template_name='users/user_list.html')
-    raise Http404
+
+
+class ShowUserList(ListView):
+    """
+    Create Class-based View
+    """
+    def get_paginate_by(self):
+        return 10
+    
+    def get_queryset(self, **kwargs):
+        if self.request.user.is_superuser:
+            return User.objects.all()
+        else:
+            raise Http404
+    
+    def get_template_names(self, **kwargs):
+        return 'users/user_list.html'
 
 def show_user(request, user_id):
     if request.user.is_authenticated():
@@ -132,8 +143,7 @@ def show_user(request, user_id):
                     'forumbookmarks' : forumbookmarks,
                     'threadsubscriptions' : threadsubscriptions,
                     'threadbookmarks' : threadbookmarks,
-                    'form' : form },
-                context_instance=RequestContext(request))
+                    'form' : form },RequestContext(request))
 
     raise Http404
 

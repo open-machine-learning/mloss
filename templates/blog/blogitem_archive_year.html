@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h1>{{ year }} archive</h1>
+<h1>{{ year|date:"Y" }} archive</h1>
 
 <ul class="linklist">
 {% for date in date_list %}

@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.sites.models import Site
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from community.models import Forum,Thread,Post
+from models import Forum, Thread, Post
 
 def SubscribeForum(request, forum, bookmark=False):
     if not request.user.is_authenticated():

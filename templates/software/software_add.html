@@ -2,7 +2,7 @@
 
 {% block extrahead %}
 <script type="text/javascript">
-	<!--
+	
 function addStringToElement(element_id, combo_id)
 {
 	var out_field = document.getElementById(element_id);
@@ -39,7 +39,7 @@ function addStringToElement(element_id, combo_id)
 			out_field.value += istr;
 	}
 };
-//-->
+
 </script>
 {% endblock %}
 
@@ -73,7 +73,7 @@ function addStringToElement(element_id, combo_id)
 {% endif %}
 
 {% if form.is_multipart %}
-<form enctype="multipart/form-data" method="POST" action="">
+<form enctype="multipart/form-data" method="POST" action="">{% csrf_token %}
 	{% else %}
 	<form method="POST" action="">
 		{% endif %}
@@ -135,7 +135,7 @@ function addStringToElement(element_id, combo_id)
 				{% endif %}
 				<dd>{{ form.tags_choice|safe }}{{ form.tags|safe }}</dd>
 				<script type="text/javascript">
-					<!--
+					
 					document.getElementById('{{ form.tags_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.tags.auto_id }}', '{{ form.tags_choice.auto_id }}');};
 //-->
 </script>
@@ -149,7 +149,7 @@ function addStringToElement(element_id, combo_id)
 				{% endif %}
 				<dd>{{ form.language_choice|safe }}{{ form.language|safe }}</dd>
 				<script type="text/javascript">
-					<!--
+					
 					document.getElementById('{{ form.language_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.language.auto_id }}', '{{ form.language_choice.auto_id }}');};
 //-->
 </script>
@@ -165,7 +165,7 @@ function addStringToElement(element_id, combo_id)
 				{% endif %}
 				<dd>{{ form.operating_systems_choice|safe }}{{ form.operating_systems|safe }}</dd>
 				<script type="text/javascript">
-					<!--
+					
 					document.getElementById('{{ form.operating_systems_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.operating_systems.auto_id }}', '{{ form.operating_systems_choice.auto_id }}');};
 //-->
 </script>
@@ -195,7 +195,7 @@ function addStringToElement(element_id, combo_id)
 				{% endif %}
 				<dd>{{ form.dataformats_choice|safe }}{{ form.dataformats|safe }}</dd>
 				<script type="text/javascript">
-					<!--
+					
 					document.getElementById('{{ form.dataformats_choice.auto_id }}').onchange = function() { addStringToElement('{{ form.dataformats.auto_id }}', '{{ form.dataformats_choice.auto_id }}');};
 //-->
 </script>

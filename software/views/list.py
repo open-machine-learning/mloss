@@ -1,212 +1,256 @@
-from django.views.generic import list_detail
+from django.views.generic.list import ListView
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 from revision.models import Revision
 from revision.models import Author, Tag, License, Language, OpSys, DataFormat
 from community.summary import get_latest_news
+from community.models import Forum
 
 
-def software_in_jmlr(request):
+
+class ClassListView(ListView):
+    """
+    Create Class-based View
+    """
+    context_object_name='object_list'
+
+    def get_template_names(self):
+        return 'software/software_list.html'
+
+    def get_paginate_by(self, dummy):
+        return 20
+
+class ForumClassView(ClassListView):
+    def get_queryset(self, **kwargs):
+        return Forum.objects.all()
+
+
+
+class SoftwareInJmlr(ClassListView):
     """
     List Software that appeared in JMLR
     """
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=Revision.objects.get_jmlr().order_by('-updated_date'),
-                                   extra_context=get_latest_news({ 'jmlr' : True }),
-                                   template_name='software/software_list.html'
-                                   )
+    def get_queryset(self, **kwargs):
+        return Revision.objects.get_jmlr().order_by('-updated_date')
 
-def software_by_user(request, username):
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareInJmlr, self).get_context_data(**kwargs)
+        context.update(get_latest_news({ 'jmlr' : True }))
+        return context
+
+
+class SoftwareByUser(ClassListView):
     """
     List of Software submitted by a particular User.
     """
-    user = get_object_or_404(User, username__exact=username)
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=Revision.objects.get_by_submitter(user.username).order_by('-updated_date'),
-                                   extra_context=get_latest_news({ 'username' : user.username }),
-                                   template_name='software/software_list.html'
-                                   )
+    def get_queryset(self, **kwargs):
+        username = self.kwargs['username']
+        user = get_object_or_404(User, username__exact=username)
+        return Revision.objects.get_by_submitter(user.username).order_by('-updated_date')
+         
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByUser, self).get_context_data(**kwargs)
+        username = self.kwargs['username']
+        user = get_object_or_404(User, username__exact=username)
+        context.update(get_latest_news({ 'username' : user.username }))
+        return context
 
-def software_by_author(request, slug):
+
+
+class SoftwareByAuthor(ClassListView):
     """
     List of software with a particular Author
     """
-    author = get_object_or_404(Author, slug__exact=slug)
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=Revision.objects.get_by_author(author.slug).order_by('-updated_date'),
-                                   extra_context=get_latest_news({ 'author' : author }),
-                                   template_name='software/software_list.html',
-                                   )
+    def get_queryset(self, **kwargs):
+        slug = self.kwargs['slug']
+        author = get_object_or_404(Author, slug__exact=slug)
+        return Revision.objects.get_by_author(author.slug).order_by('-updated_date')
+    
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByAuthor, self).get_context_data(**kwargs)
+        slug = self.kwargs['slug']
+        author = get_object_or_404(Author, slug__exact=slug)
+        context.update(get_latest_news({ 'author' : author }))
+        return context
 
-def software_by_tag(request, slug):
+
+class SoftwareByTag(ClassListView):
     """
     List of software with a particular Tag
     """
-    tag = get_object_or_404(Tag, slug__exact=slug)
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=Revision.objects.get_by_tag(tag.slug).order_by('-updated_date'),
-                                   extra_context=get_latest_news({ 'tags': tag }),
-                                   template_name='software/software_list.html',
-                                   )
+    def get_queryset(self, **kwargs):
+        slug = self.kwargs['slug']
+        tag = get_object_or_404(Tag, slug__exact=slug)
+        return Revision.objects.get_by_tag(tag.slug).order_by('-updated_date')
+    
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByTag, self).get_context_data(**kwargs)
+        slug = self.kwargs['slug']
+        tag = get_object_or_404(Tag, slug__exact=slug)
+        context.update(get_latest_news({ 'tags': tag }))
+        return context
 
-def software_by_license(request, slug):
+
+
+class SoftwareByLicense(ClassListView):
     """
     List of software with a particular License
     """
-    lic = get_object_or_404(License, slug__exact=slug)
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=Revision.objects.get_by_license(lic.slug).order_by('-updated_date'),
-                                   extra_context=get_latest_news({ 'os_license' : lic }),
-                                   template_name='software/software_list.html',
-                                   )
+    def get_queryset(self, **kwargs):
+        slug = self.kwargs['slug']
+        lic = get_object_or_404(License, slug__exact=slug)
+        return Revision.objects.get_by_license(lic.slug).order_by('-updated_date')
+    
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByLicense, self).get_context_data(**kwargs)
+        slug = self.kwargs['slug']
+        lic = get_object_or_404(License, slug__exact=slug)
+        context.update(get_latest_news({ 'os_license' : lic }))
+        return context
 
-def software_by_language(request, slug):
+
+class SoftwareByLanguage(ClassListView):
     """
     List of software with a particular Language
     """
-    language = get_object_or_404(Language, slug__exact=slug)
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=Revision.objects.get_by_language(language.slug).order_by('-updated_date'),
-                                   extra_context=get_latest_news({ 'language' : language }),
-                                   template_name='software/software_list.html',
-                                   )
+    def get_queryset(self, **kwargs):
+        slug = self.kwargs['slug']
+        language = get_object_or_404(Language, slug__exact=slug)
+        return Revision.objects.get_by_language(language.slug).order_by('-updated_date')
+    
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByLanguage, self).get_context_data(**kwargs)
+        slug = self.kwargs['slug']
+        language = get_object_or_404(Language, slug__exact=slug)
+        context.update(get_latest_news({ 'language' : language }))
+        return context
 
-def software_by_opsys(request, slug):
+
+class SoftwareByOpSys(ClassListView):
     """
     List of software with a particular Operating System
     """
-    opsys = get_object_or_404(OpSys, slug__exact=slug)
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=Revision.objects.get_by_opsys(opsys.slug).order_by('-updated_date'),
-                                   extra_context=get_latest_news({ 'opsys' : opsys }),
-                                   template_name='software/software_list.html',
-                                   )
+    def get_queryset(self, **kwargs):
+        slug = self.kwargs['slug']
+        opsys = get_object_or_404(OpSys, slug__exact=slug)
+        return Revision.objects.get_by_opsys(opsys.slug).order_by('-updated_date')
+    
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByOpSys, self).get_context_data(**kwargs)
+        slug = self.kwargs['slug']
+        opsys = get_object_or_404(OpSys, slug__exact=slug)
+        context.update(get_latest_news({ 'opsys' : opsys }))
+        return context
 
-def software_by_dataformats(request, slug):
+
+class SoftwareByDataFormats(ClassListView):
     """
     List of software with a particular Operating System
     """
-    dataformat = get_object_or_404(DataFormat, slug__exact=slug)
-    return list_detail.object_list(request,
-                                   paginate_by=20,
-                                   queryset=Revision.objects.get_by_dataformat(dataformat.slug).order_by('-updated_date'),
-                                   extra_context=get_latest_news({ 'dataformat' : dataformat }),
-                                   template_name='software/software_list.html',
-                                   )
+    def get_queryset(self, **kwargs):
+        slug = self.kwargs['slug']
+        dataformat = get_object_or_404(DataFormat, slug__exact=slug)
+        return Revision.objects.get_by_dataformat(dataformat.slug).order_by('-updated_date')
+    
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByDataFormats, self).get_context_data(**kwargs)
+        slug = self.kwargs['slug']
+        dataformat = get_object_or_404(DataFormat, slug__exact=slug)
+        context.update(get_latest_news({ 'dataformat' : dataformat }))
+        return context
 
-def software_by_pub_date(request):
+
+class SoftwareByPubDate(ClassListView):
     """
     List of Software ranked by date
     """
+    def get_queryset(self, **kwargs):
+        return Revision.objects.filter(revision=0).order_by('-pub_date')
+    
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByPubDate, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
+    
 
-    softwarelist = Revision.objects.filter(revision=0).order_by('-pub_date')
-
-    return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=softwarelist,
-                                   template_name='software/software_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
-
-def software_by_updated_date(request):
+class SoftwareByUpdatedDate(ClassListView):
     """
     List of Software ranked by date
     """
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByUpdatedDate, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
 
-    softwarelist = Revision.objects.filter(revision=0).order_by('-updated_date')
+    def get_queryset(self):
+	return Revision.objects.filter(revision=0).order_by('-updated_date')
 
-    return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=softwarelist,
-                                   template_name='software/software_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
 
-def software_by_title(request):
+class SoftwareByTitle(ClassListView):
     """
     List of Software ranked by date
     """
+    def get_queryset(self, **kwargs):
+        return Revision.objects.filter(revision=0).order_by('software__title','-updated_date')
+        
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByTitle, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
 
-    softwarelist = Revision.objects.filter(revision=0).order_by('software__title','-updated_date')
-
-    return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=softwarelist,
-                                   template_name='software/software_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
-
-def software_by_views(request):
+class SoftwareByViews(ClassListView):
     """
     List of Software ranked by vies
     """
+    def get_queryset(self, **kwargs):
+        return Revision.objects.filter(revision=0).order_by('-software__total_number_of_views','-updated_date')
+        
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByViews, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
 
-    softwarelist = Revision.objects.filter(revision=0).order_by('-software__total_number_of_views','-updated_date')
-
-    return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=softwarelist,
-                                   template_name='software/software_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
-def software_by_downloads(request):
+class SoftwareByDownloads(ClassListView):
     """
-    List of Software ranked by downloads
+    List of Software ranked by vies
     """
-
-    softwarelist = Revision.objects.filter(revision=0).order_by('-software__total_number_of_downloads','-updated_date')
-
-    return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=softwarelist,
-                                   template_name='software/software_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
-
-def software_by_rating(request):
+    def get_queryset(self, **kwargs):
+        return Revision.objects.filter(revision=0).order_by('-software__total_number_of_downloads','-updated_date')
+        
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByDownloads, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
+                                   
+class SoftwareByRating(ClassListView):
     """
     List of Software ranked by rating
     """
-    softwarelist = Revision.objects.filter(revision=0).order_by('-software__average_rating','-updated_date')
+    def get_queryset(self, **kwargs):
+        return Revision.objects.filter(revision=0).order_by('-software__average_rating','-updated_date')
+        
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareByRating, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
 
-    return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=softwarelist,
-                                   template_name='software/software_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
-
-def software_by_subscription(request):
+class SoftwareBySubscription(ClassListView):
     """
     List of Software ranked by number of subscription
     """
-    softwarelist = Revision.objects.get_by_subscription()
+    def get_queryset(self, **kwargs):
+        return Revision.objects.get_by_subscription()
+        
+    def get_context_data(self, **kwargs):
+        context=super(SoftwareBySubscription, self).get_context_data(**kwargs)
+        context.update(get_latest_news())
+        return context
 
-    return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=softwarelist,
-                                   template_name='software/software_list.html',
-                                   extra_context=get_latest_news(),
-                                   )
-
-def search_description(request, q):
-    qs=Revision.objects.get_by_searchterm(q)
+##TODO
+def search_description(request, qs):
     if qs.count()==0:
         return render_to_response('software/software_list.html',
-                get_latest_news({ 'search_term': q }),
-                context_instance=RequestContext(request))
+                get_latest_news({ 'search_term': qs }),RequestContext(request))
     else:
-        return list_detail.object_list(request,
-                                   paginate_by=10,
-                                   queryset=qs,
-                                   template_name='software/software_list.html',
-                                   extra_context=get_latest_news({ 'search_term': q }),
-                                   )
+        pass #return ClassListView(Revision.objects.get_by_searchterm(q), get_latest_news({ 'search_term': q }))
