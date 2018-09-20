@@ -1,19 +1,20 @@
 # Django settings for mloss project.
 
 VERSION = "v0.1.1"
-PRODUCTION = False # set to True when project goes live
+PRODUCTION = True # set to True when project goes live
+
 
 if not PRODUCTION:
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
 else:
     DEBUG = False
-DEBUG = True
 
 ADMINS = (
     ('Mikio Braun', 'mikio@cs.tu-berlin.de'),
     ('Cheng Soon Ong', 'chengsoon.ong@unimelb.edu.au'),
-    ('Soeren Sonnenburg', 'soeren.sonnenburg@tu-berlin.de'),
+    ('Soeren Sonnenburg', 'soeren.sonnenburg@tomtom.com'),
+    ('Ahmed Basha', 'ahmed.basha@tomtom.com'),
 )
 
 MANAGERS = ADMINS
@@ -23,25 +24,26 @@ R_CRAN_BOT = 'r-cran-robot'
 if PRODUCTION:
     DATABASES = {
     'default': {
-        'NAME': 'DB',
+        'NAME': 'name',
         'ENGINE': 'django.db.backends.mysql',
-        'USER': 'DBUSER',
-        'PASSWORD': 'DBPW',
+        'USER': 'user',
+        'PASSWORD': 'xxxxxx',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     	}
     }
 else:
     DATABASES = {
     'default': {
-        'NAME': 'mloss',
-	'ENGINE': 'django.db.backends.mysql',
-        #'ENGINE': 'django.db.backends.sqlite3',
-	'USER': 'mloss',
+        'NAME': 'name',
+	'ENGINE': 'django.db.backends.sqlite3',
+	'USER': 'user',
 	'PASSWORD': 'xxxxxxx',
 	'HOST': '',
 	'PORT': '',
     	}
     }
-
 
 
 LOGIN_REDIRECT_URL='/'
@@ -70,8 +72,12 @@ SITE_ID = 1
 # to load the internationalization machinery.
 USE_I18N = True
 
+
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
+
+import os
+
 if PRODUCTION:
     MEDIA_ROOT = '/home/mloss/static/media/'
 else:
@@ -90,11 +96,10 @@ MAX_IMAGE_UPLOAD_HEIGHT = 1024
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media_admin/'
+STATIC_URL = '/static/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'secret_key'
-
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -109,15 +114,11 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'urls'
 
 
-
-
-import os
-
 if PRODUCTION:
     TEMPLATES = [
         {
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': '/home/mloss/django/mloss/templates/',
+            'DIRS': [os.path.join(os.path.dirname(__file__), 'templates/')],
             'OPTIONS': {
                 'context_processors': [
                     'django.template.context_processors.debug',

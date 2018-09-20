@@ -118,14 +118,14 @@ All entries.
 										<a href="/media/{{ object.screenshot }}" target="new"><img src="/media/{{ object.screenshot }}" width="30" height="32" align="top" alt="Logo"></img></a>
 									{% else %}
 										{% ifequal object.software.user.username "r-cran-robot" %}
-											<img src="/media/images/rlogo.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
+											<img src="/static/images/rlogo.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
 										{% else %}
-											<img src="/media/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
+											<img src="/static/images/cray_flat_small.png" border="0" height="32" width="30" align="top" alt="Logo" title="Logo"></img>
 										{% endifequal %}
 									{% endif %}
 								{% endif %}
 								{% if object.jmlr_mloss_url %}
-									<img src="/media/images/jmlr.jpg" width="60" height="32" align="top" alt="JMLR"></img>
+									<img src="/static/images/jmlr.jpg" width="60" height="32" align="top" alt="JMLR"></img>
 								{% endif %}
 								<a href="{{ object.software.get_absolute_url|escape }}"> {{ object.software.title }} {{ object.version }}</a>
 							</h2>
@@ -133,12 +133,12 @@ All entries.
 							by <a href="/software/users/{{ object.software.user|escape }}">{{ object.software.user.username }}</a> 
 							- {{ object.updated_date|date:"F j, Y, H:i:s" }} CET
 							[
-							{% if object.project_url %}<a href="{{ object.get_absolute_homepage_url }}"><img src="/media/images/homepage.png" width="14" height="14" alt="Project Homepage" title="Project Homepage"></img></a> {% endif %}
-							<a href="{{ object.get_absolute_bib_url }}"><img src="/media/images/bib.png" width="14" height="14" alt="BibTeX" title="BibTeX"></img></a>
-							{% if object.paper_bib %}<a href="{{ object.get_absolute_paperbib_url }}"><img src="/media/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper" title="Paper BibTeX for corresponding Paper"></img></a>{% endif %}
-							{% if object.is_downloadable %}<a href="{{ object.get_absolute_download_url }}"><img src="/media/images/disk.png" width="14" height="14" alt="Download" title="Download"></img></a>{% endif %}
-                            {% if user.is_authenticated %}<a href="/software/subscribe/{{ object.software.id }}"><img src="/media/images/subscribe.png" width="14" height="14" alt="Subscribe" title="Subscribe"></img></a>{% endif %}
-							{% if user.is_authenticated %}<a href="/software/bookmark/{{ object.software.id }}"><img src="/media/images/bookmark.png" width="14" height="14" alt="Bookmark" title="Bookmark"></img></a>{% endif %}
+							{% if object.project_url %}<a href="{{ object.get_absolute_homepage_url }}"><img src="/static/images/homepage.png" width="14" height="14" alt="Project Homepage" title="Project Homepage"></img></a> {% endif %}
+							<a href="{{ object.get_absolute_bib_url }}"><img src="/static/images/bib.png" width="14" height="14" alt="BibTeX" title="BibTeX"></img></a>
+							{% if object.paper_bib %}<a href="{{ object.get_absolute_paperbib_url }}"><img src="/static/images/paper.png" width="14" height="14" alt="BibTeX for corresponding Paper" title="Paper BibTeX for corresponding Paper"></img></a>{% endif %}
+							{% if object.is_downloadable %}<a href="{{ object.get_absolute_download_url }}"><img src="/static/images/disk.png" width="14" height="14" alt="Download" title="Download"></img></a>{% endif %}
+                            {% if user.is_authenticated %}<a href="/software/subscribe/{{ object.software.id }}"><img src="/static/images/subscribe.png" width="14" height="14" alt="Subscribe" title="Subscribe"></img></a>{% endif %}
+							{% if user.is_authenticated %}<a href="/software/bookmark/{{ object.software.id }}"><img src="/static/images/bookmark.png" width="14" height="14" alt="Bookmark" title="Bookmark"></img></a>{% endif %}
 							]
 
 {% if object.software.total_number_of_views %}
