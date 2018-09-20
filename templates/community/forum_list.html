@@ -9,7 +9,7 @@
 {% for forum in object_list %}
 <tr>
 	<td class='djangoForumListDetails'><p><strong><a href='{{ forum.get_absolute_url }}'>{{ forum.title }}</a></strong><span class='djangoForumStats'> {{ forum.threads }} thread{{ forum.threads|pluralize }}, {{ forum.posts }} post{{ forum.posts|pluralize }}
-			{% if user.is_authenticated %}[ <a href="/community/subscribe/{{forum.slug}}"><img src="/media/images/subscribe.png" width="14" height="14" alt="Subscribe" title="Subscribe"></img></a> <a href="/community/bookmark/{{ forum.slug }}"><img src="/media/images/bookmark.png" width="14" height="14" alt="Bookmark" title="Bookmark"></img></a>]{% endif %}
+			{% if user.is_authenticated %}[ <a href="/community/subscribe/{{forum.slug}}"><img src="/static/images/subscribe.png" width="14" height="14" alt="Subscribe" title="Subscribe"></img></a> <a href="/community/bookmark/{{ forum.slug }}"><img src="/static/images/bookmark.png" width="14" height="14" alt="Bookmark" title="Bookmark"></img></a>]{% endif %}
 		</span></p>
 <p>{{ forum.description }}</p></td>
 <td class='djangoForumListLastPost'>{% if forum.forum_latest_post %}{{ forum.forum_latest_post.time|timesince }} ago by {{ forum.forum_latest_post.author }} (<a href='{{ forum.forum_latest_post.get_absolute_url }}'>view</a>){% else %}No Posts{% endif %}</td>

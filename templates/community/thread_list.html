@@ -22,7 +22,7 @@
     {% for t in threads %}
     <tr>
 		<td>{% if t.sticky %}Sticky {% endif %}<a href='{{ t.get_absolute_url }}'>{{ t.title }}</a>{% if t.closed %} (Closed){% endif %}
-			{% if user.is_authenticated %}[ <a href="/community/subscribe/{{forum.slug}}/{{t.pk}}"><img src="/media/images/subscribe.png" width="14" height="14" alt="Subscribe" title="Subscribe"></img></a> <a href="/community/bookmark/{{ forum.slug }}/{{t.pk}}"><img src="/media/images/bookmark.png" width="14" height="14" alt="Bookmark" title="Bookmark"></img></a>]{% endif %}
+			{% if user.is_authenticated %}[ <a href="/community/subscribe/{{forum.slug}}/{{t.pk}}"><img src="/static/images/subscribe.png" width="14" height="14" alt="Subscribe" title="Subscribe"></img></a> <a href="/community/bookmark/{{ forum.slug }}/{{t.pk}}"><img src="/static/images/bookmark.png" width="14" height="14" alt="Bookmark" title="Bookmark"></img></a>]{% endif %}
 		</td>
         <td style='width: 50px;'>{{ t.posts }}</td>
         <td style='width: 50px;'>{{ t.views }}</td>
@@ -147,10 +147,10 @@
 
 <dl>
 	<dd>
-	<h3><a href="/community/blog/rss/latest"><img src="/media/images/rss.png" alt="RSS Feed" border="0" width="16" height="16" align="top"></img> RSS Feed - Blog</a></h3>
+	<h3><a href="/community/blog/rss/latest"><img src="/static/images/rss.png" alt="RSS Feed" border="0" width="16" height="16" align="top"></img> RSS Feed - Blog</a></h3>
 	</dd>
     <dd>
-    <h3><a href="/community/rss/{{forum.slug}}/"><img src="/media/images/rss.png" alt="RSS Feed" border="0" width="16" height="16" align="top"></img> RSS Feed - Forum "{{ forum.title }}"</a></h3>
+    <h3><a href="/community/rss/{{forum.slug}}/"><img src="/static/images/rss.png" alt="RSS Feed" border="0" width="16" height="16" align="top"></img> RSS Feed - Forum "{{ forum.title }}"</a></h3>
       <h3><script type="text/javascript" src="http://w.sharethis.com/button/sharethis.js#tabs=web%2Cemail&amp;charset=utf-8&amp;services=reddit%2Cdigg%2Cdelicious%2Cstumbleupon%2Cyahoo_buzz%2Ctechnorati%2Cgoogle_bmarks%2Cyahoo_bmarks%2Cfurl%2Cslashdot%2Cmagnolia%2Cmister_wong%2Csimpy%2Cyigg&amp;offsetTop=-336&amp;style=default&amp;publisher=85555fbd-bb3a-4ab4-af6f-5dea32a6a5e4"></script></h3> 
     </dd>
 </dl>

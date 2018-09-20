@@ -7,11 +7,11 @@ register = Library()
  
 IMG_TEMPLATE = '<img src="%s" alt="%s"/>'
  
-PATH_TO_WHOLE_STAR = IMG_TEMPLATE % (settings.MEDIA_URL + 'images/stars/star.png', "Whole Star")
-PATH_TO_THREE_QUARTER_STAR = IMG_TEMPLATE % (settings.MEDIA_URL + 'images/stars/three-quarter.png', "3/4 Star")
-PATH_TO_HALF_STAR = IMG_TEMPLATE % (settings.MEDIA_URL + 'images/stars/half.png', "1/2 Star")
-PATH_TO_QUARTER_STAR = IMG_TEMPLATE % (settings.MEDIA_URL + 'images/stars/quarter.png', "1/4 Star")
-PATH_TO_BLANK_STAR = IMG_TEMPLATE % (settings.MEDIA_URL + 'images/stars/blank.png', "Empty Star")
+PATH_TO_WHOLE_STAR = IMG_TEMPLATE % (settings.STATIC_URL + 'images/stars/star.png', "Whole Star")
+PATH_TO_THREE_QUARTER_STAR = IMG_TEMPLATE % (settings.STATIC_URL + 'images/stars/three-quarter.png', "3/4 Star")
+PATH_TO_HALF_STAR = IMG_TEMPLATE % (settings.STATIC_URL + 'images/stars/half.png', "1/2 Star")
+PATH_TO_QUARTER_STAR = IMG_TEMPLATE % (settings.STATIC_URL + 'images/stars/quarter.png', "1/4 Star")
+PATH_TO_BLANK_STAR = IMG_TEMPLATE % (settings.STATIC_URL + 'images/stars/blank.png', "Empty Star")
  
 class ShowStarsNode(Node):
     """ Default rounding is to the whole unit """

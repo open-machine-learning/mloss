@@ -2,7 +2,7 @@ from wfwfeed import WellFormedWebRss
 from blog.models import BlogItem
 from django.contrib.sites.models import Site
 from django.http import HttpResponse
-from markdown2 import markdown
+from markdown import markdown
 
 from community.summary import get_latest_news
 from django.views.generic.list import ListView
